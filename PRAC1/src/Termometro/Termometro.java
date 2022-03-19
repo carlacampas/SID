@@ -21,11 +21,9 @@ public class Termometro extends Agent
 
     public class Temperatura extends TickerBehaviour
     {
-        Agent a;
         public Temperatura(Agent a, long timeout)
         {
             super(a,timeout);
-            setAgent(a);
         }
 
         public void calcTemperature() {
@@ -54,7 +52,7 @@ public class Termometro extends Agent
         }
 
         public void action() {
-            
+
             msg = myAgent.receive(tpl);
             if (msg != null) {
                 String content = msg.getContent();
@@ -64,6 +62,9 @@ public class Termometro extends Agent
                     reply.setContent(Float.toString(getTemp()));
                     send(reply);
                 }
+            }
+            else {
+                block();
             }
 
         }

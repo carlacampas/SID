@@ -11,23 +11,50 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class SearchPingBehaviourAgent extends Agent
 {
     float a, b;
-     protected void setup()
+    HashMap <AID, Float> prev_temp;
+
+    public class Termostato extends TickerBehaviour
     {
-        // envia request, termometro responde 
-        /*
-            Un agente termostato que, ya sea por push o por pull, obtenga las temperaturas de todos los term´ometros y
-            tome una decisi´on sobre la temperatura actual bas´andose en un m´etodo que escoj´ais, e.g. la media aritm´etica.
-            Este agente deber´ıa tener un estado interno que le permita
-            detectar anomal´ıas en las lecturas de cada term´ometro y tomar decisiones
-            sobre los term´ometros defectuosos, e.g. ignorarlos temporal o permanentemente. Adem´as, el termostato deber´
-            ıa tener en cuenta que din´amicamente pueden entrar y salir term´ometros de la plataforma.
+        DFAgentDescription template;
+        ServiceDescription templateSd;
+        SearchConstraints sc;
+        public Temperatura(Agent a, long timeout)
+        {
+            super(a,timeout);
+            setAgent(a);
+        }
 
-            Este agente debe aceptar dos argumentos enteros, que llamaremos a y b.
-            Cuando la temperatura actual sea ≤ a o ≥ b el agente deber´a enviar un
-            mensaje con performativa inform a todos los agentes de la plataforma con
-            serviceDescription.type = ”alarm-management”
-         */
+        public void onStart() {
+            template = new DFAgentDescription();
+            templateSd = new ServiceDescription();
+            templateSd.setType("Termometro");
+            template.addServices(templateSd);
+            sc = new SearchConstraints();
+            sc.setMaxResults(new Long(10));
+        }
 
+        public void onTick() {
+            try {
+                DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
+                if (results.length > 0) {
+                    DFAgentDescription dfd = results[0];
+                    AID provider = dfd.getName();
+
+                    ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                    msg.addReceiver(provider);
+                    msg.setContent("temperature");
+                    send(msg);
+                }
+                else {
+                    System.out.println("No Agent Found");
+                    //implement different system
+                }
+            } catch (Exception e) {}
+        }
+    }
+
+    protected void setup()
+    {
         Object[] args = getArguments();
         if (args.length != 2) {
             System.out.println("Wrong number of parameters for thermometer inicialization.");
