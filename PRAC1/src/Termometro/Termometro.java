@@ -1,16 +1,19 @@
-package sid.termometro;
+package sid.prac1;
 
 import java.util.*;
 import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
+import jade.domain.DFService;
+import jade.util.Logger;
 
-/*
-FALTA: si algun behavior acaba, avisar
- */
 public class Termometro extends Agent
 {
+    private Logger myLogger = Logger.getMyLogger(getClass().getName());
     private float m, r, p, s;
     private float temp;
 
@@ -37,6 +40,7 @@ public class Termometro extends Agent
             else { min = m - r; max = m + r; }
 
             setTemp((float)(Math.random() * (max - min)) + min);
+            System.out.println(getTemp());
         }
 
         public void onStart() { calcTemperature(); }
@@ -75,16 +79,30 @@ public class Termometro extends Agent
         if (args.length != 4) {
             System.out.println("Wrong number of parameters for thermometer inicialization. Arguments provided" +
                     args.length + "expected four.");
-            System.exit(0);
+            doDelete();
         }
         m = Float.parseFloat(args[0].toString());
         r = Float.parseFloat(args[1].toString());
         p = Float.parseFloat(args[2].toString());
         s = Float.parseFloat(args[3].toString());
-        float ms = s*1000;
-        Temperatura t = new Temperatura(this, Math.round(ms));
-        RecieveMessages rm = new RecieveMessages();
-        this.addBehaviour(t);
-        this.addBehaviour(rm);
+
+        DFAgentDescription dfd = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("Termometro");
+        sd.setName(getName());
+        dfd.setName(getAID());
+        dfd.addServices(sd);
+
+        try {
+            DFService.register(this,dfd);
+            float ms = s*1000;
+            Temperatura t = new Temperatura(this, Math.round(ms));
+            RecieveMessages rm = new RecieveMessages();
+            this.addBehaviour(t);
+            this.addBehaviour(rm);
+        } catch (FIPAException e) {
+            myLogger.log(Logger.SEVERE, "Agent " + getLocalName() + " - Cannot register with DF", e);
+            doDelete();
+        }
     }
 }

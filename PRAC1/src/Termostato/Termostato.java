@@ -1,4 +1,4 @@
-package sid.termometro;
+package sid.prac1;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.*;
@@ -27,27 +27,24 @@ public class Termostato extends Agent
 
     public class RecibirTemperaturas extends TickerBehaviour
     {
-        DFAgentDescription template;
-        ServiceDescription templateSd;
-        SearchConstraints sc;
         public RecibirTemperaturas(Agent a, long timeout)
         {
             super(a,timeout);
-            setAgent(a);
         }
 
         public void onStart() {
-            template = new DFAgentDescription();
-            templateSd = new ServiceDescription();
-            templateSd.setType("Termometro");
-            template.addServices(templateSd);
-            sc = new SearchConstraints();
-            sc.setMaxResults(Long.valueOf(10));
         }
 
         public void onTick() {
+            DFAgentDescription template = new DFAgentDescription();
+            ServiceDescription templateSd = new ServiceDescription();
+            //templateSd.setType("Termometro");
+            //template.addServices(templateSd);
+            SearchConstraints sc = new SearchConstraints();
+            sc.setMaxResults(Long.valueOf(10));
             try {
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
+                System.out.println ("here " + results.length);
                 if (results.length > 0) {
                     DFAgentDescription dfd = results[0];
                     AID provider = dfd.getName();
@@ -83,7 +80,7 @@ public class Termostato extends Agent
         Object[] args = getArguments();
         if (args.length != 2) {
             System.out.println("Wrong number of parameters for thermometer inicialization.");
-            System.exit(0);
+            doDelete();
         }
         float a = Float.parseFloat(args[0].toString());
         float b = Float.parseFloat(args[1].toString());
