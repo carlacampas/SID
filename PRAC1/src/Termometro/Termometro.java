@@ -49,9 +49,7 @@ public class Termometro extends Agent
         ACLMessage msg;
 
         public void onStart() {
-
-            tpl = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-
+            tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
         }
 
         public void action() {
@@ -68,7 +66,6 @@ public class Termometro extends Agent
             else {
                 block();
             }
-
         }
     }
 
