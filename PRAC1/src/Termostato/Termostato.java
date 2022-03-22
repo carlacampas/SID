@@ -1,4 +1,4 @@
-package org.upc.edu.Behaviours;
+package sid.termometro;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.*;
