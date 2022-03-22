@@ -51,12 +51,14 @@ public class Termostato extends Agent
 
                     ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
                     msg.addReceiver(provider);
+                    msg.setLanguage("English");
                     msg.setContent("temperature");
                     send(msg);
 
                     //recieve response from thermometer
                     MessageTemplate tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
                     msg = myAgent.receive(tpl);
+                    System.out.println(msg == null);
                     if (msg != null) {
                         String content = msg.getContent();
                         if (content != null) {
