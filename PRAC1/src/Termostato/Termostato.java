@@ -7,6 +7,15 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+
+
+/*
+FALTA: cyclic para ver si algun termometro envia un mensaje de que ha acabado
+FALTA: implementar los puntos extra
+FALTA: implementar alarm management
+ */
 
 public class SearchPingBehaviourAgent extends Agent
 {
@@ -44,6 +53,8 @@ public class SearchPingBehaviourAgent extends Agent
                     msg.addReceiver(provider);
                     msg.setContent("temperature");
                     send(msg);
+                    
+                    
                 }
                 else {
                     System.out.println("No Agent Found");

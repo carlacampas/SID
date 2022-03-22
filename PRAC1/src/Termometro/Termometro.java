@@ -6,6 +6,9 @@ import jade.core.behaviours.*;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+/*
+FALTA: si algun behavior acaba, avisar
+ */
 public class Termometro extends Agent
 {
     private float m, r, p, s;
@@ -52,7 +55,6 @@ public class Termometro extends Agent
         }
 
         public void action() {
-
             msg = myAgent.receive(tpl);
             if (msg != null) {
                 String content = msg.getContent();
