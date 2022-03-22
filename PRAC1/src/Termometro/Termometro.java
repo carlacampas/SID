@@ -14,9 +14,12 @@ import jade.util.Logger;
 public class Termometro extends Agent
 {
     private Logger myLogger = Logger.getMyLogger(getClass().getName());
+    // Parametres d'entrada
     private float m, r, p, s;
+    // Temperatura actual
     private float temp;
 
+    // getters
     public float getM() { return m; }
     public float getR() { return r; }
     public float getP() { return p; }
@@ -25,6 +28,7 @@ public class Termometro extends Agent
     public float getTemp() { return temp; }
     public void setTemp(float temp) { this.temp = temp; }
 
+    // Ticker behaviour
     public class Temperatura extends TickerBehaviour
     {
         public Temperatura(Agent a, long timeout)
@@ -32,6 +36,7 @@ public class Termometro extends Agent
             super(a,timeout);
         }
 
+        // Calcul de la nova temperatura
         public void calcTemperature() {
             float prob = (float)Math.random();
             float max, min;
@@ -40,7 +45,7 @@ public class Termometro extends Agent
             else { min = m - r; max = m + r; }
 
             setTemp((float)(Math.random() * (max - min)) + min);
-            System.out.println(getTemp());
+            //System.out.println(getTemp());
         }
 
         public void onStart() { calcTemperature(); }
@@ -48,6 +53,7 @@ public class Termometro extends Agent
         public void onTick() { calcTemperature(); }
     }
 
+    // Cyclic behaviour
     public class RecieveMessages extends CyclicBehaviour {
         MessageTemplate tpl;
         ACLMessage msg;
@@ -56,6 +62,7 @@ public class Termometro extends Agent
             tpl = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
         }
 
+        // Si rep el missatge de "temperature" envia la seva temperatura actual
         public void action() {
             msg = myAgent.receive(tpl);
             if (msg != null) {
@@ -75,6 +82,7 @@ public class Termometro extends Agent
 
     protected void setup()
     {
+        // Parametres d'entrada
         Object[] args = getArguments();
         if (args.length != 4) {
             System.out.println("Wrong number of parameters for thermometer inicialization. Arguments provided" +
@@ -86,6 +94,7 @@ public class Termometro extends Agent
         p = Float.parseFloat(args[2].toString());
         s = Float.parseFloat(args[3].toString());
 
+        // Registre al DF
         DFAgentDescription dfd = new DFAgentDescription();
         ServiceDescription sd = new ServiceDescription();
         sd.setType("Termometro");
@@ -95,14 +104,16 @@ public class Termometro extends Agent
 
         try {
             DFService.register(this,dfd);
-            float ms = s*1000;
-            Temperatura t = new Temperatura(this, Math.round(ms));
-            RecieveMessages rm = new RecieveMessages();
-            this.addBehaviour(t);
-            this.addBehaviour(rm);
         } catch (FIPAException e) {
             myLogger.log(Logger.SEVERE, "Agent " + getLocalName() + " - Cannot register with DF", e);
             doDelete();
         }
+
+        float ms = s*1000;
+        // Afegir behaviours a l'agent
+        Temperatura t = new Temperatura(this, Math.round(ms));
+        RecieveMessages rm = new RecieveMessages();
+        this.addBehaviour(t);
+        this.addBehaviour(rm);
     }
 }
