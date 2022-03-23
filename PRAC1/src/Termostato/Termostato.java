@@ -87,31 +87,33 @@ public class Termostato extends Agent
             try {
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
 
-                if (results.length > 0) {   // nombre de termometres trobats
+                //System.out.println(results.length + "       " + prev_temp.size());
+                if (results.length > 0) {   // num. de termometres trobats
                     for(int i = 0; i<results.length; ++i){
                         DFAgentDescription dfd = results[i];
-                        AID provider = dfd.getName();
+                        AID provider = dfd.getName();                        
+                        if((provider.getName().indexOf("term-started-code")==-1) || results.length==1){
+                            // Enviem missatge al termometre perque ens dongui la temperatura
+                            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                            msg.addReceiver(provider);
+                            msg.setLanguage("English");
+                            msg.setContent("temperature");
+                            send(msg);
 
-                        // Enviem missatge al termometre perque ens dongui la temperatura
-                        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                        msg.addReceiver(provider);
-                        msg.setLanguage("English");
-                        msg.setContent("temperature");
-                        send(msg);
-
-                        // Rebem resposta del termometre
-                        MessageTemplate tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-                        msg = myAgent.receive(tpl);
-                        //System.out.println(msg == null);
-                        if (msg != null) {
-                            String content = msg.getContent();
-                            if (content != null) {
-                                // actualitzem new_temp
-                                new_temp.put(provider, Float.parseFloat(content));
+                            // Rebem resposta del termometre
+                            MessageTemplate tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+                            msg = myAgent.receive(tpl);
+                            //System.out.println(msg == null);
+                            if (msg != null) {
+                                String content = msg.getContent();
+                                if (content != null) {
+                                    // actualitzem new_temp
+                                    new_temp.put(provider, Float.parseFloat(content));
+                                }
                             }
-                        }
-                        else {
-                            block();
+                            else {
+                                block();
+                            }
                         }
                     }
                     checkTempValues(new_temp);
@@ -121,7 +123,8 @@ public class Termostato extends Agent
                     System.out.println("No agent found. Initializing new agent");
                     AgentContainer ac = myAgent.getContainerController();
                     AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)),
-                                                                    "sid.prac1.Termometro", new Object[]{average, average/3, 0.5, 1});
+                                                                    "sid.prac1.Termometro", new Object[]{b, a, 0.5, 1});
+                    //added_term = ac.getName();
                     new_agent.start();
                     num_term++;
                 }
