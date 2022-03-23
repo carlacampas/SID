@@ -106,8 +106,8 @@ public class Termostato extends Agent
                         if (msg != null) {
                             String content = msg.getContent();
                             if (content != null) {
-                                //System.out.println("RECIEVED TEMPERATURE: " + msg.getSender().getName() + " " + content);
-                                new_temp.put(provider, Float.parseFloat(content));   // actualitzem prev_temp
+                                // actualitzem new_temp
+                                new_temp.put(provider, Float.parseFloat(content));
                             }
                         }
                         else {
@@ -118,9 +118,10 @@ public class Termostato extends Agent
                 }
                 else {
                     // Si no se encuentra ningún agente valido, empezamos un agente nuevo desde codigo
-                    System.out.println("No Agent Found");
+                    System.out.println("No agent found. Initializing new agent");
                     AgentContainer ac = myAgent.getContainerController();
-                    AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)), "sid.prac1.Termometro", new Object[]{1, 2, 2, 1});
+                    AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)),
+                                                                    "sid.prac1.Termometro", new Object[]{average, average, 0.5, 1});
                     new_agent.start();
                     num_term++;
                 }
@@ -147,8 +148,9 @@ public class Termostato extends Agent
             System.out.println("Wrong number of parameters for thermometer inicialization.");
             doDelete();
         }
-        float a = Float.parseFloat(args[0].toString());
-        float b = Float.parseFloat(args[1].toString());
+        a = Float.parseFloat(args[0].toString());
+        b = Float.parseFloat(args[1].toString());
+        average = 0;
 
         float ms = 1000;
         // Afegir behaviour a l'agent
