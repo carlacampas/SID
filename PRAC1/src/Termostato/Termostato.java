@@ -16,7 +16,6 @@ import java.util.HashSet;
 /*
 FALTA: completar checkTempValues --> decidir si los dejamos x iteraciones o para siempre
 FALTA: implementar los puntos extra
-FALTA: implementar alarm management
  */
 
 public class Termostato extends Agent
