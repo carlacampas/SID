@@ -121,7 +121,7 @@ public class Termostato extends Agent
                     System.out.println("No agent found. Initializing new agent");
                     AgentContainer ac = myAgent.getContainerController();
                     AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)),
-                                                                    "sid.prac1.Termometro", new Object[]{average, average, 0.5, 1});
+                                                                    "sid.prac1.Termometro", new Object[]{average, average/3, 0.5, 1});
                     new_agent.start();
                     num_term++;
                 }
