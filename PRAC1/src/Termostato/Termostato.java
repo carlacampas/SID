@@ -10,12 +10,11 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.HashMap;
+import java.util.HashSet;
 
 
 /*
-FALTA: ver si algun termometro ha caido en cada iteracion
-FALTA: comparar con iteracion anterior valores
-FALTA: recibir respuesta de temperatura
+FALTA: completar checkTempValues --> decidir si los dejamos x iteraciones o para siempre
 FALTA: implementar los puntos extra
 FALTA: implementar alarm management
  */
@@ -23,11 +22,22 @@ FALTA: implementar alarm management
 public class Termostato extends Agent
 {
     // Parametres d'entrada
-    float a, b;
-    // Hasmap amb tots els termostat i les seves temperatures
-    HashMap <String, Float> prev_temp = new HashMap <String, Float>();
+    private float a, b;
+
     // Mitjana de les temperatures
-    float average;
+    private float average;
+
+    // Hasmap amb tots els termostat i les seves temperatures
+    HashMap <AID, Float> prev_temp = new HashMap <AID, Float>();
+
+    // Hashmap amb els AIDs de termometres cancelats
+    HashSet <AID> removed = new HashSet <AID> ();
+
+    public float getA() { return a; }
+    public float getB() { return b; }
+
+    public float getAverage() { return average; }
+    public void setAverage(float average) { this.average = average; }
 
     public class RecibirTemperaturas extends TickerBehaviour
     {
@@ -36,22 +46,47 @@ public class Termostato extends Agent
             super(a,timeout);
         }
 
-        public void onStart() {
+        public void onStart() {}
+
+        private void checkTempValues (HashMap <AID, Float> temps) {
+            //check new temperatures allign with old ones and remove thermometers that don't algin
+            prev_temp = temps;
+        }
+
+        public void checkCorrectAverage () {
+            if (a >= average || average >= b) {
+                DFAgentDescription template = new DFAgentDescription();
+                ServiceDescription templateSd = new ServiceDescription();
+                templateSd.setType("alarm-management");
+                template.addServices(templateSd);
+                SearchConstraints sc = new SearchConstraints();
+                sc.setMaxResults(Long.valueOf(10));
+
+                try {
+                    DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
+                    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                    msg.setContent("alarm-managenent inform message");
+                    for (DFAgentDescription r : results) {
+                        msg.addReceiver(r.getName());
+                    }
+                    send(msg);
+                } catch (Exception e) {}
+            }
         }
 
         // Ticker behaviour
         public void onTick() {
-
+            // Inicialitzar map amb noves temperatures
+            HashMap <AID, Float> new_temp = new HashMap <AID, Float> ();
             // Busca d'agents
             DFAgentDescription template = new DFAgentDescription();
             ServiceDescription templateSd = new ServiceDescription();
-            //templateSd.setType("Termometro");
-            //template.addServices(templateSd);
+            templateSd.setType("Termometro");
+            template.addServices(templateSd);
             SearchConstraints sc = new SearchConstraints();
             sc.setMaxResults(Long.valueOf(10));
             try {
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
-                //System.out.println ("here " + results.length);
 
                 if (results.length > 0) {   // nombre de termometres trobats
                     for(int i = 0; i<results.length; ++i){
@@ -73,29 +108,31 @@ public class Termostato extends Agent
                             String content = msg.getContent();
                             if (content != null) {
                                 //System.out.println("RECIEVED TEMPERATURE: " + msg.getSender().getName() + " " + content);
-                                prev_temp.put(msg.getSender().getName(), Float.parseFloat(content));   // actualitzem prev_temp
+                                new_temp.put(provider, Float.parseFloat(content));   // actualitzem prev_temp
                             }
                         }
                         else {
                             block();
                         }
                     }
-                    
+                    checkTempValues(new_temp);
                 }
                 else {
                     System.out.println("No Agent Found");
                     //implement different system
                 }
             } catch (Exception e) {}
+
             // Escriptura i calcul de l'average
             average = 0;
-            for (String i : prev_temp.keySet()) {
+            for (AID i : prev_temp.keySet()) {
                 System.out.println(i + " -> temperatura: " + prev_temp.get(i));
                 average += prev_temp.get(i);
             }
             average /= prev_temp.size();
             System.out.println("Average: " + average);
             System.out.println("-----------------------------------");
+            checkCorrectAverage();
         }
     }
 
