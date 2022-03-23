@@ -11,6 +11,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.HashMap;
 import java.util.HashSet;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.ContainerController;
 
 
 /*
@@ -32,11 +35,8 @@ public class Termostato extends Agent
     // Hashmap amb els AIDs de termometres cancelats
     HashSet <AID> removed = new HashSet <AID> ();
 
-    public float getA() { return a; }
-    public float getB() { return b; }
-
-    public float getAverage() { return average; }
-    public void setAverage(float average) { this.average = average; }
+    // Número de agents que s'han començat en el codi
+    int num_term = 0;
 
     public class RecibirTemperaturas extends TickerBehaviour
     {
@@ -117,8 +117,12 @@ public class Termostato extends Agent
                     checkTempValues(new_temp);
                 }
                 else {
+                    // Si no se encuentra ningún agente valido, empezamos un agente nuevo desde codigo
                     System.out.println("No Agent Found");
-                    //implement different system
+                    AgentContainer ac = myAgent.getContainerController();
+                    AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)), "sid.prac1.Termometro", new Object[]{1, 2, 2, 1});
+                    new_agent.start();
+                    num_term++;
                 }
             } catch (Exception e) {}
 
