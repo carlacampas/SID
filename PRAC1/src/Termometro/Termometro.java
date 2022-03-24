@@ -41,7 +41,11 @@ public class Termometro extends Agent
             float prob = (float)Math.random();
             float max, min;
 
-            if (prob < (p/100)) { min = m - 3*r; max = m + 3*r; }
+            if (prob < (p/100)) {
+                float prob2 = (float)Math.random();
+                if(prob2<0.5) { min = m - 4*r; max = m - 3*r; }
+                else { min = m + 3*r; max = m + 4*r; } 
+                }
             else { min = m - r; max = m + r; }
 
             setTemp((float)(Math.random() * (max - min)) + min);
