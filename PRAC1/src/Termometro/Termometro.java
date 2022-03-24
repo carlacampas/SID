@@ -116,4 +116,10 @@ public class Termometro extends Agent
         this.addBehaviour(t);
         this.addBehaviour(rm);
     }
+
+    protected void takeDown() {
+        try {
+            DFService.deregister(this);
+        } catch (FIPAException e) {}
+    }
 }

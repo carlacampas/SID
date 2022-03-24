@@ -14,30 +14,24 @@ import java.util.HashSet;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
-
-
-/*
-FALTA: completar checkTempValues --> decidir si los dejamos x iteraciones o para siempre
-FALTA: implementar los puntos extra
- */
+import java.util.DoubleSummaryStatistics;
 
 public class Termostato extends Agent
 {
     // Parametres d'entrada
-    private float a, b;
+    private double a, b;
 
     // Mitjana de les temperatures
-    private float average;
+    private double average, sd, currentTemp;
 
-    // Hasmap amb tots els termostat i les seves temperatures
-    HashMap <AID, Float> prev_temp = new HashMap <AID, Float>();
+    // HashMap ...
+    HashMap <AID, Integer> correct_temp_counter = new HashMap <AID, Integer>();
 
-    // Hashmap amb els AIDs de termometres cancelats
-    HashSet <AID> removed = new HashSet <AID> ();
+    // ya ha conseguido los valores de algun temometro alguna vez
+    boolean enteredOnce = false;
 
-    // Número de agents que s'han començat en el codi
-    int num_term = 0;
-
+    private AgentController my_agent;
+    
     public class RecibirTemperaturas extends TickerBehaviour
     {
         public RecibirTemperaturas(Agent a, long timeout)
@@ -46,11 +40,6 @@ public class Termostato extends Agent
         }
 
         public void onStart() {}
-
-        private void checkTempValues (HashMap <AID, Float> temps) {
-            //check new temperatures allign with old ones and remove thermometers that don't algin
-            prev_temp = temps;
-        }
 
         public void checkCorrectAverage () {
             if (a >= average || average >= b) {
@@ -76,7 +65,7 @@ public class Termostato extends Agent
         // Ticker behaviour
         public void onTick() {
             // Inicialitzar map amb noves temperatures
-            HashMap <AID, Float> new_temp = new HashMap <AID, Float> ();
+            HashMap <AID, Double> temps = new HashMap <AID, Double> ();
             // Busca d'agents
             DFAgentDescription template = new DFAgentDescription();
             ServiceDescription templateSd = new ServiceDescription();
@@ -84,62 +73,103 @@ public class Termostato extends Agent
             template.addServices(templateSd);
             SearchConstraints sc = new SearchConstraints();
             sc.setMaxResults(Long.valueOf(10));
+
             try {
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
 
-                //System.out.println(results.length + "       " + prev_temp.size());
                 if (results.length > 0) {   // num. de termometres trobats
+                    if (results.length >= 2 && my_agent != null) { my_agent.kill(); my_agent = null; }
                     for(int i = 0; i<results.length; ++i){
                         DFAgentDescription dfd = results[i];
                         AID provider = dfd.getName();                        
-                        if((provider.getName().indexOf("term-started-code")==-1) || results.length==1){
-                            // Enviem missatge al termometre perque ens dongui la temperatura
-                            ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                            msg.addReceiver(provider);
-                            msg.setLanguage("English");
-                            msg.setContent("temperature");
-                            send(msg);
 
-                            // Rebem resposta del termometre
-                            MessageTemplate tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-                            msg = myAgent.receive(tpl);
-                            //System.out.println(msg == null);
-                            if (msg != null) {
-                                String content = msg.getContent();
-                                if (content != null) {
-                                    // actualitzem new_temp
-                                    new_temp.put(provider, Float.parseFloat(content));
+                        // Enviem missatge al termometre perque ens dongui la temperatura
+                        ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                        msg.addReceiver(provider);
+                        msg.setContent("temperature");
+                        send(msg);
+
+                        // Rebem resposta del termometre
+                        MessageTemplate tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+                        msg = myAgent.receive(tpl);
+
+                        if (msg != null) {
+                            String content = msg.getContent();
+                            // actualitzem temp
+                            if (content != null) { temps.put(provider, Double.parseDouble(content)); }
+                        }
+                        else { block(); }
+                    }
+
+                    double new_avg = 0.0;
+                    int count = 0;
+                    if (enteredOnce) {
+                        for (AID i : temps.keySet()) {
+                            System.out.println(i + " -> temperatura: " + temps.get(i));
+                            if (average - sd <= temps.get(i) && temps.get(i) <= average - sd) {
+                                int x = correct_temp_counter.get(i); x++;
+                                correct_temp_counter.put(i, x);
+
+                                if (correct_temp_counter.get(i) > 0) {
+                                    new_avg += temps.get(i) * correct_temp_counter.get(i);
+                                    count += correct_temp_counter.get(i);
                                 }
-                            }
-                            else {
-                                block();
+                                System.out.println(i + " -> temperatura: " + temps.get(i));
+                            } else {
+                                int x = correct_temp_counter.get(i); x--;
+                                correct_temp_counter.put(i, x);
                             }
                         }
+                        currentTemp = new_avg/count;
                     }
-                    checkTempValues(new_temp);
+                    else {
+                        if (my_agent != null) {
+                            for (AID i : temps.keySet()) {
+                                System.out.println(i + " -> temperatura: " + temps.get(i));
+                                new_avg += temps.get(i);
+                            }
+                            currentTemp = new_avg;
+                        }
+                        else {
+                            // primers calculs
+                            double sum = 0.0;
+                            for (AID i : temps.keySet()) 
+                                System.out.println(i + " -> temperatura: " + temps.get(i));
+
+                            for(Double x : temps.values()) {
+                                System.out.println(x);
+                                sum=sum+x;
+                            }
+
+                            new_avg /= temps.size();
+
+                            sum = 0.0;
+
+                            for(Double x : temps.values()) sum+=Math.pow((x-new_avg),2);
+
+                            sd=Math.sqrt(sum/(temps.size()-1));
+                            average = currentTemp = new_avg;
+                        }
+                    }
+                    // Escriptura i calcul de l'average
+
+                    System.out.println("Average: " + currentTemp);
+                    System.out.println("Standard Deviation: " + sd);
+                    System.out.println("Intial Average: " + average);
+                    System.out.println("-----------------------------------");
+                    checkCorrectAverage();
                 }
                 else {
                     // Si no se encuentra ningún agente valido, empezamos un agente nuevo desde codigo
                     System.out.println("No agent found. Initializing new agent");
                     AgentContainer ac = myAgent.getContainerController();
-                    AgentController new_agent = ac.createNewAgent(("term-started-code " + String.valueOf(num_term)),
-                                                                    "sid.prac1.Termometro", new Object[]{b, a, 0.5, 1});
-                    //added_term = ac.getName();
-                    new_agent.start();
-                    num_term++;
+                    if (enteredOnce) 
+                        my_agent = ac.createNewAgent("term-started-code", "sid.prac1.Termometro", new Object[]{average, sd, 0.5, 1});
+                    else
+                        my_agent = ac.createNewAgent("term-started-code", "sid.prac1.Termometro", new Object[]{(a+b)/2, Math.sqrt(b-a), 0.5, 1});
+                    my_agent.start();
                 }
             } catch (Exception e) {}
-
-            // Escriptura i calcul de l'average
-            average = 0;
-            for (AID i : prev_temp.keySet()) {
-                System.out.println(i + " -> temperatura: " + prev_temp.get(i));
-                average += prev_temp.get(i);
-            }
-            average /= prev_temp.size();
-            System.out.println("Average: " + average);
-            System.out.println("-----------------------------------");
-            checkCorrectAverage();
         }
     }
 
@@ -151,11 +181,12 @@ public class Termostato extends Agent
             System.out.println("Wrong number of parameters for thermometer inicialization.");
             doDelete();
         }
-        a = Float.parseFloat(args[0].toString());
-        b = Float.parseFloat(args[1].toString());
-        average = 0;
+        a = Double.parseDouble(args[0].toString());
+        b = Double.parseDouble(args[1].toString());
+        System.out.println(a);
+        System.out.println(b);
 
-        float ms = 1000;
+        double ms = 1000;
         // Afegir behaviour a l'agent
         RecibirTemperaturas rt = new RecibirTemperaturas(this, Math.round(ms));
         this.addBehaviour(rt);
