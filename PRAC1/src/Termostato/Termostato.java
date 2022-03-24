@@ -21,15 +21,18 @@ public class Termostato extends Agent
     // Parametres d'entrada
     private double a, b;
 
-    // Mitjana de les temperatures
+    // average = primera mitjana de les temperatures
+    // sd = desviació estandard 
+    // currentTemp = mitjana de les temperatures eliminant les que estiguin fora del rang average +- 3*sd
     private double average, sd, currentTemp;
 
-    // HashMap ...
+    // HashMap amb els AID dels termometres i el nombre de vegades que han donat una temperatura correcte (pot ser negatiu)
     HashMap <AID, Integer> correct_temp_counter = new HashMap <AID, Integer>();
 
-    // ya ha conseguido los valores de algun temometro alguna vez
+    // Si hi han hagut termometres afegits manualment en algun moment
     boolean enteredOnce = false;
 
+    // Termometre que afegim en cas que no n'hi hagin
     private AgentController my_agent;
     
     public class RecibirTemperaturas extends TickerBehaviour
@@ -41,6 +44,7 @@ public class Termostato extends Agent
 
         public void onStart() {}
 
+        // Comprova que la currentTemp estigui entre a i b
         public void checkCorrectAverage () {
             if (a >= average || average >= b) {
                 DFAgentDescription template = new DFAgentDescription();
@@ -50,7 +54,7 @@ public class Termostato extends Agent
                 SearchConstraints sc = new SearchConstraints();
                 sc.setMaxResults(Long.valueOf(10));
 
-                try {
+                try { // envia un missatge un missatge en cas que no estigui dins el rang
                     DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
                     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                     msg.setContent("alarm-managenent inform message");
@@ -62,6 +66,7 @@ public class Termostato extends Agent
             }
         }
 
+        // Calcula average i sd
         private void calcStats (HashMap <AID, Double> temps) {
             // primers calculs
             double sum = 0.0;
@@ -76,9 +81,9 @@ public class Termostato extends Agent
 
         // Ticker behaviour
         public void onTick() {
-            // Inicialitzar map amb noves temperatures
+            // HashMap amb les temperatures rebudes pels AID corresponents
             HashMap <AID, Double> temps = new HashMap <AID, Double> ();
-            // Busca d'agents
+            // Busca agents
             DFAgentDescription template = new DFAgentDescription();
             ServiceDescription templateSd = new ServiceDescription();
             templateSd.setType("Termometro");
@@ -107,12 +112,13 @@ public class Termostato extends Agent
 
                         if (msg != null) {
                             String content = msg.getContent();
-                            // actualitzem temp
+                            // actualitzem temps
                             if (content != null) { temps.put(provider, Double.parseDouble(content)); }
                         }
                         else { block(); }
                     }
                     
+                    // Si només hi ha el termometre que afegim nosatlres per codi que currentTemp sigui directament la temperatura que envia
                     if (temps.size() == 1 || my_agent != null) {
                         currentTemp = 0.0;
                         for (AID i : temps.keySet()) {
@@ -120,13 +126,13 @@ public class Termostato extends Agent
                             currentTemp += temps.get(i);
                         }
                     }
-                    else {
+                    else {      // Hi han mes termometres i es calcula average, sd i currentTemp. També s'actualitza correct_temp_counter
                         calcStats(temps);
                         double new_avg = 0.0; currentTemp = 0.0;
                         int count = 0;
                         for (AID i : temps.keySet()) {
-                            System.out.println(i + " -> temperatura: " + temps.get(i));
-                            if (average - 3*sd <= temps.get(i) && temps.get(i) <= average + 3*sd) {
+                            System.out.println(i + " -> temperatura: " + temps.get(i));   // Escriptura AID termometre i la seva temperatura
+                            if (average - 3*sd <= temps.get(i) && temps.get(i) <= average + 3*sd) {  // comprovem si la temperatura es correcte
                                 int x = 1;
                                 if (correct_temp_counter.containsKey(i))
                                     x = correct_temp_counter.get(i) + 1;
@@ -146,7 +152,7 @@ public class Termostato extends Agent
                         }
                         currentTemp = new_avg/count;
                     }
-                    // Escriptura i calcul de l'average
+                    // Escriptura de les dades
                     if (currentTemp == 0.0) currentTemp = average;
                     
                     System.out.println("Average: " + currentTemp);
@@ -156,7 +162,7 @@ public class Termostato extends Agent
                     checkCorrectAverage();
                 }
                 else {
-                    // Si no se encuentra ningún agente valido, empezamos un agente nuevo desde codigo
+                    // Si no hi ha cap termometre en creem un nostaltres per codi
                     System.out.println("No agent found. Initializing new agent");
                     AgentContainer ac = myAgent.getContainerController();
                     if (enteredOnce) 
