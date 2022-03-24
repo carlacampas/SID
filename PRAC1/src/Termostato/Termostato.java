@@ -62,6 +62,18 @@ public class Termostato extends Agent
             }
         }
 
+        private void calcStats (HashMap <AID, Double> temps) {
+            // primers calculs
+            double sum = 0.0;
+            for(Double x : temps.values()) sum=sum+x;
+
+            average = sum/temps.size();
+            sum = 0.0;
+
+            for(Double x : temps.values()) sum+=Math.pow((x-average),2);
+            sd=Math.sqrt(sum/(temps.size()-1));
+        }
+
         // Ticker behaviour
         public void onTick() {
             // Inicialitzar map amb noves temperatures
@@ -78,10 +90,11 @@ public class Termostato extends Agent
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
 
                 if (results.length > 0) {   // num. de termometres trobats
+                    System.out.println("here " + results.length);
                     if (results.length >= 2 && my_agent != null) { my_agent.kill(); my_agent = null; }
                     for(int i = 0; i<results.length; ++i){
                         DFAgentDescription dfd = results[i];
-                        AID provider = dfd.getName();                        
+                        AID provider = dfd.getName();
 
                         // Enviem missatge al termometre perque ens dongui la temperatura
                         ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
@@ -100,59 +113,43 @@ public class Termostato extends Agent
                         }
                         else { block(); }
                     }
-
-                    double new_avg = 0.0;
-                    int count = 0;
-                    if (enteredOnce) {
+                    
+                    if (temps.size() == 1 || my_agent != null) {
+                        currentTemp = 0.0;
                         for (AID i : temps.keySet()) {
                             System.out.println(i + " -> temperatura: " + temps.get(i));
-                            if (average - sd <= temps.get(i) && temps.get(i) <= average - sd) {
-                                int x = correct_temp_counter.get(i); x++;
+                            currentTemp += temps.get(i);
+                        }
+                    }
+                    else {
+                        calcStats(temps);
+                        double new_avg = 0.0; currentTemp = 0.0;
+                        int count = 0;
+                        for (AID i : temps.keySet()) {
+                            System.out.println(i + " -> temperatura: " + temps.get(i));
+                            if (average - 3*sd <= temps.get(i) && temps.get(i) <= average + 3*sd) {
+                                int x = 1;
+                                if (correct_temp_counter.containsKey(i))
+                                    x = correct_temp_counter.get(i) + 1;
+
                                 correct_temp_counter.put(i, x);
 
                                 if (correct_temp_counter.get(i) > 0) {
                                     new_avg += temps.get(i) * correct_temp_counter.get(i);
                                     count += correct_temp_counter.get(i);
                                 }
-                                System.out.println(i + " -> temperatura: " + temps.get(i));
                             } else {
-                                int x = correct_temp_counter.get(i); x--;
+                                int x = -1;
+                                if (correct_temp_counter.containsKey(i))
+                                    x = correct_temp_counter.get(i) - 1;
                                 correct_temp_counter.put(i, x);
                             }
                         }
                         currentTemp = new_avg/count;
                     }
-                    else {
-                        if (my_agent != null) {
-                            for (AID i : temps.keySet()) {
-                                System.out.println(i + " -> temperatura: " + temps.get(i));
-                                new_avg += temps.get(i);
-                            }
-                            currentTemp = new_avg;
-                        }
-                        else {
-                            // primers calculs
-                            double sum = 0.0;
-                            for (AID i : temps.keySet()) 
-                                System.out.println(i + " -> temperatura: " + temps.get(i));
-
-                            for(Double x : temps.values()) {
-                                System.out.println(x);
-                                sum=sum+x;
-                            }
-
-                            new_avg /= temps.size();
-
-                            sum = 0.0;
-
-                            for(Double x : temps.values()) sum+=Math.pow((x-new_avg),2);
-
-                            sd=Math.sqrt(sum/(temps.size()-1));
-                            average = currentTemp = new_avg;
-                        }
-                    }
                     // Escriptura i calcul de l'average
-
+                    if (currentTemp == 0.0) currentTemp = average;
+                    
                     System.out.println("Average: " + currentTemp);
                     System.out.println("Standard Deviation: " + sd);
                     System.out.println("Intial Average: " + average);

@@ -45,7 +45,6 @@ public class Termometro extends Agent
             else { min = m - r; max = m + r; }
 
             setTemp((float)(Math.random() * (max - min)) + min);
-            //System.out.println(getTemp());
         }
 
         public void onStart() { calcTemperature(); }
