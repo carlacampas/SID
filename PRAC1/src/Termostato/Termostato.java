@@ -90,7 +90,6 @@ public class Termostato extends Agent
                 DFAgentDescription[] results = DFService.search(this.myAgent, template, sc);
 
                 if (results.length > 0) {   // num. de termometres trobats
-                    System.out.println("here " + results.length);
                     if (results.length >= 2 && my_agent != null) { my_agent.kill(); my_agent = null; }
                     for(int i = 0; i<results.length; ++i){
                         DFAgentDescription dfd = results[i];
