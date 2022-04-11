@@ -14,8 +14,10 @@ import jade.util.Logger;
 public class Termometro extends Agent
 {
     private Logger myLogger = Logger.getMyLogger(getClass().getName());
+
     // Parametres d'entrada
     private float m, r, p, s;
+
     // Temperatura actual
     private float temp;
 
@@ -120,6 +122,7 @@ public class Termometro extends Agent
         this.addBehaviour(rm);
     }
 
+    // Desfegistre del DF al takeDown (quan es mor l'agent)
     protected void takeDown() {
         try {
             DFService.deregister(this);
