@@ -1,26 +1,52 @@
-package sid.bdiexamples;
+
+package sid.prac2;
 
 import java.util.*;
-
-import bdi4jade.core.*;
 import bdi4jade.goal.Goal;
 import bdi4jade.plan.DefaultPlan;
 import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
+import bdi4jade.core.*;
+
 public class Player extends SingleCapabilityAgent {
-  
+  private int CC, CD, DC, DD;
+
+  protected void init() {
+    Object[] args = getArguments();
+    if (args.length != 4) {
+      System.out.println("Wrong number of parameters for player inicialization. Arguments provided" +
+              args.length + "expected four.");
+      doDelete();
+    }
+
+    int CC = Integer.parseInt(args[0].toString());
+    int CD = Integer.parseInt(args[1].toString());
+    int DC = Integer.parseInt(args[2].toString());
+    int DD = Integer.parseInt(args[3].toString());
+    Belief C = new TransientBelief("C", new int[]{CC, CD});
+    Belief D = new TransientBelief("D", new int[]{DC, DD});
+    Belief history = new TransientBeliefSet("history", new HashSet());
+
+    Capability cap = this.getCapability();
+    BeliefBase beliefBase = cap.getBeliefBase();
+    beliefBase.addBelief(C);
+    beliefBase.addBelief(D);
+    beliefBase.addBelief(history);
+    Plan plan = new DefaultPlan(minimizePlay.class,
+    minimizePlanBody.class);
+    addGoal(new minimizePlay());
+    getCapability().getPlanLibrary().addPlan(plan);
+    //System.out.println(this.getBeliefs());
+  }
+
   public class minimizePlay implements Goal {
-    
     private static final String msg = "Hello World!";
     
     public String getText(){
-    
       return msg;
-    
     }
-
   }
   
   public class minimizePlanBody extends AbstractPlanBody {
@@ -43,36 +69,5 @@ public class Player extends SingleCapabilityAgent {
       else return a[1];
     }*/
   }
-
-  public Player() {
-    setup();
-    
-    Object[] args = super.getArguments();
-    if(/*args != null && args.length == 4*/ true){
-      
-//       int CC = Integer.parseInt(args[0].toString());
-//       int CD = Integer.parseInt(args[1].toString());
-//       int DC = Integer.parseInt(args[2].toString());
-//       int DD = Integer.parseInt(args[3].toString());
-//       Capability cap = this.getCapability();
-//       BeliefBase beliefBase = cap.getBeliefBase();
-//       beliefBase.addBelief(new TransientBelief("C", new int[]{CC, CD}));
-//       beliefBase.addBelief(new TransientBelief("D", new int[]{DC, DD}));
-//       beliefBase.addBelief(new TransientBeliefSet("history", new HashSet()));
-//       Plan plan = new DefaultPlan(minimizePlay.class,
-//       minimizePlanBody.class);
-//       addGoal(new minimizePlay());
-//       getCapability().getPlanLibrary().addPlan(plan);
-        if(args == null) System.out.println("args es nulo!");
-//         System.out.println("Numero de argumentos: " + String.valueOf(args.length));
-    }else System.out.println("Numero de argumentos de Player erroneo. Deben ser 4.");
-    //System.out.println("Numero de argumentos: " + args.length);
-    
-    
-    
-
-  }
-  
-  
 }
 
