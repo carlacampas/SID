@@ -144,7 +144,16 @@ public class Termostato extends Agent
                                 correct_temp_counter.put(i, x);
                             }
                         }
-                        currentTemp = new_avg/count;
+                        enteredOnce = true;
+                        if (count > 0) currentTemp = new_avg/count;
+                        else {
+                            AgentContainer ac = myAgent.getContainerController();
+                            if (enteredOnce)
+                                my_agent = ac.createNewAgent("term-started-code", "sid.prac1.Termometro", new Object[]{average, sd, 0.5, 1});
+                            else
+                                my_agent = ac.createNewAgent("term-started-code", "sid.prac1.Termometro", new Object[]{(a+b)/2, Math.sqrt(b-a), 0.5, 1});
+                            my_agent.start();
+                        }
                     }
                     // Escriptura i calcul de l'average
                     if (currentTemp == 0.0) currentTemp = average;
