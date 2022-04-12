@@ -12,7 +12,7 @@ import bdi4jade.belief.*;
 import bdi4jade.core.*;
 import bdi4jade.goal.*;
 
-public class PlayerV2 extends SingleCapabilityAgent {
+public class PlayerV3 extends SingleCapabilityAgent {
   private int CC, CD, DC, DD;
   
   protected void init() {
@@ -38,24 +38,25 @@ public class PlayerV2 extends SingleCapabilityAgent {
     beliefBase.addBelief(history);
     ArrayList<Integer> Cv = new ArrayList<Integer>(Arrays.asList(new Integer[]{CC, CD}));
     ArrayList<Integer> Dv = new ArrayList<Integer>(Arrays.asList(new Integer[]{DC, DD}));
-    this.addGoal(new BeliefSetHasValueGoal("history", Cv));
-    System.out.println("La clase de C y D es: " + Cv.getClass().getSimpleName());
-    
-    System.out.println("La clase de Cv es igual a la de Dv" + (Cv.getClass().equals(ArrayList.class)));
-    /*Ejemplo con predicado booleano*/
-    //this.addGoal(new PredicateGoal("notEmpty", true));
-    //GoalTemplate goalTemplate = GoalTemplateFactory.hasBeliefValueOfType("notEmpty", Boolean.class);
-    
-    /*GoalTemplate con valor en vez de tipo*/
-//     GoalTemplate goalTemplate = GoalTemplateFactory.hasValueInBeliefSet("history", new ArrayList<Integer>(Arrays.asList(new Integer[]{CC, CD})));
-
-    /*Lo hago con el tipo, compruebo que haya al menos un valor de tipo ArrayList en history */
-    GoalTemplate goalTemplate = GoalTemplateFactory.hasValueOfTypeInBeliefSet("history", ArrayList.class);
     
     
-    Plan plan = new DefaultPlan(goalTemplate,
-    notEmptyPlan.class);
-    getCapability().getPlanLibrary().addPlan(plan);
+    ArrayList<Goal> goals = new ArrayList<Goal>();
+    
+    goals.add(new BeliefPresentGoal("jugada"));
+    goals.add(new PredicateGoal("realizada", true));
+    SequentialGoal sequentialGoal = new SequentialGoal(goals);
+    this.addGoal(sequentialGoal);
+    
+    GoalTemplate goalTemplateJugada = GoalTemplateFactory.hasBelief("jugada");
+    GoalTemplate goalTemplateRealizada = GoalTemplateFactory.hasBeliefValueOfType("realizada", Boolean.class);
+    
+    
+    Plan planJugada = new DefaultPlan(goalTemplateJugada,
+    elegirPlan.class);
+    Plan planRealizada = new DefaultPlan(goalTemplateRealizada, realizarPlan.class);
+    getCapability().getPlanLibrary().addPlan(planJugada);
+    getCapability().getPlanLibrary().addPlan(planRealizada);
+    
     System.out.println("Termino init.");
     //System.out.println(this.getBeliefs());
   }
@@ -71,6 +72,7 @@ public class PlayerV2 extends SingleCapabilityAgent {
   public class minimizePlanBody extends AbstractPlanBody {
   @Override
     public void action() {
+    BeliefSetHasValueGoal setb = (BeliefSetHasValueGoal) this.getGoal();
     minimizePlay goal = (minimizePlay) getGoal();
     BeliefBase bb = getBeliefBase();
     System.out.println("A minimizar");
@@ -138,6 +140,34 @@ public class PlayerV2 extends SingleCapabilityAgent {
     }
       
     
+  }
+  
+  public class elegirPlan extends BeliefGoalPlanBody {
+    @Override
+    protected void execute() {
+    
+      BeliefBase bb = getBeliefBase();
+      TransientBelief jugada = new TransientBelief("jugada", "Saludar");
+      bb.addOrUpdateBelief(jugada);
+    
+    }
+    
+  
+  }
+  
+  public class realizarPlan extends BeliefGoalPlanBody {
+    @Override
+    protected void execute() {
+      BeliefBase bb = getBeliefBase();
+      TransientBelief jugada = (TransientBelief) bb.getBelief("jugada");
+      String sjug = (String) jugada.getValue(); 
+      System.out.println("La jugada es: " + sjug);
+      bb.addOrUpdateBelief(new TransientPredicate("realizada", true));
+      //bb.removeBelief("jugada");
+    
+    }
+  
+  
   }
   
 }
