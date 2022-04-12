@@ -53,21 +53,41 @@ public class Player extends SingleCapabilityAgent {
   @Override
     public void action() {
     minimizePlay goal = (minimizePlay) getGoal();
-    //BeliefBase bb = getBeliefBase();
+    BeliefBase bb = getBeliefBase();
     System.out.println("A minimizar");
-//     int[] c = (int[]) bb.getBelief("C").getValue();
-//     int[] d = (int[]) bb.getBelief("D").getValue();
-//     int minc = this.min(c);
-//     int mind = this.min(d);
-//     if(minc <= mind) System.out.println(Arrays.toString(c));
-//     else System.out.println(Arrays.toString(d));
+    int[] c = (int[]) bb.getBelief("C").getValue();
+    int[] d = (int[]) bb.getBelief("D").getValue();
+    int minc = this.min(c);
+    int mind = this.min(d);
+    TransientBeliefSet hist = (TransientBeliefSet) bb.getBelief("history");
+    if(minc <= mind){
+      System.out.println(Arrays.toString(c));
+      hist.addValue(c);
+    }
+    else{
+      System.out.println(Arrays.toString(d));
+      hist.addValue(d);
+      
+    }
+    System.out.println("history es: ");
+    HashSet s = (HashSet) hist.getValue();
+    printHashSet(s);
     setEndState(Plan.EndState.SUCCESSFUL);
     }
     
-    /*private int min(int[] a){
+    private int min(int[] a){
       if(a[0] < a[1]) return a[0];
       else return a[1];
-    }*/
+    }
+    
+    private void printHashSet(HashSet s){
+      for (Object v: s){
+        
+        int[] elem = (int[]) v; 
+        System.out.println(Arrays.toString(elem));
+      }
+    }
+    
   }
 }
 
