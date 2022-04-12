@@ -22,13 +22,13 @@ public class PlayerV2 extends SingleCapabilityAgent {
               args.length + "expected four.");
       doDelete();
     }
-
+    System.out.println("Ejecutando init.");
     int CC = Integer.parseInt(args[0].toString());
     int CD = Integer.parseInt(args[1].toString());
     int DC = Integer.parseInt(args[2].toString());
     int DD = Integer.parseInt(args[3].toString());
-    Belief C = new TransientBelief("C", new int[]{CC, CD});
-    Belief D = new TransientBelief("D", new int[]{DC, DD});
+    Belief C = new TransientBelief("C", new ArrayList<Integer>( Arrays.asList(new Integer[]{CC, CD})));
+    Belief D = new TransientBelief("D", new ArrayList<Integer>(Arrays.asList(new Integer[]{DC, DD})));
     Belief history = new TransientBeliefSet("history", new HashSet());
 
     Capability cap = this.getCapability();
@@ -36,11 +36,26 @@ public class PlayerV2 extends SingleCapabilityAgent {
     beliefBase.addBelief(C);
     beliefBase.addBelief(D);
     beliefBase.addBelief(history);
-    this.addGoal(new BeliefSetHasValueGoal("history", new int[2]));
-    GoalTemplate goalTemplate = GoalTemplateFactory.hasValueOfTypeInBeliefSet("history", int[].class);
+    ArrayList<Integer> Cv = new ArrayList<Integer>(Arrays.asList(new Integer[]{CC, CD}));
+    this.addGoal(new BeliefSetHasValueGoal("history", Cv));
+    System.out.println("La clase de C y D es: " + Cv.getClass().getSimpleName());
+    
+    
+    /*Ejemplo con predicado booleano*/
+    //this.addGoal(new PredicateGoal("notEmpty", true));
+    //GoalTemplate goalTemplate = GoalTemplateFactory.hasBeliefValueOfType("notEmpty", Boolean.class);
+    
+    /*GoalTemplate con valor en vez de tipo*/
+//     GoalTemplate goalTemplate = GoalTemplateFactory.hasValueInBeliefSet("history", new ArrayList<Integer>(Arrays.asList(new Integer[]{CC, CD})));
+
+    /*Lo hago con el tipo, compruebo que haya al menos un valor de tipo ArrayList en history */
+    GoalTemplate goalTemplate = GoalTemplateFactory.hasValueOfTypeInBeliefSet("history", Cv.getClass());
+    
+    
     Plan plan = new DefaultPlan(goalTemplate,
     notEmptyPlan.class);
     getCapability().getPlanLibrary().addPlan(plan);
+    System.out.println("Termino init.");
     //System.out.println(this.getBeliefs());
   }
 
@@ -95,29 +110,30 @@ public class PlayerV2 extends SingleCapabilityAgent {
   public class notEmptyPlan extends BeliefGoalPlanBody {
     @Override
     protected void execute() {
-    
-      BeliefBase bb = getBeliefBase();
+      
       System.out.println("A minimizar");
-      int[] c = (int[]) bb.getBelief("C").getValue();
-      int[] d = (int[]) bb.getBelief("D").getValue();
+      BeliefBase bb = getBeliefBase();
+      ArrayList<Integer> c = (ArrayList<Integer>) bb.getBelief("C").getValue();
+      ArrayList<Integer> d = (ArrayList<Integer>) bb.getBelief("D").getValue();
       int minc = this.min(c);
       int mind = this.min(d);
       TransientBeliefSet hist = (TransientBeliefSet) bb.getBelief("history");
       if(minc <= mind){
-        System.out.println(Arrays.toString(c));
+        System.out.println(c);
         hist.addValue(c);
       }
       else{
-        System.out.println(Arrays.toString(d));
+        System.out.println(d);
         hist.addValue(d);
-        
       }
       
+      //bb.addOrUpdateBelief(new TransientPredicate("notEmpty", true));
+      System.out.println("Termino notEmptyPlan.");
     }
       
-    private int min(int[] a){
-      if(a[0] < a[1]) return a[0];
-      else return a[1];
+    private int min(ArrayList<Integer> a){
+      if(a.get(0) < a.get(1)) return a.get(0);
+      else return a.get(1);
     }
       
     
