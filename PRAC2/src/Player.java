@@ -16,8 +16,8 @@ public class Player extends SingleCapabilityAgent {
   protected void init() {
     Object[] args = getArguments();
     if (args.length != 4) {
-      System.out.println("Wrong number of parameters for player inicialization. Arguments provided" +
-              args.length + "expected four.");
+      System.out.println("Wrong number of parameters for player inicialization. Arguments provided " +
+              args.length + " expected four.");
       doDelete();
     }
 
