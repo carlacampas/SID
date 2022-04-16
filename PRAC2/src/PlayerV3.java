@@ -16,6 +16,32 @@ public class PlayerV3 extends SingleCapabilityAgent {
   private int CC, CD, DC, DD;
   
   protected void init() {
+    /*
+    DFAgentDescription dfd = new DFAgentDescription();
+    dfd.setName(getAID());
+
+    ServiceDescription sd = new ServiceDescription();
+    sd.setType("player");
+    sd.setName(getName());
+
+    DFAgentDescription template = // fill the template
+            Behaviour b = new SubscriptionInitiator(
+            this,
+            DFService.createSubscriptionMessage(this, dfd, template, null))
+    {
+      protected void handleInform(ACLMessage inform) {
+        try {
+          DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+          // do something
+        }
+        catch (FIPAException fe) {
+          fe.printStackTrace();
+        }
+      }
+    };
+    addBehaviour(b);
+     */
+    
     Object[] args = getArguments();
     if (args.length != 4) {
       System.out.println("Wrong number of parameters for player inicialization. Arguments provided" +
@@ -38,7 +64,6 @@ public class PlayerV3 extends SingleCapabilityAgent {
     beliefBase.addBelief(history);
     ArrayList<Integer> Cv = new ArrayList<Integer>(Arrays.asList(new Integer[]{CC, CD}));
     ArrayList<Integer> Dv = new ArrayList<Integer>(Arrays.asList(new Integer[]{DC, DD}));
-    
     
     ArrayList<Goal> goals = new ArrayList<Goal>();
     
