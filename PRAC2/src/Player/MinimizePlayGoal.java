@@ -7,7 +7,6 @@ import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
-import bdi4jade.belief.BeliefBase;
 import bdi4jade.core.*;
 
 public class MinimizePlayGoal implements Goal {

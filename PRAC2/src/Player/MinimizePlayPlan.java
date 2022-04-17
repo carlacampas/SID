@@ -8,30 +8,38 @@ import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
 import bdi4jade.core.*;
+import jade.core.AID;
 
 public class MinimizePlayPlan extends AbstractPlanBody {
   @Override
   public void action() {
-    System.out.println("here");
     BeliefBase bb = getBeliefBase();
+    System.out.println("here");
+    if (bb.hasBelief("AID")) {
+      System.out.println("here1");
 
-    int[] c = (int[]) (bb.getBelief("C").getValue());
-    int[] d = (int[]) (bb.getBelief("D").getValue());
-    Set<String> history = (Set<String>) bb.getBelief("history").getValue();
+      int[] c = (int[]) (bb.getBelief("C").getValue());
+      int[] d = (int[]) (bb.getBelief("D").getValue());
+      Set<String> history = (Set<String>) bb.getBelief("history").getValue();
 
-    int c_min = Math.min(c[0], c[1]);
-    int d_min = Math.min(d[0], d[1]);
+      AID aid = (AID) bb.getBelief("AID").getValue();
+      System.out.println(aid);
 
-    String ch = "D";
-    if (c_min <= d_min) ch = "C";
-    System.out.println(ch);
+      int c_min = Math.min(c[0], c[1]);
+      int d_min = Math.min(d[0], d[1]);
 
-    history.add(ch);
+      String ch = "D";
+      if (c_min <= d_min) ch = "C";
+      System.out.println(ch);
 
-    bb.updateBelief("history", history);
-    System.out.println(bb.getBelief("history").getValue().toString());
+      history.add(ch);
 
-    setEndState(Plan.EndState.SUCCESSFUL);
-    //MinimizePlayGoal goal = (MinimizePlayGoal) getGoal();
+      bb.updateBelief("history", history);
+      System.out.println(bb.getBelief("history").getValue().toString());
+
+      setEndState(Plan.EndState.SUCCESSFUL);
+      bb.removeBelief("AID");
+      //MinimizePlayGoal goal = (MinimizePlayGoal) getGoal();
+    }
   }
 }
