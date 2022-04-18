@@ -18,7 +18,6 @@ import jade.domain.DFService;
 public class FindPlan extends AbstractPlanBody {
   @Override
   public void action() {
-    System.out.println("here");
     FindGoal rg = (FindGoal) getGoal();
     Agent a = rg.getAgent();
 
@@ -43,6 +42,7 @@ public class FindPlan extends AbstractPlanBody {
         System.out.println(play_against);
         System.out.println("sucessfully registered new game");
         setEndState(Plan.EndState.SUCCESSFUL);
+        dispatchGoal(new MinimizePlayGoal(a, play_against));
       }
     } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
   }

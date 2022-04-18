@@ -32,7 +32,7 @@ public class Player extends SingleCapabilityAgent {
     ACLMessage msg;
 
     public void onStart() {
-      tpl = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+      tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM); //and MessageTemplate.MatchOntology("play");
     }
 
     // Si rep el missatge de "temperature" envia la seva temperatura actual
@@ -45,7 +45,7 @@ public class Player extends SingleCapabilityAgent {
           Belief aid = new TransientBelief("AID", msg.getSender());
           beliefBase.addBelief(aid);
           // add goal
-          addGoal(new MinimizePlayGoal());
+          //addGoal(new MinimizePlayGoal());
         }
       }
       else {
@@ -69,6 +69,7 @@ public class Player extends SingleCapabilityAgent {
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBeliefSet("history", new HashSet());
+    Belief penalization = new TransientBelief("penalization", 0);
 
     Capability c = getCapability();
     beliefBase = c.getBeliefBase();
@@ -76,13 +77,16 @@ public class Player extends SingleCapabilityAgent {
     beliefBase.addBelief(C);
     beliefBase.addBelief(D);
     beliefBase.addBelief(history);
+    beliefBase.addBelief(penalization);
 
-    //Plan plan = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
+    Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(find_agents);
+    c.getPlanLibrary().addPlan(play);
+    
     this.addGoal(new RegisterGoal(this));
   }
 }

@@ -8,14 +8,15 @@ import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
 import bdi4jade.core.*;
+import jade.core.Agent;
+import jade.core.AID;
 
 public class MinimizePlayGoal implements Goal {
-  int val;
-  public MinimizePlayGoal() {
-    val = 0;
-  }
+  private Agent a;
+  private AID player;
 
-  public int getVal() {
-    return val;
+  public MinimizePlayGoal(Agent a, AID player) {
+    this.a = a;
+    this.player = player;
   }
 }

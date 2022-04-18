@@ -14,32 +14,25 @@ public class MinimizePlayPlan extends AbstractPlanBody {
   @Override
   public void action() {
     BeliefBase bb = getBeliefBase();
-    System.out.println("here");
-    if (bb.hasBelief("AID")) {
-      System.out.println("here1");
 
-      int[] c = (int[]) (bb.getBelief("C").getValue());
-      int[] d = (int[]) (bb.getBelief("D").getValue());
-      Set<String> history = (Set<String>) bb.getBelief("history").getValue();
+    int[] c = (int[]) (bb.getBelief("C").getValue());
+    int[] d = (int[]) (bb.getBelief("D").getValue());
+    Set<String> history = (Set<String>) bb.getBelief("history").getValue();
 
-      AID aid = (AID) bb.getBelief("AID").getValue();
-      System.out.println(aid);
+    int c_min = Math.min(c[0], c[1]);
+    int d_min = Math.min(d[0], d[1]);
 
-      int c_min = Math.min(c[0], c[1]);
-      int d_min = Math.min(d[0], d[1]);
+    String ch = "D";
+    if (c_min <= d_min) ch = "C";
+    System.out.println(ch);
 
-      String ch = "D";
-      if (c_min <= d_min) ch = "C";
-      System.out.println(ch);
+    history.add(ch);
 
-      history.add(ch);
+    bb.updateBelief("history", history);
+    System.out.println(bb.getBelief("history").getValue().toString());
 
-      bb.updateBelief("history", history);
-      System.out.println(bb.getBelief("history").getValue().toString());
-
-      setEndState(Plan.EndState.SUCCESSFUL);
-      bb.removeBelief("AID");
-      //MinimizePlayGoal goal = (MinimizePlayGoal) getGoal();
-    }
+    setEndState(Plan.EndState.SUCCESSFUL);
+    bb.removeBelief("AID");
+    //MinimizePlayGoal goal = (MinimizePlayGoal) getGoal();
   }
 }
