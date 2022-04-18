@@ -26,38 +26,40 @@ public class Player extends SingleCapabilityAgent {
   Set<AID> seen = new HashSet <>();
   BeliefBase beliefBase;
 
+  // Cyclic behaviour
+  public class RecieveMessages extends CyclicBehaviour {
+    MessageTemplate tpl;
+    ACLMessage msg;
+
+    public void onStart() {
+      tpl = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+    }
+
+    // Si rep el missatge de "temperature" envia la seva temperatura actual
+    public void action() {
+      msg = myAgent.receive(tpl);
+      if (msg != null) {
+        String content = msg.getContent();
+        if ((content != null) && (content.indexOf("new game") != -1)) {
+          // add balief
+          Belief aid = new TransientBelief("AID", msg.getSender());
+          beliefBase.addBelief(aid);
+          // add goal
+          addGoal(new MinimizePlayGoal());
+        }
+      }
+      else {
+        block();
+      }
+    }
+  }
+
   protected void init() {
     Object[] args = getArguments();
     if (args.length != 4) {
       System.out.println("incorrect args");
       doDelete();
     }
-
-    DFAgentDescription template = new DFAgentDescription();
-    ServiceDescription templateSd = new ServiceDescription();
-    templateSd.setType("player");
-    template.addServices(templateSd);
-    //SearchConstraints sc = new SearchConstraints();
-    //sc.setMaxResults(Long.valueOf(10));
-    /*
-    try { // envia un missatge un missatge en cas que no estigui dins el rang
-      DFAgentDescription[] results = DFService.search(this, template, null);
-      Random rand = new Random();
-      int agent_game = rand.nextInt(results.length);
-      DFAgentDescription
-      ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-      msg.setContent("new game");
-      int count = 0;
-      for (DFAgentDescription r : results) {
-        String a = getAID().getName();
-        String b = r.getName().getName();
-        if (!a.equals(b)) {
-          msg.addReceiver(r.getName());
-          count++;
-        }
-      }
-      if (count > 0) send(msg);
-    } catch (Exception e) {} */
 
     int CC = Integer.parseInt(args[0].toString());
     int CD = Integer.parseInt(args[1].toString());
@@ -77,8 +79,10 @@ public class Player extends SingleCapabilityAgent {
 
     //Plan plan = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
+    Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
+    c.getPlanLibrary().addPlan(find_agents);
     this.addGoal(new RegisterGoal(this));
   }
 }
