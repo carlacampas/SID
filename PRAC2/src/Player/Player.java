@@ -39,11 +39,12 @@ public class Player extends SingleCapabilityAgent {
     public void action() {
       msg = myAgent.receive(tpl);
       if (msg != null) {
+        System.out.println("here");
         String content = msg.getContent();
         if ((content != null) && (content.indexOf("new game") != -1)) {
           // add balief
-          Belief aid = new TransientBelief("AID", msg.getSender());
-          beliefBase.addBelief(aid);
+          //Belief aid = new TransientBelief("AID", msg.getSender());
+          //beliefBase.addBelief(aid);
           // add goal
           //addGoal(new MinimizePlayGoal());
         }
@@ -82,11 +83,15 @@ public class Player extends SingleCapabilityAgent {
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
     Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
+    Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(find_agents);
     c.getPlanLibrary().addPlan(play);
+    c.getPlanLibrary().addPlan(send);
     
     this.addGoal(new RegisterGoal(this));
+    RecieveMessages rm = new RecieveMessages();
+    this.addBehaviour(rm);
   }
 }
