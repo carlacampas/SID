@@ -21,26 +21,21 @@ public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
     SendGoal sg = (SendGoal) getGoal();
-    String choice = sg.getChoice();
-    AID player = sg.getPlayer();
     Agent a = sg.getAgent();
-
-    DFAgentDescription template = new DFAgentDescription();
-    ServiceDescription templateSd = new ServiceDescription();
-    templateSd.setType("alarm-management");
-    template.addServices(templateSd);
-    SearchConstraints sc = new SearchConstraints();
-    sc.setMaxResults(Long.valueOf(10));
-
-    try { // envia un missatge un missatge en cas que no estigui dins el rang
-      DFAgentDescription[] results = DFService.search(a, template, sc);
-      ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-      msg.setContent(choice);
-      msg.setOntology("play");
-      msg.addReceiver(player);
-      System.out.println("Message sent sucessfully");
-      a.send(msg);
-      setEndState(Plan.EndState.SUCCESSFUL);
-    } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+     
+ 
+    Set<AID> ag = (Set<AID>) this.getBeliefBase().getBelief("games").getValue();
+    for(AID r : ag){
+      try { // envia un missatge un missatge en cas que no estigui dins el rang
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.setContent("Play " + sg.getPlays());
+        msg.setOntology("play");
+        msg.addReceiver(r);
+        System.out.println("Message from " + a.getName() + " to " + r.getName() + " sent sucessfully");
+        a.send(msg);
+      } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+    }
+    sg.inc_plays();
+    if(sg.getPlays()==5) setEndState(Plan.EndState.SUCCESSFUL);
   }
 }
