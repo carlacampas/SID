@@ -18,6 +18,7 @@ import jade.domain.DFService;
 public class RegisterPlan extends AbstractPlanBody {
   @Override
   public void action() {
+    System.out.println("Register Plan:");
     RegisterGoal rg = (RegisterGoal) getGoal();
     Agent a = rg.getAgent();
 
@@ -36,9 +37,10 @@ public class RegisterPlan extends AbstractPlanBody {
     }
 
     if (rg.hasAgent()) {
-      System.out.println("agent sucessfully registered in platform");
+      System.out.println("agent " + a.getName() + " sucessfully registered in platform");
       setEndState(Plan.EndState.SUCCESSFUL);
       dispatchGoal(new FindGoal(a));
     }
+    System.out.println("-------------------------------------");
   }
 }
