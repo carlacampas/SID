@@ -18,6 +18,7 @@ import jade.domain.DFService;
 public class FindPlan extends AbstractPlanBody {
   @Override
   public void action() {
+    System.out.println("Find Plan:");
     FindGoal rg = (FindGoal) getGoal();
     Agent a = rg.getAgent();
 
@@ -25,25 +26,19 @@ public class FindPlan extends AbstractPlanBody {
     ServiceDescription templateSd = new ServiceDescription();
     templateSd.setType("player");
     template.addServices(templateSd);
-    //SearchConstraints sc = new SearchConstraints();
-    //sc.setMaxResults(Long.valueOf(10));
+
+    HashSet<AID> players = new HashSet(); 
     try {
-      //FALTA MIRAR QUE NO ESTES JUGANDO YA
-      DFAgentDescription[] results = DFService.search(a, template);
-      Set <String> s = new HashSet <>();
-      for (DFAgentDescription r : results) {
-        if (!r.getName().getName().equals(a.getAID().getName()))
-          s.add(r.getName().getName());
-      }
-      Random rand = new Random();
-      if (s.size() > 0) {
-        int agent_game = rand.nextInt(results.length);
-        AID play_against = results[agent_game].getName();
-        System.out.println(play_against);
-        System.out.println("sucessfully registered new game");
-        setEndState(Plan.EndState.SUCCESSFUL);
-        dispatchGoal(new MinimizePlayGoal(a, play_against));
-      }
-    } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+        DFAgentDescription[] results = DFService.search(a, template);
+        Set <String> s = new HashSet <>();
+        for (DFAgentDescription r : results) {
+          if (!r.getName().getName().equals(a.getAID().getName())) players.add(r.getName());
+        }
+      } catch (Exception e) {}
+      this.getBeliefBase().updateBelief("games", players);
+      dispatchGoal(new SendGoal(a));
+      setEndState(Plan.EndState.SUCCESSFUL);
+    System.out.println(this.getBeliefBase().getBelief("games"));
+    System.out.println("-------------------------------------------------");
   }
 }
