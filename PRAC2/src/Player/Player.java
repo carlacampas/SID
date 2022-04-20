@@ -39,7 +39,8 @@ public class Player extends SingleCapabilityAgent {
     public void action() {
       msg = myAgent.receive(tpl);
       if (msg != null) {
-        System.out.println("here");
+        System.out.println("Message received: " + msg.getContent());
+        System.out.println("Enviem resposta");
         String content = msg.getContent();
         if ((content != null) && (content.indexOf("new game") != -1)) {
           // add balief
@@ -70,6 +71,7 @@ public class Player extends SingleCapabilityAgent {
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBeliefSet("history", new HashSet());
+    Belief games = new TransientBeliefSet("games", new HashSet());
     Belief penalization = new TransientBelief("penalization", 0);
 
     Capability c = getCapability();
@@ -78,16 +80,16 @@ public class Player extends SingleCapabilityAgent {
     beliefBase.addBelief(C);
     beliefBase.addBelief(D);
     beliefBase.addBelief(history);
+    beliefBase.addBelief(games);
     beliefBase.addBelief(penalization);
 
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
-    Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
+    //Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(find_agents);
-    c.getPlanLibrary().addPlan(play);
     c.getPlanLibrary().addPlan(send);
     
     this.addGoal(new RegisterGoal(this));
