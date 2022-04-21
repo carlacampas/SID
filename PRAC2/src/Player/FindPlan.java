@@ -20,7 +20,6 @@ public class FindPlan extends AbstractPlanBody {
   public void action() {
     BeliefBase bb = getBeliefBase();
     Set<String> plays = (Set<String>) (bb.getBelief("plays").getValue());
-    Set<String> started = (Set<String>) (bb.getBelief("started").getValue());
 
     //System.out.println ("plays find: " + plays.toString());
     FindGoal rg = (FindGoal) getGoal();
@@ -44,11 +43,8 @@ public class FindPlan extends AbstractPlanBody {
       if (s.size() > 0) {
         int agent_game = rand.nextInt(results.length);
         AID play_against = results[agent_game].getName();
-        started.add(play_against.getName());
-        bb.updateBelief("started", started);
         plays.add(play_against.getName());
         bb.updateBelief("plays", plays);
-        System.out.println(play_against);
 
         System.out.println("sucessfully registered new game");
         dispatchGoal(new MinimizePlayGoal(a, play_against, null));

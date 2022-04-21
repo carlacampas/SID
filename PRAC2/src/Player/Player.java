@@ -37,8 +37,7 @@ public class Player extends SingleCapabilityAgent {
     
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
-    Belief history = new TransientBeliefSet("history", new HashSet());
-    Belief started = new TransientBeliefSet("started", new HashSet());
+    Belief history = new TransientBelief("history", new HashMap());
     Belief plays = new TransientBeliefSet("plays", new HashSet());
     Belief penalization = new TransientBelief("penalization", 0);
 
@@ -48,7 +47,6 @@ public class Player extends SingleCapabilityAgent {
     bb.addBelief(C);
     bb.addBelief(D);
     bb.addBelief(history);
-    bb.addBelief(started);
     bb.addBelief(plays);
     bb.addBelief(penalization);
 

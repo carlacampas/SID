@@ -35,7 +35,6 @@ public class SendPlan extends AbstractPlanBody {
       msg.setConversationId(a.getAID().getName());
     }
     
-
     try {
       a.send(msg);
       setEndState(Plan.EndState.SUCCESSFUL);

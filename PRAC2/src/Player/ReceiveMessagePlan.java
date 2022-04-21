@@ -22,8 +22,6 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
   public void action() {
     ReceiveMessageGoal rg = (ReceiveMessageGoal) getGoal();
     Agent a = rg.getAgent();
-    BeliefBase bb = getBeliefBase();
-    Set<String> started = (Set<String>) (bb.getBelief("started").getValue());
 
     MessageTemplate tpl = MessageTemplate.and(MessageTemplate.MatchPerformative(ACLMessage.INFORM), MessageTemplate.MatchOntology("play"));
     // Cyclic behaviour
@@ -32,7 +30,6 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
       String name = msg.getSender().getName();
       if (msg.getConversationId().equals(a.getAID().getName())) {
         dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender(), msg));
-        // count points, continue playing
       }
       else {
         String content = msg.getContent();

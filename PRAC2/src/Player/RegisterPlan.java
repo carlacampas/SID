@@ -31,7 +31,6 @@ public class RegisterPlan extends AbstractPlanBody {
     try {
       DFService.register(a,dfd);
     } catch (FIPAException e) {
-      //myLogger.log(Logger.SEVERE, "Agent " + getLocalName() + " - Cannot register with DF", e);
       setEndState(Plan.EndState.FAILED);
     }
 
