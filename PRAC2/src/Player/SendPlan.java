@@ -21,18 +21,27 @@ public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
     SendGoal sg = (SendGoal) getGoal();
+    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     String choice = sg.getChoice();
     AID player = sg.getPlayer();
     Agent a = sg.getAgent();
+    msg.setContent(choice);
+    msg.setOntology("play");
 
-    try { // envia un missatge un missatge en cas que no estigui dins el rang
-      ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-      msg.setContent(choice);
-      msg.setOntology("play");
+    if (sg.getMessage() != null)
+      msg = sg.getMessage().createReply();
+    else {
       msg.addReceiver(player);
-      System.out.println("Message sent sucessfully");
+      msg.setConversationId(a.getAID().getName());
+    }
+    
+
+    try {
       a.send(msg);
       setEndState(Plan.EndState.SUCCESSFUL);
-    } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+    } catch (Exception e) {
+      setEndState(Plan.EndState.FAILED);
+    }
+    
   }
 }

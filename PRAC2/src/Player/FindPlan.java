@@ -51,7 +51,7 @@ public class FindPlan extends AbstractPlanBody {
         System.out.println(play_against);
 
         System.out.println("sucessfully registered new game");
-        dispatchGoal(new MinimizePlayGoal(a, play_against));
+        dispatchGoal(new MinimizePlayGoal(a, play_against, null));
       }
     } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
   }

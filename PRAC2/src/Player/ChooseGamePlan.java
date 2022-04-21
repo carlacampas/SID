@@ -31,6 +31,6 @@ public class ChooseGamePlan extends AbstractPlanBody {
 
     System.out.println ("my_choice: " +  my_choice);
     setEndState(Plan.EndState.SUCCESSFUL);
-    dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice));
+    dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice, cg.getMessage()));
   }
 }

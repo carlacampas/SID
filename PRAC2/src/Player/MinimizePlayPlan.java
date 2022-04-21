@@ -37,6 +37,6 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     bb.removeBelief("AID");
     MinimizePlayGoal mpg = (MinimizePlayGoal) getGoal();
 
-    dispatchGoal(new SendGoal(mpg.getAgent(), mpg.getPlayer(), ch));
+    dispatchGoal(new SendGoal(mpg.getAgent(), mpg.getPlayer(), ch, mpg.getMessage()));
   }
 }

@@ -30,18 +30,14 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
     ACLMessage msg = a.receive(tpl);
     if (msg != null) {
       String name = msg.getSender().getName();
-      if (started.contains(name)) {
-        dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender()));
+      if (msg.getConversationId().equals(a.getAID().getName())) {
+        dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender(), msg));
         // count points, continue playing
       }
       else {
-        Set<String> senders = (Set<String>) (bb.getBelief("plays").getValue());
         String content = msg.getContent();
-        if (content != null && (content.equals("C") || content.equals("D"))) {
-          senders.add(name);
-          bb.updateBelief("plays", senders);
-          dispatchGoal(new ChooseGameGoal(content, a, msg.getSender()));
-        }
+        if (content != null && (content.equals("C") || content.equals("D")))
+          dispatchGoal(new ChooseGameGoal(content, a, msg.getSender(), msg));
       }
     }
   }
