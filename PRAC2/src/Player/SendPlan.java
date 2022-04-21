@@ -21,8 +21,6 @@ public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
     SendGoal sg = (SendGoal) getGoal();
-    String choice = sg.getChoice();
-    AID player = sg.getPlayer();
     Agent a = sg.getAgent();
 
     try { // envia un missatge un missatge en cas que no estigui dins el rang
