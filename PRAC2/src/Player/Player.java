@@ -57,7 +57,7 @@ public class Player extends SingleCapabilityAgent {
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
     Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
-    Plan choose = new DefaultPlan(ChooseGameGoal.class, ChooseGamePlan.class);
+    Plan choose = new DefaultPlan(ChoosePlayGoal.class, ChoosePlayPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(receive_message);

@@ -46,7 +46,7 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
           }
           bb.updateBelief("penalization", penalization);
           dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender(), msg));
-        } else dispatchGoal(new ChooseGameGoal(content, a, msg.getSender(), msg));
+        } else dispatchGoal(new ChoosePlayGoal(content, a, msg.getSender(), msg));
       }
     }
   }

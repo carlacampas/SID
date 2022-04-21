@@ -15,7 +15,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.DFService;
 
-public class ChooseGamePlan extends AbstractPlanBody {
+public class ChoosePlayPlan extends AbstractPlanBody {
   @Override
   public void action() {
     BeliefBase bb = getBeliefBase();
@@ -23,7 +23,7 @@ public class ChooseGamePlan extends AbstractPlanBody {
     int[] d = (int[]) (bb.getBelief("D").getValue());
     int penalization = (int) bb.getBelief("penalization").getValue();
 
-    ChooseGameGoal cg = (ChooseGameGoal) getGoal();
+    ChoosePlayGoal cg = (ChoosePlayGoal) getGoal();
     String choice = cg.getChoice();
 
     String my_choice = "D";
