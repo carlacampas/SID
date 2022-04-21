@@ -33,10 +33,10 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     bb.updateBelief("history", history);
     System.out.println(bb.getBelief("history").getValue().toString());
 
-    //setEndState(Plan.EndState.SUCCESSFUL);
+    setEndState(Plan.EndState.SUCCESSFUL);
     bb.removeBelief("AID");
     MinimizePlayGoal mpg = (MinimizePlayGoal) getGoal();
 
-    //dispatchGoal(new SendGoal(mpg.getAgent(), mpg.getPlayer(), ch));
+    dispatchGoal(new SendGoal(mpg.getAgent(), mpg.getPlayer(), ch));
   }
 }

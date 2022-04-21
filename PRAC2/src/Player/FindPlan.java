@@ -30,9 +30,10 @@ public class FindPlan extends AbstractPlanBody {
     ServiceDescription templateSd = new ServiceDescription();
     templateSd.setType("player");
     template.addServices(templateSd);
-
-    HashSet<AID> players = new HashSet();
+    //SearchConstraints sc = new SearchConstraints();
+    //sc.setMaxResults(Long.valueOf(10));
     try {
+      //FALTA MIRAR QUE NO ESTES JUGANDO YA
       DFAgentDescription[] results = DFService.search(a, template);
       Set <String> s = new HashSet <>();
       for (DFAgentDescription r : results) {

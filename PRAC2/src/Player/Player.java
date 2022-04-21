@@ -34,7 +34,7 @@ public class Player extends SingleCapabilityAgent {
     int CD = Integer.parseInt(args[1].toString());
     int DC = Integer.parseInt(args[2].toString());
     int DD = Integer.parseInt(args[3].toString());
-
+    
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBeliefSet("history", new HashSet());
@@ -55,13 +55,14 @@ public class Player extends SingleCapabilityAgent {
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
     Plan receive_message = new DefaultPlan(ReceiveMessageGoal.class, ReceiveMessagePlan.class);
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
-    //Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
+    Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
     Plan choose = new DefaultPlan(ChooseGameGoal.class, ChooseGamePlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(receive_message);
     c.getPlanLibrary().addPlan(find_agents);
+    c.getPlanLibrary().addPlan(play);
     c.getPlanLibrary().addPlan(send);
     c.getPlanLibrary().addPlan(choose);
 

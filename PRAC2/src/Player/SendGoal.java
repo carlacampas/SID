@@ -16,14 +16,15 @@ import jade.core.Agent;
 public class SendGoal implements Goal {
   private Agent a;
   private AID player;
-  private int plays;
+  private String choice;
 
-  public SendGoal(Agent a) {
+  public SendGoal(Agent a, AID player, String choice) {
     this.a = a;
-    plays = 0;
+    this.player = player;
+    this.choice = choice;
   }
 
   public Agent getAgent() { return a; }
-  public int getPlays() { return plays; }
-  public void inc_plays() {++plays;};
+  public AID getPlayer() { return player; }
+  public String getChoice() { return choice; }
 }
