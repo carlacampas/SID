@@ -14,6 +14,8 @@ public class History {
     this.last_selection = last_selection;
   }
 
+  public String getSelection() { return last_selection; }
+
   public AID getPlayer() { return player; }
   @Override
   public boolean equals(Object o) {

@@ -29,9 +29,7 @@ public class MinimizePlayPlan extends AbstractPlanBody {
 
     History h = new History(mpg.getPlayer(), ch);
     history.put(mpg.getPlayer().getName(), h);
-
     bb.updateBelief("history", history);
-    //System.out.println(bb.getBelief("history").getValue().toString());
 
     setEndState(Plan.EndState.SUCCESSFUL);
 

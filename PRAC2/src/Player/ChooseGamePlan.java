@@ -21,15 +21,27 @@ public class ChooseGamePlan extends AbstractPlanBody {
     BeliefBase bb = getBeliefBase();
     int[] c = (int[]) (bb.getBelief("C").getValue());
     int[] d = (int[]) (bb.getBelief("D").getValue());
+    int penalization = (int) bb.getBelief("penalization").getValue();
 
     ChooseGameGoal cg = (ChooseGameGoal) getGoal();
     String choice = cg.getChoice();
 
     String my_choice = "D";
-    if ((cg.equals("C") && c[0] <= d[0]) || (cg.equals("D") && c[1] > d[1]))
-      my_choice = "C";
+    if (cg.equals("C")) {
+      if (c[0] <= d[0]) {
+        my_choice = "C";
+        penalization += c[0];
+      } else penalization += d[0];
+    }
+    else {
+      if (c[1] > d[1]) {
+        my_choice = "C";
+        penalization += c[1];
+      } else penalization += d[1];
+    }
 
     System.out.println ("my_choice: " +  my_choice);
+    bb.updateBelief("penalization", penalization);
     setEndState(Plan.EndState.SUCCESSFUL);
     dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice, cg.getMessage()));
   }

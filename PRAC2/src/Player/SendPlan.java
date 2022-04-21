@@ -21,19 +21,25 @@ public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
     SendGoal sg = (SendGoal) getGoal();
+
+    BeliefBase bb = getBeliefBase();
+    int penalization = (int) bb.getBelief("penalization").getValue();
+    System.out.println(sg.getAgent().getAID().getName() + " " + penalization);
+
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     String choice = sg.getChoice();
     AID player = sg.getPlayer();
     Agent a = sg.getAgent();
-    msg.setContent(choice);
-    msg.setOntology("play");
 
     if (sg.getMessage() != null)
       msg = sg.getMessage().createReply();
     else {
-      msg.addReceiver(player);
       msg.setConversationId(a.getAID().getName());
     }
+
+    msg.setContent(choice);
+    msg.setOntology("play");
+    msg.addReceiver(player);
     
     try {
       a.send(msg);

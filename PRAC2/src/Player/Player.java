@@ -39,6 +39,7 @@ public class Player extends SingleCapabilityAgent {
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBelief("history", new HashMap());
     Belief plays = new TransientBeliefSet("plays", new HashSet());
+    Belief found_agents = new TransientBelief("found_agents", new HashMap());
     Belief penalization = new TransientBelief("penalization", 0);
 
     Capability c = getCapability();
@@ -48,6 +49,7 @@ public class Player extends SingleCapabilityAgent {
     bb.addBelief(D);
     bb.addBelief(history);
     bb.addBelief(plays);
+    bb.addBelief(found_agents);
     bb.addBelief(penalization);
 
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
