@@ -38,6 +38,7 @@ public class RegisterPlan extends AbstractPlanBody {
     if (rg.hasAgent()) {
       System.out.println("agent sucessfully registered in platform");
       setEndState(Plan.EndState.SUCCESSFUL);
+      dispatchGoal(new ReceiveMessageGoal(a));
       dispatchGoal(new FindGoal(a));
     }
   }

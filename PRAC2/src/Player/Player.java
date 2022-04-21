@@ -23,38 +23,6 @@ import jade.util.Logger;
 import bdi4jade.goal.SequentialGoal;
 
 public class Player extends SingleCapabilityAgent {
-  Set<AID> seen = new HashSet <>();
-  BeliefBase beliefBase;
-
-  // Cyclic behaviour
-  public class RecieveMessages extends CyclicBehaviour {
-    MessageTemplate tpl;
-    ACLMessage msg;
-
-    public void onStart() {
-      tpl = MessageTemplate.MatchPerformative(ACLMessage.INFORM); //and MessageTemplate.MatchOntology("play");
-    }
-
-    // Si rep el missatge de "temperature" envia la seva temperatura actual
-    public void action() {
-      msg = myAgent.receive(tpl);
-      if (msg != null) {
-        System.out.println("here");
-        String content = msg.getContent();
-        if ((content != null) && (content.indexOf("new game") != -1)) {
-          // add balief
-          //Belief aid = new TransientBelief("AID", msg.getSender());
-          //beliefBase.addBelief(aid);
-          // add goal
-          //addGoal(new MinimizePlayGoal());
-        }
-      }
-      else {
-        block();
-      }
-    }
-  }
-
   protected void init() {
     Object[] args = getArguments();
     if (args.length != 4) {
@@ -70,28 +38,34 @@ public class Player extends SingleCapabilityAgent {
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBeliefSet("history", new HashSet());
+    Belief started = new TransientBeliefSet("started", new HashSet());
+    Belief plays = new TransientBeliefSet("plays", new HashSet());
     Belief penalization = new TransientBelief("penalization", 0);
 
     Capability c = getCapability();
-    beliefBase = c.getBeliefBase();
+    BeliefBase bb = c.getBeliefBase();
 
-    beliefBase.addBelief(C);
-    beliefBase.addBelief(D);
-    beliefBase.addBelief(history);
-    beliefBase.addBelief(penalization);
+    bb.addBelief(C);
+    bb.addBelief(D);
+    bb.addBelief(history);
+    bb.addBelief(started);
+    bb.addBelief(plays);
+    bb.addBelief(penalization);
 
     Plan reg = new DefaultPlan(RegisterGoal.class, RegisterPlan.class);
+    Plan receive_message = new DefaultPlan(ReceiveMessageGoal.class, ReceiveMessagePlan.class);
     Plan find_agents = new DefaultPlan(FindGoal.class, FindPlan.class);
     Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
+    Plan choose = new DefaultPlan(ChooseGameGoal.class, ChooseGamePlan.class);
 
     c.getPlanLibrary().addPlan(reg);
+    c.getPlanLibrary().addPlan(receive_message);
     c.getPlanLibrary().addPlan(find_agents);
     c.getPlanLibrary().addPlan(play);
     c.getPlanLibrary().addPlan(send);
-    
+    c.getPlanLibrary().addPlan(choose);
+
     this.addGoal(new RegisterGoal(this));
-    RecieveMessages rm = new RecieveMessages();
-    this.addBehaviour(rm);
   }
 }
