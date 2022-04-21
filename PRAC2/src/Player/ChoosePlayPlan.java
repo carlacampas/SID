@@ -24,9 +24,9 @@ public class ChoosePlayPlan extends AbstractPlanBody {
     int penalization = (int) bb.getBelief("penalization").getValue();
 
     ChoosePlayGoal cg = (ChoosePlayGoal) getGoal();
-    String choice = cg.getChoice();
-
-    String my_choice = "D";
+    String choice, my_choice;
+    my_choice = choice = cg.getChoice();
+    
     if (cg.equals("C")) {
       if (c[0] <= d[0]) {
         my_choice = "C";

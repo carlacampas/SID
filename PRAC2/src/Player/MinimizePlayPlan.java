@@ -20,13 +20,14 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     int[] d = (int[]) (bb.getBelief("D").getValue());
     Set<String> plays = (Set<String>) (bb.getBelief("plays").getValue());
     Map<String, History> history = (Map<String, History>) bb.getBelief("history").getValue();
-    
-    int c_min = Math.min(c[0], c[1]);
-    int d_min = Math.min(d[0], d[1]);
 
-    String ch = "D";
-    if (c_min <= d_min) ch = "C";
-
+    String ch = "";
+    if (!history.containsKey(mpg.getPlayer().getName()))
+      ch = "C";
+    else {
+      History h = history.get(mpg.getPlayer().getName());
+      ch = history.get(mpg.getPlayer().getName()).getLastPlay();
+    }
     History h = new History(mpg.getPlayer(), ch);
     history.put(mpg.getPlayer().getName(), h);
     bb.updateBelief("history", history);

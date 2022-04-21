@@ -21,12 +21,10 @@ public class ChoosePlayGoal implements Goal {
   private ACLMessage msg;
 
   public ChoosePlayGoal(String choice, Agent a, AID against, ACLMessage msg) {
-
     my_agent = a;
     this.choice = choice;
     this.against = against;
     this.msg = msg;
-
   }
 
   public Agent getAgent() { return my_agent; }

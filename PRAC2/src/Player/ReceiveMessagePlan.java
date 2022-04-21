@@ -44,6 +44,9 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
             if (content == "C") penalization += d[0];  //DC
             else penalization += d[1];  //DD
           }
+          h.setLastPlay(content);
+          history.replace(name, h);
+          bb.updateBelief("history", history);
           bb.updateBelief("penalization", penalization);
           dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender(), msg));
         } else dispatchGoal(new ChoosePlayGoal(content, a, msg.getSender(), msg));
