@@ -7,12 +7,18 @@ import jade.core.AID;
 
 public class History {
   private AID player;
-  private String last_selection;
+  private String selection;
+  private String last_play;
 
-  public History (AID player, String last_selection) {
+  public History (AID player, String selection) {
     this.player = player;
-    this.last_selection = last_selection;
+    this.selection = selection;
+    this.last_play = "";
   }
+
+  public void setLastPlay(String last_play) { this.last_play = last_play; }
+  public String getLastPlay() { return this.last_play; }
+  public String getSelection() { return selection; }
 
   public AID getPlayer() { return player; }
   @Override

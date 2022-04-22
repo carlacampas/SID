@@ -25,23 +25,13 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     int c_min = Math.min(c[0], c[1]);
     int d_min = Math.min(d[0], d[1]);
 
-    String ch = "D";
-    if (c_min <= d_min) ch = "C";
-    /*
+    String ch = "";
+    if (!history.containsKey(mpg.getPlayer().getName()))
+      ch = "C";
+    else {
+      ch = history.get(mpg.getPlayer().getName()).getLastPlay();
+    }
     ArrayList<Object> elems = new ArrayList<Object>();
-
-    History h = new History(mpg.Player(), ch);
-
-    elems.add(h);
-    elems.add(cg.getMessage());
-    history.put(cg.getPlayer().getName(), elems);
-    bb.updateBelief("historyReplies", history);
-
-
-    */
-
-    ArrayList<Object> elems = new ArrayList<Object>();
-
     History h = new History(mpg.getPlayer(), ch);
 
     elems.add(h);
@@ -49,11 +39,10 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     history.put(mpg.getPlayer().getName(), elems);
     bb.updateBelief("historyReplies", history);
 
-    bb.updateBelief("history", history);
     //System.out.println(bb.getBelief("history").getValue().toString());
 
     setEndState(Plan.EndState.SUCCESSFUL);
 
-    //dispatchGoal(new SendGoal());
+    dispatchGoal(new SendGoal(mpg.getAgent(), mpg.getPlayer(), ch, mpg.getMessage()));
   }
 }

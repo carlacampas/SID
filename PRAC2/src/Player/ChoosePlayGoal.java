@@ -14,19 +14,17 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
-public class ChooseGameGoal implements Goal {
+public class ChoosePlayGoal implements Goal {
   private Agent my_agent;
   private String choice;
   private AID against;
   private ACLMessage msg;
 
-  public ChooseGameGoal(String choice, Agent a, AID against, ACLMessage msg) {
-
+  public ChoosePlayGoal(String choice, Agent a, AID against, ACLMessage msg) {
     my_agent = a;
     this.choice = choice;
     this.against = against;
     this.msg = msg;
-
   }
 
   public Agent getAgent() { return my_agent; }

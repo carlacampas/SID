@@ -17,13 +17,15 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.lang.acl.ACLMessage;
 
-
 public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
 
-    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     BeliefBase bb = getBeliefBase();
+    int penalization = (int) bb.getBelief("penalization").getValue();
+    //System.out.println(sg.getAgent().getAID().getName() + " " + penalization);
+
+    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 
     Map<String, Object> history = (Map<String, Object>) bb.getBelief("history").getValue();
     try {
@@ -41,13 +43,17 @@ public class SendPlan extends AbstractPlanBody {
       bb.updateBelief("history", history);
       msg.setContent(choice);
       msg.setOntology("play");
+      Map.Entry<String, Object> entry = history.entrySet().iterator().next();
 
       if (incoming != null)
         msg = incoming.createReply();
       else {
-        msg.addReceiver(player);
         msg.setConversationId(a.getAID().getName());
       }
+
+      msg.setContent(choice);
+      msg.setOntology("play");
+      msg.addReceiver(player);
 
       try {
         a.send(msg);

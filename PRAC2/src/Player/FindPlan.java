@@ -3,6 +3,7 @@ package examples.Player;
 import java.util.*;
 import bdi4jade.goal.Goal;
 import bdi4jade.goal.SequentialGoal;
+import bdi4jade.goal.SequentialGoal;
 import bdi4jade.plan.DefaultPlan;
 import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
@@ -21,39 +22,44 @@ public class FindPlan extends AbstractPlanBody {
   public void action() {
     BeliefBase bb = getBeliefBase();
     Set<String> plays = (Set<String>) (bb.getBelief("plays").getValue());
+    Map<String, AID> found_agents = (Map<String, AID>) (bb.getBelief("found_agents").getValue());
 
     //System.out.println ("plays find: " + plays.toString());
     FindGoal rg = (FindGoal) getGoal();
     Agent a = rg.getAgent();
 
-    DFAgentDescription template = new DFAgentDescription();
-    ServiceDescription templateSd = new ServiceDescription();
-    templateSd.setType("player");
-    template.addServices(templateSd);
-    //SearchConstraints sc = new SearchConstraints();
-    //sc.setMaxResults(Long.valueOf(10));
-    try {
-      //FALTA MIRAR QUE NO ESTES JUGANDO YA
-      DFAgentDescription[] results = DFService.search(a, template);
-      Set <String> s = new HashSet <>();
-      for (DFAgentDescription r : results) {
-        if (!r.getName().getName().equals(a.getAID().getName()) && !plays.contains(r.getName().getName()))
-          s.add(r.getName().getName());
-      }
-      Random rand = new Random();
-      if (s.size() > 0) {
-        int agent_game = rand.nextInt(results.length);
-        AID play_against = results[agent_game].getName();
-        plays.add(play_against.getName());
-        bb.updateBelief("plays", plays);
+    if (found_agents.size() == 0) {
+      DFAgentDescription template = new DFAgentDescription();
+      ServiceDescription templateSd = new ServiceDescription();
+      templateSd.setType("player");
+      template.addServices(templateSd);
+      //SearchConstraints sc = new SearchConstraints();
+      //sc.setMaxResults(Long.valueOf(10));
+      try {
+        DFAgentDescription[] results = DFService.search(a, template);
+        for (DFAgentDescription r : results) {
+          if (!r.getName().getName().equals(a.getAID().getName()) && !plays.contains(r.getName().getName()))
+            found_agents.put(r.getName().getName(), r.getName());
+        }
+      } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+    }
 
-        System.out.println("sucessfully registered new game");
-        ArrayList<Goal> goals = new ArrayList<Goal>();
-        goals.add(new MinimizePlayGoal(a, play_against, null));
-        goals.add(new SendGoal());
-        SequentialGoal seq = new SequentialGoal(goals);
-        dispatchGoal(seq);
-      }
-    } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
+    if (found_agents.size() > 0) {
+      AID[] results = found_agents.values().toArray(new AID[found_agents.size()]);
+      Random rand = new Random();
+      int agent_game = rand.nextInt(results.length);
+      AID play_against = results[agent_game];
+      plays.add(play_against.getName());
+      found_agents.remove(play_against.getName());
+      bb.updateBelief("plays", plays);
+      bb.updateBelief("found_agents", found_agents);
+      System.out.println("sucessfully registered new game");
+      ArrayList<Goal> goals = new ArrayList<Goal>();
+      goals.add(new MinimizePlayGoal(a, play_against, null));
+      goals.add(new SendGoal());
+      SequentialGoal seq = new SequentialGoal(goals);
+      dispatchGoal(seq);
+      //dispatchGoal(new MinimizePlayGoal(a, play_against, null));
+    }
   }
 }
