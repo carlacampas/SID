@@ -1,4 +1,4 @@
-package src.Player;
+package examples.Player;
 
 import bdi4jade.belief.BeliefBase;
 import bdi4jade.plan.Plan.EndState;
@@ -7,29 +7,34 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
 public class ReplayPlan extends AbstractPlanBody {
   @Override
   public void action() {
-    SendGoal sg = (SendGoal) getGoal();
+    System.out.println("Llego a replyPlan!");
+    //SendGoal sg = (SendGoal) getGoal();
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     BeliefBase bb = getBeliefBase();
-    Map<String, History> history = (Map<String, History>) bb.getBelief("history").getValue();
-    Map.Entry<String, History> entry = history.entrySet().iterator().next();
+    Map<String, Object> history = (Map<String, Object>) bb.getBelief("historyReplies").getValue();
+    Map.Entry<String, Object> entry = history.entrySet().iterator().next();
     String key = entry.getKey();
-    History hist = entry.getValue();
+    ArrayList<Object> hist_vect = (ArrayList<Object>) entry.getValue();
+    History hist = (History) hist_vect.get(0);
+    ACLMessage incoming = (ACLMessage) hist_vect.get(1);
 
     String choice = hist.getLast_selection();
     AID player = hist.getPlayer();
     Agent a = getAgent();
     history.remove(key);
+    bb.updateBelief("historyReplies", history);
     msg.setContent(choice);
     msg.setOntology("play");
 
-    if (sg.getMessage() != null)
-      msg = sg.getMessage().createReply();
+    if (incoming != null)
+      msg = incoming.createReply();
     else {
       msg.addReceiver(player);
       msg.setConversationId(a.getAID().getName());

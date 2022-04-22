@@ -20,12 +20,12 @@ public class SendGoal implements Goal {
   private String choice;
   private ACLMessage msg;
 
-  public SendGoal(Agent a, AID player, String choice, ACLMessage msg) {
+  /*public SendGoal(Agent a, AID player, String choice, ACLMessage msg) {
     this.a = a;
     this.player = player;
     this.choice = choice;
     this.msg = msg;
-  }
+  }*/
 
   public Agent getAgent() { return a; }
   public AID getPlayer() { return player; }

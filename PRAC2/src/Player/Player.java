@@ -38,6 +38,7 @@ public class Player extends SingleCapabilityAgent {
     Belief C = new TransientBelief("C", new int[] {CC, CD});
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBelief("history", new HashMap());
+    Belief history2 = new TransientBelief("historyReplies", new HashMap());
     Belief plays = new TransientBeliefSet("plays", new HashSet());
     Belief penalization = new TransientBelief("penalization", 0);
 
@@ -47,6 +48,7 @@ public class Player extends SingleCapabilityAgent {
     bb.addBelief(C);
     bb.addBelief(D);
     bb.addBelief(history);
+    bb.addBelief(history2);
     bb.addBelief(plays);
     bb.addBelief(penalization);
 
@@ -56,6 +58,7 @@ public class Player extends SingleCapabilityAgent {
     Plan play = new DefaultPlan(MinimizePlayGoal.class, MinimizePlayPlan.class);
     Plan send = new DefaultPlan(SendGoal.class, SendPlan.class);
     Plan choose = new DefaultPlan(ChooseGameGoal.class, ChooseGamePlan.class);
+    Plan reply_message = new DefaultPlan(ReplyGoal.class, ReplayPlan.class);
 
     c.getPlanLibrary().addPlan(reg);
     c.getPlanLibrary().addPlan(receive_message);
@@ -63,6 +66,7 @@ public class Player extends SingleCapabilityAgent {
     c.getPlanLibrary().addPlan(play);
     c.getPlanLibrary().addPlan(send);
     c.getPlanLibrary().addPlan(choose);
+    c.getPlanLibrary().addPlan(reply_message);
 
     this.addGoal(new RegisterGoal(this));
   }

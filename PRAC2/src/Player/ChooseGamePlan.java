@@ -25,12 +25,25 @@ public class ChooseGamePlan extends AbstractPlanBody {
     ChooseGameGoal cg = (ChooseGameGoal) getGoal();
     String choice = cg.getChoice();
 
+    Map<String, Object> history = (Map<String, Object>) bb.getBelief("historyReplies").getValue();
+
+
+
     String my_choice = "D";
     if ((cg.equals("C") && c[0] <= d[0]) || (cg.equals("D") && c[1] > d[1]))
       my_choice = "C";
 
+    ArrayList<Object> elems = new ArrayList<Object>();
+
+    History h = new History(cg.getAgainst(), my_choice);
+
+    elems.add(h);
+    elems.add(cg.getMessage());
+    history.put(cg.getAgainst().getName(), elems);
+    bb.updateBelief("historyReplies", history);
+
     System.out.println ("my_choice: " +  my_choice);
     setEndState(Plan.EndState.SUCCESSFUL);
-    dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice, cg.getMessage()));
+    //dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice, cg.getMessage()));
   }
 }

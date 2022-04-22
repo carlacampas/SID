@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="PRAC2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PRAC2/commons-logging-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/PRAC2/jade.jar!/" />
+      <root url="jar://$PROJECT_DIR$/PRAC2/bdi4jade.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

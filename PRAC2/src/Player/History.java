@@ -22,4 +22,6 @@ public class History {
     if (h.getPlayer().getName() == this.player.getName()) return true;
     return false;
   }
+
+  public String getLast_selection(){return last_selection;}
 }

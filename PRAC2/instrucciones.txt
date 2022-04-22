@@ -1,0 +1,13 @@
+Como ejecutar y compilar.
+
+Compilar:
+
+javac -d classes/ src/PlayerVX.java
+
+
+Ejecutar:
+
+java -cp "$CLASSPATH:./classes/" jade.Boot -gui "player:sid.prac2.PlayerVX(1,2,3,4)"
+
+
+Donde X es la versión de Player a compilar/ejecutar.

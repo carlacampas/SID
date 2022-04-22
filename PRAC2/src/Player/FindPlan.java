@@ -2,6 +2,7 @@ package examples.Player;
 
 import java.util.*;
 import bdi4jade.goal.Goal;
+import bdi4jade.goal.SequentialGoal;
 import bdi4jade.plan.DefaultPlan;
 import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
@@ -47,7 +48,11 @@ public class FindPlan extends AbstractPlanBody {
         bb.updateBelief("plays", plays);
 
         System.out.println("sucessfully registered new game");
-        dispatchGoal(new MinimizePlayGoal(a, play_against, null));
+        ArrayList<Goal> goals = new ArrayList<Goal>();
+        goals.add(new MinimizePlayGoal(a, play_against, null));
+        goals.add(new SendGoal());
+        SequentialGoal seq = new SequentialGoal(goals);
+        dispatchGoal(seq);
       }
     } catch (Exception e) { setEndState(Plan.EndState.FAILED); }
   }

@@ -2,6 +2,7 @@ package examples.Player;
 
 import java.util.*;
 import bdi4jade.goal.Goal;
+import bdi4jade.goal.SequentialGoal;
 import bdi4jade.plan.DefaultPlan;
 import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
@@ -16,6 +17,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.DFService;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import examples.Player.ReplyGoal;
 
 public class ReceiveMessagePlan extends AbstractPlanBody {
   @Override
@@ -33,8 +35,14 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
       }
       else {
         String content = msg.getContent();
-        if (content != null && (content.equals("C") || content.equals("D")))
-          dispatchGoal(new ChooseGameGoal(content, a, msg.getSender(), msg));
+        if (content != null && (content.equals("C") || content.equals("D"))) {
+          ArrayList<Goal> goals = new ArrayList<Goal>();
+          goals.add(new ChooseGameGoal(content, a, msg.getSender(), msg));
+          goals.add(new ReplyGoal());
+          SequentialGoal seq = new SequentialGoal(goals);
+          dispatchGoal(seq);
+          // dispatchGoal(new ChooseGameGoal(content, a, msg.getSender(), msg));
+        }
       }
     }
   }

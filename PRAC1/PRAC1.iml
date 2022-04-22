@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/Termometro" isTestSource="false" packagePrefix="sid.prac1" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Termostato" isTestSource="false" packagePrefix="sid.prac1" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="PRAC2" level="project" />
+    <orderEntry type="library" name="jade" level="project" />
+  </component>
+</module>

@@ -17,30 +17,49 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.lang.acl.ACLMessage;
 
+
 public class SendPlan extends AbstractPlanBody {
   @Override
   public void action() {
-    SendGoal sg = (SendGoal) getGoal();
-    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-    String choice = sg.getChoice();
-    AID player = sg.getPlayer();
-    Agent a = sg.getAgent();
-    msg.setContent(choice);
-    msg.setOntology("play");
 
-    if (sg.getMessage() != null)
-      msg = sg.getMessage().createReply();
-    else {
-      msg.addReceiver(player);
-      msg.setConversationId(a.getAID().getName());
-    }
-    
+    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+    BeliefBase bb = getBeliefBase();
+
+    Map<String, Object> history = (Map<String, Object>) bb.getBelief("history").getValue();
     try {
-      a.send(msg);
-      setEndState(Plan.EndState.SUCCESSFUL);
-    } catch (Exception e) {
-      setEndState(Plan.EndState.FAILED);
+      Map.Entry<String, Object> entry = history.entrySet().iterator().next();
+
+      String key = entry.getKey();
+      ArrayList<Object> hist_vect = (ArrayList<Object>) entry.getValue();
+      History hist = (History) hist_vect.get(0);
+      ACLMessage incoming = (ACLMessage) hist_vect.get(1);
+
+      String choice = hist.getLast_selection();
+      AID player = hist.getPlayer();
+      Agent a = getAgent();
+      history.remove(key);
+      bb.updateBelief("history", history);
+      msg.setContent(choice);
+      msg.setOntology("play");
+
+      if (incoming != null)
+        msg = incoming.createReply();
+      else {
+        msg.addReceiver(player);
+        msg.setConversationId(a.getAID().getName());
+      }
+
+      try {
+        a.send(msg);
+        setEndState(Plan.EndState.SUCCESSFUL);
+      } catch (Exception e) {
+        setEndState(Plan.EndState.FAILED);
+      }
     }
-    
+    catch (Exception e) {
+
+      System.out.println("Esta vacio");
+
+    }
   }
 }
