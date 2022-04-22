@@ -36,14 +36,13 @@ public class SendPlan extends AbstractPlanBody {
       History hist = (History) hist_vect.get(0);
       ACLMessage incoming = (ACLMessage) hist_vect.get(1);
 
-      String choice = hist.getLast_selection();
+      String choice = hist.getLastPlay();
       AID player = hist.getPlayer();
       Agent a = getAgent();
       history.remove(key);
       bb.updateBelief("history", history);
       msg.setContent(choice);
       msg.setOntology("play");
-      Map.Entry<String, Object> entry = history.entrySet().iterator().next();
 
       if (incoming != null)
         msg = incoming.createReply();

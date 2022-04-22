@@ -29,5 +29,4 @@ public class History {
     return false;
   }
 
-  public String getLast_selection(){return last_selection;}
 }

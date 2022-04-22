@@ -9,6 +9,7 @@ import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
 import bdi4jade.core.*;
+import bdi4jade.goal.*;
 import jade.core.AID;
 import jade.domain.FIPAException;
 import jade.core.Agent;
@@ -22,7 +23,10 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
   @Override
   public void action() {
     BeliefBase bb = getBeliefBase();
-    Map<String, History> history = (Map<String, History>) bb.getBelief("history").getValue();
+
+    Map<String, ArrayList<Object>> history_container = (Map<String, ArrayList<Object>>) bb.getBelief("history").getValue();
+
+
     int penalization = (int) bb.getBelief("penalization").getValue();
     int[] c = (int[]) (bb.getBelief("C").getValue());
     int[] d = (int[]) (bb.getBelief("D").getValue());
@@ -37,7 +41,7 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
       String content = msg.getContent(), name = msg.getSender().getName();
       if (content != null && (content.equals("C") || content.equals("D"))) {
         if (msg.getConversationId().equals(a.getAID().getName())) {
-          History h = history.get(name);
+          History h = (History) history_container.get(name).get(0);
           if (h.getSelection() == "C") {
             if (content == "C") penalization += c[0];  //CC
             else penalization += c[1];  //CD
@@ -46,11 +50,14 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
             else penalization += d[1];  //DD
           }
           h.setLastPlay(content);
-          history.replace(name, h);
-          bb.updateBelief("history", history);
+          ArrayList<Object> new_hist_vect = new ArrayList<Object>();
+          new_hist_vect.add(h);
+          new_hist_vect.add(msg);
+          history_container.replace(name, new_hist_vect);
+          bb.updateBelief("history", history_container);
           bb.updateBelief("penalization", penalization);
-          dispatchGoal(new MinimizePlayGoal(rg.getAgent(), msg.getSender(), msg));
-        } else dispatchGoal(new ChoosePlayGoal(content, a, msg.getSender(), msg));
+          dispatch_sequential_minimize(content, a, msg);
+        } else dispatch_sequential_choose(content, a,  msg);
       }
     }
   }
@@ -58,7 +65,7 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
 
 
     ArrayList<Goal> goals = new ArrayList<Goal>();
-    goals.add(new ChooseGameGoal(content, a, msg.getSender(), msg));
+    goals.add(new ChoosePlayGoal(content, a, msg.getSender(), msg));
     goals.add(new examples.Player.ReplyGoal());
     SequentialGoal seq = new SequentialGoal(goals);
     dispatchGoal(seq);
@@ -68,7 +75,7 @@ public class ReceiveMessagePlan extends AbstractPlanBody {
 
 
     ArrayList<Goal> goals = new ArrayList<Goal>();
-    goals.add(new ChooseGameGoal(content, a, msg.getSender(), msg));
+    goals.add(new MinimizePlayGoal(a, msg.getSender(), msg));
     goals.add(new examples.Player.ReplyGoal());
     SequentialGoal seq = new SequentialGoal(goals);
     dispatchGoal(seq);
