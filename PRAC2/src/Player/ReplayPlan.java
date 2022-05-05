@@ -7,7 +7,9 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 
 
@@ -18,18 +20,20 @@ public class ReplayPlan extends AbstractPlanBody {
     //SendGoal sg = (SendGoal) getGoal();
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
     BeliefBase bb = getBeliefBase();
-    Map<String, Object> history = (Map<String, Object>) bb.getBelief("historyReplies").getValue();
-    Map.Entry<String, Object> entry = history.entrySet().iterator().next();
+    LinkedList<QueueElem> queue = (LinkedList<QueueElem>) bb.getBelief("replyQueue").getValue();
+    if(queue.isEmpty()) System.out.println("En ReplyPlan history está vacio");
+    /*Map.Entry<String, Object> entry = history.entrySet().iterator().next();
     String key = entry.getKey();
-    ArrayList<Object> hist_vect = (ArrayList<Object>) entry.getValue();
-    History hist = (History) hist_vect.get(0);
-    ACLMessage incoming = (ACLMessage) hist_vect.get(1);
+    ArrayList<Object> hist_vect = (ArrayList<Object>) entry.getValue();*/
+    QueueElem qelem = queue.poll();
+    History hist = qelem.getHistory();
+    ACLMessage incoming = qelem.getMessage();
 
-    String choice = hist.getLastPlay();
+    String choice = hist.getSelection();
     AID player = hist.getPlayer();
     Agent a = getAgent();
-    history.remove(key);
-    bb.updateBelief("historyReplies", history);
+
+    bb.updateBelief("replyQueue", queue);
     msg.setContent(choice);
     msg.setOntology("play");
 
@@ -41,6 +45,8 @@ public class ReplayPlan extends AbstractPlanBody {
     }
     
     try {
+      msg.setContent(choice);
+      System.out.println("Contenido antes de reply: " + msg.getContent());
       a.send(msg);
       setEndState(EndState.SUCCESSFUL);
     } catch (Exception e) {

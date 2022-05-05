@@ -27,44 +27,39 @@ public class SendPlan extends AbstractPlanBody {
 
     ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 
-    Map<String, Object> history = (Map<String, Object>) bb.getBelief("history").getValue();
+    LinkedList<QueueElem> queue = (LinkedList<QueueElem>) bb.getBelief("sendQueue").getValue();
+    if(!queue.isEmpty()) System.out.println("Hay cosas que enviar!");
+
+    QueueElem qelem = queue.poll();
+    History hist = qelem.getHistory();
+    ACLMessage incoming = qelem.getMessage();
+
+    String choice = hist.getSelection();
+    //System.out.println("choice es: " + choice);
+    AID player = hist.getPlayer();
+    //System.out.println("AID de player es: " + player.getName());
+    Agent a = getAgent();
+    bb.updateBelief("sendQueue", queue);
+
+    if (incoming != null)
+      msg = incoming.createReply();
+    else {
+      msg.setConversationId(a.getAID().getName());
+    }
+
+    msg.setContent(choice);
+    msg.setOntology("play");
+    msg.addReceiver(player);
+    //System.out.println("Intentando imprimir contenido: " + msg.getContent());
     try {
-      Map.Entry<String, Object> entry = history.entrySet().iterator().next();
+      System.out.println("contenido antes de enviar en Send: " + msg.getContent());
 
-      String key = entry.getKey();
-      ArrayList<Object> hist_vect = (ArrayList<Object>) entry.getValue();
-      History hist = (History) hist_vect.get(0);
-      ACLMessage incoming = (ACLMessage) hist_vect.get(1);
-
-      String choice = hist.getLastPlay();
-      AID player = hist.getPlayer();
-      Agent a = getAgent();
-      history.remove(key);
-      bb.updateBelief("history", history);
-      msg.setContent(choice);
-      msg.setOntology("play");
-
-      if (incoming != null)
-        msg = incoming.createReply();
-      else {
-        msg.setConversationId(a.getAID().getName());
-      }
-
-      msg.setContent(choice);
-      msg.setOntology("play");
-      msg.addReceiver(player);
-
-      try {
-        a.send(msg);
-        setEndState(Plan.EndState.SUCCESSFUL);
-      } catch (Exception e) {
-        setEndState(Plan.EndState.FAILED);
-      }
+      a.send(msg);
+      setEndState(Plan.EndState.SUCCESSFUL);
+    } catch (Exception e) {
+      setEndState(Plan.EndState.FAILED);
     }
-    catch (Exception e) {
 
-      System.out.println("Esta vacio");
 
-    }
   }
 }

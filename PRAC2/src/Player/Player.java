@@ -22,6 +22,7 @@ import jade.core.behaviours.*;
 import jade.util.Logger;
 import bdi4jade.goal.SequentialGoal;
 
+
 public class Player extends SingleCapabilityAgent {
   protected void init() {
     Object[] args = getArguments();
@@ -39,6 +40,8 @@ public class Player extends SingleCapabilityAgent {
     Belief D = new TransientBelief("D", new int[] {DC, DD});
     Belief history = new TransientBelief("history", new HashMap());
     Belief history2 = new TransientBelief("historyReplies", new HashMap());
+    Belief send_queue = new TransientBelief("sendQueue", new LinkedList<QueueElem>());
+    Belief reply_queue = new TransientBelief("replyQueue", new LinkedList<QueueElem>());
     Belief plays = new TransientBeliefSet("plays", new HashSet());
     Belief found_agents = new TransientBelief("found_agents", new HashMap());
     Belief penalization = new TransientBelief("penalization", 0);
@@ -50,6 +53,8 @@ public class Player extends SingleCapabilityAgent {
     bb.addBelief(D);
     bb.addBelief(history);
     bb.addBelief(history2);
+    bb.addBelief(send_queue);
+    bb.addBelief(reply_queue);
     bb.addBelief(plays);
     bb.addBelief(found_agents);
     bb.addBelief(penalization);

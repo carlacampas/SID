@@ -15,6 +15,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.DFService;
 
+
 public class ChoosePlayPlan extends AbstractPlanBody {
   @Override
   public void action() {
@@ -24,9 +25,9 @@ public class ChoosePlayPlan extends AbstractPlanBody {
     int penalization = (int) bb.getBelief("penalization").getValue();
 
     examples.Player.ChoosePlayGoal cg = (examples.Player.ChoosePlayGoal) getGoal();
-    String choice = cg.getChoice();
+    //String choice = cg.getChoice();
 
-    Map<String, Object> history = (Map<String, Object>) bb.getBelief("historyReplies").getValue();
+    LinkedList<QueueElem> queue = (LinkedList<QueueElem>) bb.getBelief("replyQueue").getValue();
 
 
 
@@ -43,16 +44,17 @@ public class ChoosePlayPlan extends AbstractPlanBody {
         penalization += c[1];
       } else penalization += d[1];
     }
-    ArrayList<Object> elems = new ArrayList<Object>();
+    //ArrayList<Object> elems = new ArrayList<Object>();
 
     History h = new History(cg.getAgainst(), my_choice);
 
-    elems.add(h);
-    elems.add(cg.getMessage());
-    history.put(cg.getAgainst().getName(), elems);
-    bb.updateBelief("historyReplies", history);
+    QueueElem qelem = new QueueElem(h, cg.getMessage());
+    //elems.add(h);
+    //elems.add(cg.getMessage());
+    queue.add(qelem);
+    bb.updateBelief("replyQueue", queue);
 
-    System.out.println ("my_choice: " +  my_choice);
+    //System.out.println ("my_choice: " +  my_choice);
     bb.updateBelief("penalization", penalization);
     setEndState(Plan.EndState.SUCCESSFUL);
     //dispatchGoal(new SendGoal(cg.getAgent(), cg.getAgainst(), my_choice, cg.getMessage()));

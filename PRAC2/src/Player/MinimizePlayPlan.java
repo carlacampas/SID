@@ -10,6 +10,7 @@ import bdi4jade.belief.*;
 import bdi4jade.core.*;
 import jade.core.AID;
 
+
 public class MinimizePlayPlan extends AbstractPlanBody {
   @Override
   public void action() {
@@ -18,11 +19,10 @@ public class MinimizePlayPlan extends AbstractPlanBody {
 
     int[] c = (int[]) (bb.getBelief("C").getValue());
     int[] d = (int[]) (bb.getBelief("D").getValue());
-    Set<String> plays = (Set<String>) (bb.getBelief("plays").getValue());
-    Map<String, ArrayList<Object>> history_container = (Map<String, ArrayList<Object>>) bb.getBelief("history").getValue();
+    //Set<String> plays = (Set<String>) (bb.getBelief("plays").getValue());
+    Map<String, History> history_container = (Map<String, History>) bb.getBelief("history").getValue();
+    LinkedList<QueueElem> queue = (LinkedList<QueueElem>) bb.getBelief("sendQueue").getValue();
 
-
-    
     int c_min = Math.min(c[0], c[1]);
     int d_min = Math.min(d[0], d[1]);
 
@@ -30,19 +30,20 @@ public class MinimizePlayPlan extends AbstractPlanBody {
     if (!history_container.containsKey(mpg.getPlayer().getName()))
       ch = "C";
     else {
-      ArrayList<Object> hist_vect = history_container.get(mpg.getPlayer().getName());
-      History hist = (History) hist_vect.get(0);
+      History hist = history_container.get(mpg.getPlayer().getName());
       ch = hist.getLastPlay();
     }
-    ArrayList<Object> elems = new ArrayList<Object>();
+    //ArrayList<Object> elems = new ArrayList<Object>();
     History h = new History(mpg.getPlayer(), ch);
-
-    elems.add(h);
-    elems.add(mpg.getMessage());
-    history_container.put(mpg.getPlayer().getName(), elems);
-    bb.updateBelief("historyReplies", history_container);
-
-    System.out.println("paso por minimizePlay");
+    QueueElem qelem = new QueueElem(h, mpg.getMessage());
+    queue.add(qelem);
+    history_container.put(mpg.getPlayer().getName(), h);
+    bb.updateBelief("sendQueue", queue);
+    //bb.updateBelief("history", history_container);
+    //elems.add(h);
+    //elems.add(mpg.getMessage());
+    //history_container.put(mpg.getPlayer().getName(), );
+    //bb.updateBelief("historyReplies", history_container);
 
     setEndState(Plan.EndState.SUCCESSFUL);
 
