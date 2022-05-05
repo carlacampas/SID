@@ -37,9 +37,6 @@
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Ocupado"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#OneAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Oro"/>
     </Declaration>
     <Declaration>
@@ -55,31 +52,7 @@
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EightAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#FiveAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#FourAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#NineAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SevenAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SixAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#TenAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#ThreeAwayAlmacenamiento"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
@@ -134,112 +107,22 @@
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <EquivalentClasses>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#OneAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_puede_descargar"/>
         <ObjectIntersectionOf>
             <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
             <ObjectSomeValuesFrom>
                 <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#OneAwayAlmacenamiento"/>
+                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <EquivalentClasses>
-        <Class IRI="#EightAwayAlmacenamiento"/>
+        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
         <ObjectIntersectionOf>
             <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
             <ObjectSomeValuesFrom>
                 <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#SevenAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#FiveAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#FourAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#FourAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#ThreeAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#NineAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#EightAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#SevenAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#SixAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#SixAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#FiveAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#TenAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#NineAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#ThreeAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="#TwoAwayAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#TwoAwayAlmacenamiento"/>
-        <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#OneAwayAlmacenamiento"/>
+                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
@@ -264,10 +147,6 @@
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#OneAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Oro"/>
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
     </SubClassOf>
@@ -284,39 +163,7 @@
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#EightAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#FiveAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#FourAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#NineAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#SevenAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#SixAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#TenAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#ThreeAwayAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
         <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
     </SubClassOf>
     <DisjointClasses>
