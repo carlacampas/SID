@@ -1,1 +1,1 @@
-http://10-192-231-32client.eduroam.upc.edu:7778/acc
+http://carlas-mbp.lan:7778/acc

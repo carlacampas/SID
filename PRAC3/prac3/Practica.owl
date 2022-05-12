@@ -6,322 +6,425 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/sid-prac3">
-    <Prefix name="" IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5"/>
+    <Prefix name="" IRI="http://www.semanticweb.org/sid-prac3"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Agent"/>
+        <Class IRI="#Agent"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+        <Class IRI="#Almacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Diamante"/>
+        <Class IRI="#Diamante"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador"/>
+        <Class IRI="#EightAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <Class IRI="#Explorador"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstáculo"/>
+        <Class IRI="#FourAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Ocupado"/>
+        <Class IRI="#NineAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Oro"/>
+        <Class IRI="#Node"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Pozo"/>
+        <Class IRI="#NodeAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+        <Class IRI="#Obstáculo"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_puede_descargar"/>
+        <Class IRI="#OneAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
+        <Class IRI="#Oro"/>
     </Declaration>
     <Declaration>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
+        <Class IRI="#Pozo"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
+        <Class IRI="#Recolector"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
+        <Class IRI="#Recolector_puede_descargar"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <Class IRI="#Recurso"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador_esta_en"/>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Has_agente_almacenamiento"/>
+        <Class IRI="#SixAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstaculo_esta_en"/>
+        <Class IRI="#TenAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso_esta_en"/>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadMaxima"/>
+        <ObjectProperty IRI="#Adjacent"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadOcupada"/>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#alma"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#recolector"/>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#1"/>
+        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#2"/>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#CapacidadMaxima"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#CapacidadOcupada"/>
     </Declaration>
     <EquivalentClasses>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
+        <Class IRI="#EightAwayAlmacenamiento"/>
         <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+            <Class IRI="#Node"/>
             <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Has_agente_almacenamiento"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#SevenAwayAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <EquivalentClasses>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_puede_descargar"/>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
         <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+            <Class IRI="#Node"/>
             <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#FourAwayAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <EquivalentClasses>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
+        <Class IRI="#FourAwayAlmacenamiento"/>
         <ObjectIntersectionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+            <Class IRI="#Node"/>
             <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-                <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#ThreeAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#NineAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#EightAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#NodeAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+                <Class IRI="#Almacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#OneAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NodeAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#Recolector_puede_descargar"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Recolector"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Recolector_esta_en"/>
+                <Class IRI="#OneAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#SixAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#SixAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#FiveAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#TenAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NineAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#TwoAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#OneAwayAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Agent"/>
+        <Class IRI="#Almacenamiento"/>
+        <Class IRI="#Agent"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Diamante"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
+        <Class IRI="#Diamante"/>
+        <Class IRI="#Recurso"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Agent"/>
+        <Class IRI="#EightAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#NodeAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <Class IRI="#Explorador"/>
+        <Class IRI="#Agent"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Ocupado"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Oro"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
+        <Class IRI="#FourAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Pozo"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstáculo"/>
+        <Class IRI="#NineAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Agent"/>
+        <Class IRI="#NodeAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_puede_descargar"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+        <Class IRI="#OneAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#nearAlmacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <Class IRI="#Oro"/>
+        <Class IRI="#Recurso"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Pozo"/>
+        <Class IRI="#Obstáculo"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Recolector"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Recolector_puede_descargar"/>
+        <Class IRI="#Recolector"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SixAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TenAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
     </SubClassOf>
     <DisjointClasses>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Diamante"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Oro"/>
+        <Class IRI="#Diamante"/>
+        <Class IRI="#Oro"/>
     </DisjointClasses>
-    <ClassAssertion>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#alma"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#recolector"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#1"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#2"/>
-    </ClassAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#alma"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#recolector"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#2"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#1"/>
-        <NamedIndividual IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#2"/>
-    </ObjectPropertyAssertion>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstaculo_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <InverseObjectProperties>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Has_agente_almacenamiento"/>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
     </InverseObjectProperties>
     <SymmetricObjectProperty>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
+        <ObjectProperty IRI="#Adjacent"/>
     </SymmetricObjectProperty>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Adjacent"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <Class IRI="#Almacenamiento"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
         <ObjectUnionOf>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Agent"/>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstáculo"/>
-            <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
+            <Class IRI="#Agent"/>
+            <Class IRI="#Obstáculo"/>
+            <Class IRI="#Recurso"/>
         </ObjectUnionOf>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador"/>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <Class IRI="#Explorador"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Has_agente_almacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstaculo_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstáculo"/>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <Class IRI="#Obstáculo"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <Class IRI="#Recolector"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso"/>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <Class IRI="#Recurso"/>
     </ObjectPropertyDomain>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Adjacent"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Adjacent"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Explorador_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Has_agente_almacenamiento"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <Class IRI="#Almacenamiento"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Obstaculo_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recurso_esta_en"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <DataPropertyDomain>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadMaxima"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+        <DataProperty IRI="#CapacidadMaxima"/>
+        <Class IRI="#Almacenamiento"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadMaxima"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+        <DataProperty IRI="#CapacidadMaxima"/>
+        <Class IRI="#Recolector"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadOcupada"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Almacenamiento"/>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Almacenamiento"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadOcupada"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Node"/>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Node"/>
     </DataPropertyDomain>
     <DataPropertyDomain>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadOcupada"/>
-        <Class IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#Recolector"/>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Recolector"/>
     </DataPropertyDomain>
     <DataPropertyRange>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadMaxima"/>
+        <DataProperty IRI="#CapacidadMaxima"/>
         <Datatype abbreviatedIRI="xsd:int"/>
     </DataPropertyRange>
     <DataPropertyRange>
-        <DataProperty IRI="http://www.semanticweb.org/gilrallo/ontologies/2022/3/untitled-ontology-5#CapacidadOcupada"/>
+        <DataProperty IRI="#CapacidadOcupada"/>
         <Datatype abbreviatedIRI="xsd:int"/>
     </DataPropertyRange>
 </Ontology>

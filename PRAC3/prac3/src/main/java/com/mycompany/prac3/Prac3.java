@@ -47,9 +47,9 @@ public class Prac3 extends SingleCapabilityAgent {
         this.NamingContext = _NamingContext;
     }
     
-    public void Pract3 () {
+    public Prac3 () {
         this.JENAPath = "./";
-        this.OntologyFile = "Practica.owl";
+        this.OntologyFile = "test_Practica.owl";
         this.NamingContext = "prac3";
     }
     
@@ -80,6 +80,8 @@ public class Prac3 extends SingleCapabilityAgent {
         
         int n = nodes.length;
         OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
+        
+        // crear nodos + adjacencia entre nodos
         for (int i=0; i<n; i++) {
             System.out.println("Adding instance '" + nodes[i] + "'");
             Individual nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nodes[i] + "Instance");
@@ -92,8 +94,58 @@ public class Prac3 extends SingleCapabilityAgent {
                 }
             }
         }
+        
+        Property alma_esta_en = model.createDatatypeProperty(BASE_URI + "#Almacenamiento_esta_en");
+        Property reco_esta_en = model.createDatatypeProperty(BASE_URI + "#Recolector_esta_en");
+        
+        // crear agente almacenamiento
+        OntClass agenteAlmacenamiento = model.getOntClass(BASE_URI + "#Almacenamiento");
+        Individual almacenamientoInstance = agenteAlmacenamiento.createIndividual(BASE_URI + "#Almacenador1");
+        Individual nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nodes[1] + "Instance");
+        almacenamientoInstance.addProperty(alma_esta_en, nodeInstance);
+        
+        // crear agente recolector
+        OntClass agenteRecolector = model.getOntClass(BASE_URI + "#Recolector");
+        Individual recolectorInstance = agenteRecolector.createIndividual(BASE_URI + "#Recolector1");
+        nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nodes[4] + "Instance");
+        recolectorInstance.addProperty(reco_esta_en, nodeInstance);
+        
         try {
             releaseOntology();
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            System.out.println("here2");
+        }
+        
+        Belief ontology = new TransientBelief("ontology", model);
+        Capability c = getCapability();
+        BeliefBase bb = c.getBeliefBase();
+        
+        bb.addBelief(ontology);
+        
+        Plan descargar = new DefaultPlan(DescargarGoal.class, DescargarPlan.class);
+        c.getPlanLibrary().addPlan(descargar);
+        
+        this.addGoal(new DescargarGoal());
+    }
+    
+    public class DescargarGoal implements Goal {
+        public boolean check_descarga(OntModel model) {
+            // query w/ sparql check if agent is nearby
+            return false;
+        }
+    }
+    
+    public class DescargarPlan extends AbstractPlanBody {
+        @Override
+        public void action() {
+            BeliefBase bb = getBeliefBase();
+            OntModel model = (OntModel) (bb.getBelief("ontology").getValue());
+                    
+            DescargarGoal g = (DescargarGoal) getGoal();
+            if (g.check_descarga(model)) setEndState(Plan.EndState.SUCCESSFUL);
+            else {
+                // find closest and continue
+            }
+        }
     }
 }
