@@ -127,11 +127,23 @@ public class Prac3 extends SingleCapabilityAgent {
         
         this.addGoal(new DescargarGoal());
     }
-    
+
     public class DescargarGoal implements Goal {
+
+        private static final boolean nearAlmacenamiento; 
+
+        private void testEquivalentClass() {
+            model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF);
+            dm = model.getDocumentManager();
+            dm.addAltEntry(NamingContext, "file:" + JENAPath + File.separator + MODIFIED_PREFIX + OntologyFile);
+            model.read(NamingContext);
+            Individual instance = model.getIndividual(BASE_URI + "#Recolector1");
+            nearAlmacenamiento = instance.hasOntClass(BASE_URI + "#OneAwayAlmacenamiento");
+            model.close();
+        }
         public boolean check_descarga(OntModel model) {
-            // query w/ sparql check if agent is nearby
-            return false;
+            testEquivalentClass();
+            return nearAlmacenamiento;
         }
     }
     
