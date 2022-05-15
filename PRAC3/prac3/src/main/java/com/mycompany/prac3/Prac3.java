@@ -7,25 +7,14 @@ import org.apache.jena.ontology.OntDocumentManager;
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.ontology.OntProperty;
-import org.apache.jena.query.Query;
-import org.apache.jena.query.QueryExecution;
-import org.apache.jena.query.QueryExecutionFactory;
-import org.apache.jena.query.QueryFactory;
-import org.apache.jena.query.ResultSet;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.sparql.core.ResultBinding;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Iterator;
-import java.util.*;
 import bdi4jade.goal.Goal;
 import bdi4jade.plan.DefaultPlan;
-import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
 import bdi4jade.plan.Plan;
 import bdi4jade.belief.*;
@@ -110,12 +99,6 @@ public class Prac3 extends SingleCapabilityAgent {
         nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nodes[4] + "Instance");
         recolectorInstance.addProperty(reco_esta_en, nodeInstance);
         
-        try {
-            releaseOntology();
-        } catch(Exception e) {
-            System.out.println("here2");
-        }
-        
         Belief ontology = new TransientBelief("ontology", model);
         Capability c = getCapability();
         BeliefBase bb = c.getBeliefBase();
@@ -129,21 +112,37 @@ public class Prac3 extends SingleCapabilityAgent {
     }
 
     public class DescargarGoal implements Goal {
+        private OntModel model;
 
-        private static final boolean nearAlmacenamiento; 
-
-        private void testEquivalentClass() {
-            model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF);
-            dm = model.getDocumentManager();
-            dm.addAltEntry(NamingContext, "file:" + JENAPath + File.separator + MODIFIED_PREFIX + OntologyFile);
-            model.read(NamingContext);
+        private boolean testEquivalentClass(String checkEquiv) {
             Individual instance = model.getIndividual(BASE_URI + "#Recolector1");
-            nearAlmacenamiento = instance.hasOntClass(BASE_URI + "#OneAwayAlmacenamiento");
-            model.close();
+            boolean ex = instance.hasOntClass(BASE_URI + "#" + checkEquiv);
+            return ex;
         }
-        public boolean check_descarga(OntModel model) {
-            testEquivalentClass();
-            return nearAlmacenamiento;
+        
+        private Individual checkAdjacent(String a) {
+            Individual instance = model.getIndividual(BASE_URI + "#Recolector1");
+            Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
+            RDFNode adjacentNodes = instance.getPropertyValue(nameProperty);
+            System.out.println(adjacentNodes.toString());
+            return instance;
+        }
+        
+        public void setModel(OntModel model) { this.model = model; }
+        
+        public Individual check_descarga() {
+            String[] nodes = {"OneAwayAlmacenamiento", "TwoAwayAlmacenamiento", 
+                                "ThreeAwayAlmacenamiento", "FourAwayAlmacenamiento", 
+                                "FiveAwayAlmacenamiento"};
+            for (int i = 0; i < nodes.length; i++){
+                String n = nodes[i];
+                if (testEquivalentClass(n)) {
+                    System.out.println(n);
+                    if (i == 0) return model.getIndividual(BASE_URI + "#Recolector1");
+                    return checkAdjacent(nodes[i-1]);
+                }
+            }
+            return null;
         }
     }
     
@@ -154,10 +153,12 @@ public class Prac3 extends SingleCapabilityAgent {
             OntModel model = (OntModel) (bb.getBelief("ontology").getValue());
                     
             DescargarGoal g = (DescargarGoal) getGoal();
-            if (g.check_descarga(model)) setEndState(Plan.EndState.SUCCESSFUL);
+            g.setModel(model);
+            g.check_descarga();
+            /*if (g.check_descarga()) setEndState(Plan.EndState.SUCCESSFUL);
             else {
-                // find closest and continue
-            }
+                Individual nextNode = g.getClosestNode();
+            }*/
         }
     }
 }
