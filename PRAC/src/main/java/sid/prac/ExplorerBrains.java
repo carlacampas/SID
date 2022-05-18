@@ -1,4 +1,4 @@
-package sid.prac.agents;
+package sid.prac;
 
 import jade.core.*;
 import bdi4jade.core.*;
@@ -13,17 +13,16 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 
 public class ExplorerBrains extends SingleCapabilityAgent {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	AID body;
 	private MapRepresentation myMap;
 	
-	ExplorerBrains(AID mybody){
-		super();
-		body = mybody;
-		
-	}
 	
 	protected void init() {
-		
+		System.out.println("Brains se despierta!");
 		Object[] args = getArguments();
 		if (args.length != 1) {
 		      System.out.println("incorrect args");

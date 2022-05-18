@@ -19,7 +19,7 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import sid.prac.agents.Explorer;
+import sid.prac.Explorer;
 
 import org.junit.Assert;
 import jade.wrapper.AgentContainer;

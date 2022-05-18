@@ -1,4 +1,4 @@
-package sid.prac.agents;
+package sid.prac;
 
 import java.util.*;
 
@@ -9,7 +9,7 @@ import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.*;
 import jade.core.behaviours.Behaviour;
 import jade.wrapper.StaleProxyException;
-import sid.prac.agents.*;
+import sid.prac.*;
 
 public class Explorer extends AbstractDedaleAgent{
 	
@@ -31,11 +31,10 @@ public class Explorer extends AbstractDedaleAgent{
 		final Object[] args = getArguments();
 		//use them as parameters for your behaviours 
 		System.out.println("Llego a setup de Explorer");
-		
-		
+		sid.prac.ExplorerBrains br = new sid.prac.ExplorerBrains();
 		jade.wrapper.AgentContainer ag = getContainerController();
 		try {
-			ag.createNewAgent("brainy", "sid.prac.agents.ExplorerBrains", null);
+			ag.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
