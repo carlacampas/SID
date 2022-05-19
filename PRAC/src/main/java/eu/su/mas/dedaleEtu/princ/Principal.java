@@ -19,7 +19,7 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
-import sid.prac.agents.Explorer;
+import sid.prac.Explorer;
 
 import org.junit.Assert;
 import jade.wrapper.AgentContainer;
@@ -351,7 +351,7 @@ public class Principal {
 		agentList.add(ag);
 
 		/*********
-		 * AGENT Explo2
+		 * AGENT Explorer
 		 *********/
 		//1) Get the container where the agent will appear
 		c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);

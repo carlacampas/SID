@@ -1,4 +1,4 @@
-package sid.prac.agents;
+package sid.prac;
 
 import java.util.Iterator;
 import java.util.List;
@@ -74,7 +74,7 @@ public class ExplorerBehaviour extends SimpleBehaviour {
 					System.out.println("nextNode notNUll - "+this.myAgent.getLocalName()+"-- list= "+this.myMap.getOpenNodes()+"\n -- nextNode: "+nextNode);
 				}
 				((AbstractDedaleAgent)this.myAgent).moveTo(nextNode);
-				finished = true;
+				//finished = true;
 			}
 			
 		}
