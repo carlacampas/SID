@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.NodeIterator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,7 +45,7 @@ public class Prac3 extends SingleCapabilityAgent {
     
     public void loadOntology() {
         System.out.println("· Loading Ontology");
-        model = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM_TRANS_INF);
+        model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF);
         dm = model.getDocumentManager();
         dm.addAltEntry(NamingContext, "file:" + JENAPath + OntologyFile);
         model.read(NamingContext);
@@ -100,10 +101,12 @@ public class Prac3 extends SingleCapabilityAgent {
         recolectorInstance.addProperty(reco_esta_en, nodeInstance);
         
         Belief ontology = new TransientBelief("ontology", model);
+        Belief recolector = new TransientBelief("recolector", recolectorInstance);
         Capability c = getCapability();
         BeliefBase bb = c.getBeliefBase();
         
         bb.addBelief(ontology);
+        bb.addBelief(recolector);
         
         Plan descargar = new DefaultPlan(DescargarGoal.class, DescargarPlan.class);
         c.getPlanLibrary().addPlan(descargar);
@@ -111,38 +114,73 @@ public class Prac3 extends SingleCapabilityAgent {
         this.addGoal(new DescargarGoal());
     }
 
+    protected void takeDown () {
+        try {
+            releaseOntology();
+        } catch(Exception e) { }
+    }
+    
     public class DescargarGoal implements Goal {
         private OntModel model;
-
-        private boolean testEquivalentClass(String checkEquiv) {
-            Individual instance = model.getIndividual(BASE_URI + "#Recolector1");
-            boolean ex = instance.hasOntClass(BASE_URI + "#" + checkEquiv);
-            return ex;
+        private Individual recolector;
+        private Property reco_esta_en;
+        private Individual nodeFound;
+        
+        public void setModel(OntModel model) { 
+            this.model = model; 
+            this.reco_esta_en = model.getProperty(BASE_URI + "#Recolector_esta_en");
+        }
+        public void setRecolector(Individual recolector) { 
+            this.recolector = recolector; 
+            RDFNode in = recolector.getPropertyValue(reco_esta_en);
+            nodeFound = model.getIndividual(in.toString());
         }
         
-        private Individual checkAdjacent(String a) {
-            Individual instance = model.getIndividual(BASE_URI + "#Recolector1");
-            Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
-            RDFNode adjacentNodes = instance.getPropertyValue(nameProperty);
-            System.out.println(adjacentNodes.toString());
-            return instance;
+        public OntModel getModel () { return this.model; }
+        public Individual getRecolector () { return this.recolector; }
+        
+        private boolean checkAdjacent() {
+            
+            OntClass oneAway = model.getOntClass(BASE_URI + "#OneAwayAlmacenamiento");
+            return nodeFound.hasOntClass(oneAway);
         }
         
-        public void setModel(OntModel model) { this.model = model; }
-        
-        public Individual check_descarga() {
+        private int get_num_away () {
             String[] nodes = {"OneAwayAlmacenamiento", "TwoAwayAlmacenamiento", 
                                 "ThreeAwayAlmacenamiento", "FourAwayAlmacenamiento", 
                                 "FiveAwayAlmacenamiento"};
-            for (int i = 0; i < nodes.length; i++){
-                String n = nodes[i];
-                if (testEquivalentClass(n)) {
-                    System.out.println(n);
-                    if (i == 0) return model.getIndividual(BASE_URI + "#Recolector1");
-                    return checkAdjacent(nodes[i-1]);
+            
+            for (int i = 0; i < nodes.length; i++) {
+                OntClass n_away = model.getOntClass(BASE_URI + "#" + nodes[i]);
+                boolean b = nodeFound.hasOntClass(n_away);
+                if (b) return i;
+            }
+            return 0;
+        }
+        
+        public Individual get_closest_descarga() {
+            String[] nodes = {"OneAwayAlmacenamiento", "TwoAwayAlmacenamiento", 
+                                "ThreeAwayAlmacenamiento", "FourAwayAlmacenamiento", 
+                                "FiveAwayAlmacenamiento"};
+            String pos = nodes[get_num_away() - 1];
+            OntClass n_away = model.getOntClass(BASE_URI + "#" + pos);
+            
+            Property adj = model.createDatatypeProperty(BASE_URI + "#Adjacent");
+            NodeIterator ni = nodeFound.listPropertyValues(adj);
+            while (ni.hasNext()) {
+                RDFNode nextNode = ni.nextNode();
+                Individual nn = model.getIndividual(nextNode.toString());
+                if (nn.hasOntClass(n_away)) {
+                    System.out.println("moving to: " + nextNode.toString());
+                    return nn;
                 }
             }
             return null;
+        }
+        
+        public void set_node(Individual n) {
+            recolector.removeProperty(reco_esta_en, nodeFound);
+            recolector.addProperty(reco_esta_en, n);
         }
     }
     
@@ -151,14 +189,19 @@ public class Prac3 extends SingleCapabilityAgent {
         public void action() {
             BeliefBase bb = getBeliefBase();
             OntModel model = (OntModel) (bb.getBelief("ontology").getValue());
+            Individual recolector = (Individual) (bb.getBelief("recolector").getValue());
                     
             DescargarGoal g = (DescargarGoal) getGoal();
             g.setModel(model);
-            g.check_descarga();
-            /*if (g.check_descarga()) setEndState(Plan.EndState.SUCCESSFUL);
+            g.setRecolector(recolector);
+            if (g.checkAdjacent()) setEndState(Plan.EndState.SUCCESSFUL);
             else {
-                Individual nextNode = g.getClosestNode();
-            }*/
+                Individual get_closest = g.get_closest_descarga();
+                if (get_closest == null) setEndState(Plan.EndState.FAILED);
+                g.set_node(get_closest);
+                bb.updateBelief("ontology", g.getModel());
+                bb.updateBelief("recolector", g.getRecolector());
+            }
         }
     }
 }

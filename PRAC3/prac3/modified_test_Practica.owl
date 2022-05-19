@@ -14,51 +14,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#EightAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SevenAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom>
               <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#EightAwayAlmacenamiento"/>
@@ -77,36 +32,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom>
               <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
@@ -125,39 +50,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento"/>
             <owl:onProperty>
@@ -179,34 +71,27 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom>
               <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
+            </owl:someValuesFrom>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento">
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+          <owl:Restriction>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
             </owl:someValuesFrom>
             <owl:onProperty>
               <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
@@ -221,41 +106,13 @@
       <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Agent"/>
     </rdfs:subClassOf>
   </owl:Class>
-  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento">
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-    <owl:equivalentClass>
-      <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Restriction>
-            <owl:someValuesFrom>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:someValuesFrom>
-            <owl:onProperty>
-              <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
-            </owl:onProperty>
-          </owl:Restriction>
-        </owl:intersectionOf>
-      </owl:Class>
-    </owl:equivalentClass>
+  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Almacenamiento">
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agent"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Oro">
     <rdfs:subClassOf>
       <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recurso"/>
     </rdfs:subClassOf>
-  </owl:Class>
-  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Almacenamiento">
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agent"/>
   </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento">
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
@@ -279,17 +136,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
             <owl:onProperty>
@@ -300,10 +146,11 @@
       </owl:Class>
     </owl:equivalentClass>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector">
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agent"/>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_puede_descargar">
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
     <owl:equivalentClass>
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
@@ -320,9 +167,6 @@
       </owl:Class>
     </owl:equivalentClass>
   </owl:Class>
-  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector">
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agent"/>
-  </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Diamante">
     <owl:disjointWith rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso"/>
@@ -333,20 +177,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
             <owl:onProperty>
@@ -363,40 +193,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#EightAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NineAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf>
-              <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            </owl:complementOf>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#SevenAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NineAwayAlmacenamiento"/>
             <owl:onProperty>
@@ -413,9 +209,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
             <owl:onProperty>
@@ -432,30 +225,6 @@
       <owl:Class>
         <owl:intersectionOf rdf:parseType="Collection">
           <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#SevenAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento"/>
-          </owl:Class>
-          <owl:Class>
-            <owl:complementOf rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
-          </owl:Class>
           <owl:Restriction>
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SevenAwayAlmacenamiento"/>
             <owl:onProperty>
@@ -507,27 +276,27 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#CapacidadMaxima">
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#CapacidadOcupada">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_esta_en">
-    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#CapacidadMaxima">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Almacenamiento_esta_en">
     <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
     <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_agente_almacenamiento"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_esta_en">
+    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
     <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:DatatypeProperty>
@@ -540,21 +309,20 @@
       </j.0:Node>
     </j.0:Almacenamiento_esta_en>
   </j.0:Almacenamiento>
-  <j.0:Recolector rdf:about="http://www.semanticweb.org/sid-prac3#Recolector1">
-    <j.0:Recolector_esta_en>
-      <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node5Instance">
+  <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node5Instance">
+    <j.0:Adjacent>
+      <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node4Instance">
         <j.0:Adjacent>
-          <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node4Instance">
-            <j.0:Adjacent>
-              <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node3Instance">
-                <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node2Instance"/>
-                <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node1Instance"/>
-              </j.0:Node>
-            </j.0:Adjacent>
+          <j.0:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node3Instance">
+            <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node2Instance"/>
+            <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node1Instance"/>
           </j.0:Node>
         </j.0:Adjacent>
-        <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node1Instance"/>
       </j.0:Node>
-    </j.0:Recolector_esta_en>
+    </j.0:Adjacent>
+    <j.0:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node1Instance"/>
+  </j.0:Node>
+  <j.0:Recolector rdf:about="http://www.semanticweb.org/sid-prac3#Recolector1">
+    <j.0:Recolector_esta_en rdf:resource="http://www.semanticweb.org/sid-prac3#Node1Instance"/>
   </j.0:Recolector>
 </rdf:RDF>
