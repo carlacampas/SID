@@ -8,6 +8,7 @@ import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import jade.core.*;
 import jade.core.behaviours.Behaviour;
+import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import sid.prac.*;
 
@@ -32,13 +33,17 @@ public class Explorer extends AbstractDedaleAgent{
 		//use them as parameters for your behaviours 
 		System.out.println("Llego a setup de Explorer");
 		sid.prac.ExplorerBrains br = new sid.prac.ExplorerBrains();
-		jade.wrapper.AgentContainer ag = getContainerController();
+		jade.wrapper.AgentContainer ac = getContainerController();
 		try {
-			ag.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
+			AgentController ag = ac.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
+			ag.start();
+			brains = new AID(ag.getName(), AID.ISLOCALNAME);
+			
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		System.out.println("Agente cerebro creado correctamente!");
 		
@@ -87,5 +92,7 @@ public class Explorer extends AbstractDedaleAgent{
 	protected void afterMove(){
 		super.afterMove();
 	}
+	
+	public AID getBrains() {return brains;}
 	
 }

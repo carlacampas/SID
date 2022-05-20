@@ -24,7 +24,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/joaquin/Documents/universidad/SID/lab/SID/PRAC/jars/bdi4jade.jar"/>
 	<classpathentry kind="lib" path="jars/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="jars/bdi4jade.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
