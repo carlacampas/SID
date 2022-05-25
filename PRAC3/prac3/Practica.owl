@@ -34,16 +34,25 @@
         <Class IRI="#FourAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#Golem"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#NineAwayAlmacenamiento"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Node"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#NodeAgent"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#NodeAlmacenamiento"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Obstáculo"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#OneAwayAgent"/>
     </Declaration>
     <Declaration>
         <Class IRI="#OneAwayAlmacenamiento"/>
@@ -82,6 +91,9 @@
         <ObjectProperty IRI="#Adjacent"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </Declaration>
+    <Declaration>
         <ObjectProperty IRI="#Almacenamiento_esta_en"/>
     </Declaration>
     <Declaration>
@@ -91,7 +103,13 @@
         <ObjectProperty IRI="#Explorador_esta_en"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <ObjectProperty IRI="#Has"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Has_agent"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#Obstaculo_esta_en"/>
@@ -149,12 +167,22 @@
         </ObjectIntersectionOf>
     </EquivalentClasses>
     <EquivalentClasses>
-        <Class IRI="#NodeAlmacenamiento"/>
+        <Class IRI="#NodeAgent"/>
         <ObjectIntersectionOf>
             <Class IRI="#Node"/>
             <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="#Has_agente_almacenamiento"/>
-                <Class IRI="#Almacenamiento"/>
+                <ObjectProperty IRI="#Has_agent"/>
+                <Class IRI="#Agent"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#OneAwayAgent"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NodeAgent"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
@@ -165,16 +193,6 @@
             <ObjectSomeValuesFrom>
                 <ObjectProperty IRI="#Adjacent"/>
                 <Class IRI="#NodeAlmacenamiento"/>
-            </ObjectSomeValuesFrom>
-        </ObjectIntersectionOf>
-    </EquivalentClasses>
-    <EquivalentClasses>
-        <Class IRI="#Recolector_puede_descargar"/>
-        <ObjectIntersectionOf>
-            <Class IRI="#Recolector"/>
-            <ObjectSomeValuesFrom>
-                <ObjectProperty IRI="#Recolector_esta_en"/>
-                <Class IRI="#OneAwayAlmacenamiento"/>
             </ObjectSomeValuesFrom>
         </ObjectIntersectionOf>
     </EquivalentClasses>
@@ -253,11 +271,23 @@
         <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
+        <Class IRI="#Golem"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="#NineAwayAlmacenamiento"/>
         <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
+        <Class IRI="#NodeAgent"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="#NodeAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#OneAwayAgent"/>
         <Class IRI="#Node"/>
     </SubClassOf>
     <SubClassOf>
@@ -304,13 +334,29 @@
         <Class IRI="#Diamante"/>
         <Class IRI="#Oro"/>
     </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#Obstáculo"/>
+        <Class IRI="#Recurso"/>
+    </DisjointClasses>
     <SubObjectPropertyOf>
-        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
         <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
         <ObjectProperty IRI="#Explorador_esta_en"/>
-        <ObjectProperty IRI="#Esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Has_agent"/>
+        <ObjectProperty IRI="#Has"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+        <ObjectProperty IRI="#Has_agent"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#Obstaculo_esta_en"/>
@@ -318,15 +364,23 @@
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#Recolector_esta_en"/>
-        <ObjectProperty IRI="#Esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
     </SubObjectPropertyOf>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#Recurso_esta_en"/>
         <ObjectProperty IRI="#Esta_en"/>
     </SubObjectPropertyOf>
     <InverseObjectProperties>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <ObjectProperty IRI="#Has_agent"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
         <ObjectProperty IRI="#Almacenamiento_esta_en"/>
-        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#Esta_en"/>
+        <ObjectProperty IRI="#Has"/>
     </InverseObjectProperties>
     <SymmetricObjectProperty>
         <ObjectProperty IRI="#Adjacent"/>
@@ -334,6 +388,10 @@
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#Adjacent"/>
         <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <Class IRI="#Agent"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#Almacenamiento_esta_en"/>
@@ -352,7 +410,15 @@
         <Class IRI="#Explorador"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
-        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <ObjectProperty IRI="#Has"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Has_agent"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
         <Class IRI="#Node"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
@@ -372,6 +438,10 @@
         <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
         <ObjectProperty IRI="#Almacenamiento_esta_en"/>
         <Class IRI="#Node"/>
     </ObjectPropertyRange>
@@ -384,7 +454,19 @@
         <Class IRI="#Node"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
-        <ObjectProperty IRI="#Has_agente_almacenamiento"/>
+        <ObjectProperty IRI="#Has"/>
+        <ObjectUnionOf>
+            <Class IRI="#Agent"/>
+            <Class IRI="#Obstáculo"/>
+            <Class IRI="#Recurso"/>
+        </ObjectUnionOf>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Has_agent"/>
+        <Class IRI="#Agent"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
         <Class IRI="#Almacenamiento"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
