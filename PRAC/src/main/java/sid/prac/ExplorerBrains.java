@@ -29,7 +29,8 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		      doDelete();
 		}
 		body = (AID) args[0];
-		System.out.println("Brain waking up");
+		System.out.println("Brain waking up, successfully linked to body agent: " + body.getName());
+		
 		
 	}
 }
