@@ -140,7 +140,6 @@ public class Prac3 extends SingleCapabilityAgent {
         public Individual getRecolector () { return this.recolector; }
         
         private boolean checkAdjacent() {
-            
             OntClass oneAway = model.getOntClass(BASE_URI + "#OneAwayAlmacenamiento");
             return nodeFound.hasOntClass(oneAway);
         }
