@@ -86,7 +86,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		System.out.println("Llego a setup de Explorer");
 		AgentContainer ac = getContainerController();
 		try {
-			AgentController ag = ac.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
+			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.ExplorerBrains", new Object[]{getAID()});
 			ag.start();
 			brains = new AID(ag.getName(), AID.ISLOCALNAME);
 			
@@ -103,7 +103,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		System.out.println("Llego a setup de Recolector");
 		AgentContainer ac = getContainerController();
 		try {
-			AgentController ag = ac.createNewAgent("brainy", "sid.prac.RecolectorBrains", new Object[]{getAID()});
+			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.RecolectorBrains", new Object[]{getAID()});
 			ag.start();
 			brains = new AID(ag.getName(), AID.ISLOCALNAME);
 			
