@@ -5,11 +5,13 @@ import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.behaviours.*;
 import eu.su.mas.dedaleEtu.mas.knowledge.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -24,7 +26,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	public void setup() {
 		super.setup();
 		
-		addBehaviour(new OneShotBehaviour() {
+		List<Behaviour> lb=new ArrayList<Behaviour>();
+		
+		lb.add(new OneShotBehaviour() {
 			public void action () {
 				List<Couple<Observation, Integer>> free = getBackPackFreeSpace();
 				Iterator<Couple<Observation, Integer>> iter=free.iterator();
@@ -61,6 +65,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		        }
 			}
 		});
+		
+		addBehaviour(new startMyBehaviours(this,lb));
+		System.out.println("here, done with behaviour");
 	}
 	
 	/**
