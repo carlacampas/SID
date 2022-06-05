@@ -1,3 +1,2 @@
 mapname:map2018MultiTypes
-agentExplo:Explo1:3:free:-1:-1:0:1:1
-agentExplo:Explorer:3:free:-1:-1:0:1:1
+agentExplo:GeneralAgent:3:free:-1:-1:0:1:1

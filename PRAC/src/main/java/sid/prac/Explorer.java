@@ -3,6 +3,8 @@ package sid.prac;
 import java.util.*;
 
 import bdi4jade.core.SingleCapabilityAgent;
+import dataStructures.tuple.Couple;
+import eu.su.mas.dedale.env.Observation;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
@@ -27,7 +29,7 @@ public class Explorer extends AbstractDedaleAgent{
 	 */
 	protected void setup(){
 		super.setup();
-
+		
 		//get the parameters given when creating the agent into the object[]
 		final Object[] args = getArguments();
 		//use them as parameters for your behaviours 

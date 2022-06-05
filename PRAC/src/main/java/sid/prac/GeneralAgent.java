@@ -11,16 +11,24 @@ import java.util.List;
 
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
+import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.wrapper.AgentController;
+import jade.wrapper.StaleProxyException;
+import jade.wrapper.AgentContainer;
 import jade.domain.FIPAException;
 import jade.domain.DFService;
 
+import sid.prac.ExplorerBrains;
+
 public class GeneralAgent extends AbstractDedaleAgent {
 	private MapRepresentation map;
+	private String type;
+	private AID brains;
 	
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
@@ -37,16 +45,17 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					sum += iter.next().getRight();
 				}
 				
-				String type;
 				if (sum == 0) {
 					type = "explorer";
 					
 					myAgent.addBehaviour(new ExploSoloBehaviour((AbstractDedaleAgent) this.myAgent, map));
+					addExplorerBrains();
 					System.out.println("I am an explorer!");
 				}
 				else {
 					type = "recolector";
 					myAgent.addBehaviour(new RandomWalkBehaviour((AbstractDedaleAgent) this.myAgent));
+					addRecolectorBrains();
 					System.out.println("I am a collector!");
 				}
 				
@@ -68,6 +77,40 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		
 		addBehaviour(new startMyBehaviours(this,lb));
 		System.out.println("here, done with behaviour");
+	}
+	
+	public void addExplorerBrains() {
+		//get the parameters given when creating the agent into the object[]
+		final Object[] args = getArguments();
+		//use them as parameters for your behaviours 
+		System.out.println("Llego a setup de Explorer");
+		AgentContainer ac = getContainerController();
+		try {
+			AgentController ag = ac.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
+			ag.start();
+			brains = new AID(ag.getName(), AID.ISLOCALNAME);
+			
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addRecolectorBrains() {
+		//get the parameters given when creating the agent into the object[]
+		final Object[] args = getArguments();
+		//use them as parameters for your behaviours 
+		System.out.println("Llego a setup de Recolector");
+		AgentContainer ac = getContainerController();
+		try {
+			AgentController ag = ac.createNewAgent("brainy", "sid.prac.RecolectorBrains", new Object[]{getAID()});
+			ag.start();
+			brains = new AID(ag.getName(), AID.ISLOCALNAME);
+			
+		} catch (StaleProxyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
