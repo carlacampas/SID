@@ -1,0 +1,524 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/sid-prac3"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/sid-prac3">
+    <Prefix name="" IRI="http://www.semanticweb.org/sid-prac3"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <Class IRI="#Agent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Almacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Diamante"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#EightAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Explorador"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#FourAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Golem"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#NineAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Node"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#NodeAgent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#NodeAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Obstáculo"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#OneAwayAgent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#OneAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Oro"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Pozo"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Recolector"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Recolector_puede_descargar"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Recurso"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SixAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TenAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Visitado"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Adjacent"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Has"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Has_agent"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#CapacidadMaxima"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#CapacidadOcupada"/>
+    </Declaration>
+    <EquivalentClasses>
+        <Class IRI="#EightAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#SevenAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#FourAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#FourAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#ThreeAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#NineAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#EightAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#NodeAgent"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Has_agent"/>
+                <Class IRI="#Agent"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#OneAwayAgent"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NodeAgent"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#OneAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NodeAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#SixAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#SixAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#FiveAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#TenAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#NineAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#TwoAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Node"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#Adjacent"/>
+                <Class IRI="#OneAwayAlmacenamiento"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <SubClassOf>
+        <Class IRI="#Almacenamiento"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Diamante"/>
+        <Class IRI="#Recurso"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#EightAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Explorador"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FiveAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FourAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Golem"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NineAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NodeAgent"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#NodeAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#OneAwayAgent"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#OneAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Oro"/>
+        <Class IRI="#Recurso"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Pozo"/>
+        <Class IRI="#Obstáculo"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Recolector"/>
+        <Class IRI="#Agent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Recolector_puede_descargar"/>
+        <Class IRI="#Recolector"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SevenAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SixAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TenAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ThreeAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TwoAwayAlmacenamiento"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Visitado"/>
+        <Class IRI="#Node"/>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="#Diamante"/>
+        <Class IRI="#Oro"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#Obstáculo"/>
+        <Class IRI="#Recurso"/>
+    </DisjointClasses>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Has_agent"/>
+        <ObjectProperty IRI="#Has"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+        <ObjectProperty IRI="#Has_agent"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <ObjectProperty IRI="#Esta_en"/>
+    </SubObjectPropertyOf>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <ObjectProperty IRI="#Has_agent"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#Esta_en"/>
+        <ObjectProperty IRI="#Has"/>
+    </InverseObjectProperties>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#Adjacent"/>
+    </SymmetricObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Adjacent"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <Class IRI="#Agent"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <Class IRI="#Almacenamiento"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Esta_en"/>
+        <ObjectUnionOf>
+            <Class IRI="#Agent"/>
+            <Class IRI="#Obstáculo"/>
+            <Class IRI="#Recurso"/>
+        </ObjectUnionOf>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <Class IRI="#Explorador"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Has"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Has_agent"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <Class IRI="#Obstáculo"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <Class IRI="#Recolector"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <Class IRI="#Recurso"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Adjacent"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Agente_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Almacenamiento_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Explorador_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Has"/>
+        <ObjectUnionOf>
+            <Class IRI="#Agent"/>
+            <Class IRI="#Obstáculo"/>
+            <Class IRI="#Recurso"/>
+        </ObjectUnionOf>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Has_agent"/>
+        <Class IRI="#Agent"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Has_agent_almacenamiento"/>
+        <Class IRI="#Almacenamiento"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Obstaculo_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Recolector_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#Recurso_esta_en"/>
+        <Class IRI="#Node"/>
+    </ObjectPropertyRange>
+    <DataPropertyDomain>
+        <DataProperty IRI="#CapacidadMaxima"/>
+        <Class IRI="#Almacenamiento"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#CapacidadMaxima"/>
+        <Class IRI="#Recolector"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Almacenamiento"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Node"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Class IRI="#Recolector"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#CapacidadMaxima"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#CapacidadOcupada"/>
+        <Datatype abbreviatedIRI="xsd:int"/>
+    </DataPropertyRange>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
@@ -101,7 +102,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	public void addRecolectorBrains(Observation collectType) {
 		System.out.println("RECOLECTOR PUEDE RECOGER: " + collectType.toString());
 		
-		final Object[] args = {getAID(), collectType, observe()};
+		final Object[] args = {getAID(), collectType, getCurrentPosition(), observe()};
 		
 		System.out.println("Llego a setup de Recolector");
 		AgentContainer ac = getContainerController();
@@ -148,21 +149,25 @@ public class GeneralAgent extends AbstractDedaleAgent {
         ACLMessage msg;
         
 		public void onStart() {
-			System.out.println(brains);
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
-			tpl = MessageTemplate.and(tpl1, tpl1);
+			tpl = MessageTemplate.and(tpl1, tpl2);
         }
 		
         public void action() {
             msg = myAgent.receive(tpl);
             if (msg != null) {
-            	//System.out.println(msg.getSender());
                 String content = msg.getContent();
                 if (content != null) {
                 	moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
-                	//System.out.println("Observations: " + ob.toString());
+                	System.out.println("Observations: " + ob.toString());
+                	
+                	try {
+						TimeUnit.SECONDS.sleep(1);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
                 	
                 	ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.INFORM);
