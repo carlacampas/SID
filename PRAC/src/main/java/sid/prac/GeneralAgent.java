@@ -90,7 +90,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		try {
 			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.ExplorerBrains", new Object[]{getAID()});
 			ag.start();
-			brains = new AID(ag.getName(), AID.ISLOCALNAME);
+			brains = new AID(ag.getName(), AID.ISGUID);
 			
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
