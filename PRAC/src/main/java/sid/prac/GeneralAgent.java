@@ -157,12 +157,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
         public void action() {
             msg = myAgent.receive(tpl);
             if (msg != null) {
-            	System.out.println(msg.getSender());
+            	//System.out.println(msg.getSender());
                 String content = msg.getContent();
                 if (content != null) {
                 	moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
-                	System.out.println("Observations: " + ob.toString());
+                	//System.out.println("Observations: " + ob.toString());
                 	
                 	ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.INFORM);

@@ -98,7 +98,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		public void action() {
 			BeliefBase bb = getBeliefBase();
 			List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) bb.getBelief("observations").getValue();
-			System.out.println(ob.toString());
+			//System.out.println(ob.toString());
 			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
 			
 			tg.setObservations(ob);

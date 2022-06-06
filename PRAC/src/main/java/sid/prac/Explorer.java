@@ -39,7 +39,7 @@ public class Explorer extends AbstractDedaleAgent{
 		try {
 			AgentController ag = ac.createNewAgent("brainy", "sid.prac.ExplorerBrains", new Object[]{getAID()});
 			ag.start();
-			brains = new AID(ag.getName(), AID.ISLOCALNAME);
+			brains = new AID(ag.getName(), AID.ISGUID);
 			
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
@@ -47,7 +47,7 @@ public class Explorer extends AbstractDedaleAgent{
 		}
 		
 		
-		System.out.println("Agente cerebro creado correctamente!");
+		System.out.println("Agente cerebro creado correctamente! Su AID es: " + brains.getName());
 		
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 		
