@@ -151,38 +151,6 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
-    // Data properties
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    
-
-
-    <!-- http://www.semanticweb.org/sid-prac3#CapacidadMaxima -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#CapacidadMaxima">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- http://www.semanticweb.org/sid-prac3#CapacidadOcupada -->
-
-    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#CapacidadOcupada">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
     // Classes
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -514,6 +482,14 @@
             </owl:Class>
         </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Viento -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Viento">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Obstáculo"/>
     </owl:Class>
     
 

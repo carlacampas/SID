@@ -52,14 +52,14 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				}
 				
 				if (sum == 0) {
-					type = "explorer";
+					type = "agentExplo";
 					
 					myAgent.addBehaviour(new ExploSoloBehaviour((AbstractDedaleAgent) this.myAgent, map));
 					addExplorerBrains();
 					System.out.println("I am an explorer!");
 				}
 				else {
-					type = "recolector";
+					type = "agentCollect";
 					addRecolectorBrains(getMyTreasureType());
 					System.out.println("I am a collector!");
 				}
@@ -163,6 +163,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
                 	System.out.println("Observations: " + ob.toString());
                 	
+                	// REMOVE
                 	try {
 						TimeUnit.SECONDS.sleep(1);
 					} catch (InterruptedException e1) {
