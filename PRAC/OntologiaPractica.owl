@@ -5,7 +5,8 @@
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:sid-prac3="http://www.semanticweb.org/sid-prac3#">
     <owl:Ontology rdf:about="http://www.semanticweb.org/sid-prac3"/>
     
 
@@ -48,6 +49,17 @@
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agente_esta_en"/>
         <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_agent_almacenamiento"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Diamante_esta_en -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Diamante_esta_en">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_diamante"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Diamante"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     </owl:ObjectProperty>
     
@@ -102,8 +114,6 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_agent">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Agent"/>
     </owl:ObjectProperty>
     
 
@@ -112,8 +122,59 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_agent_almacenamiento">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_agent"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_diamante -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_diamante">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_recurso"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_obstaculo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_obstaculo">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_oro -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_oro">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_recurso"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Oro_esta_en"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_pozo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_pozo">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_obstaculo"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Pozo_esta_en"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_recurso -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_recurso">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Has_viento -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_viento">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Has_obstaculo"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/sid-prac3#Viento_esta_en"/>
     </owl:ObjectProperty>
     
 
@@ -123,6 +184,26 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Obstáculo"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Oro_esta_en -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Oro_esta_en">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Pozo_esta_en -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Pozo_esta_en">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Pozo"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     </owl:ObjectProperty>
     
@@ -143,6 +224,16 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recurso_esta_en">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Viento_esta_en -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sid-prac3#Viento_esta_en">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Viento"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     </owl:ObjectProperty>
     
@@ -201,6 +292,44 @@
     
 
 
+    <!-- http://www.semanticweb.org/sid-prac3#EightAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#EightAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SevenAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#EightAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#EightAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SevenAwayOro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/sid-prac3#Explorador -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Explorador">
@@ -219,6 +348,44 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
                         <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FourAwayAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#FiveAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FourAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#FiveAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FourAwayOro"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -247,6 +414,44 @@
     
 
 
+    <!-- http://www.semanticweb.org/sid-prac3#FourAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#FourAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#ThreeAwayOro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/sid-prac3#Golem -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Golem">
@@ -265,6 +470,44 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
                         <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#EightAwayAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NineAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NineAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#EightAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NineAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NineAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#EightAwayOro"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -302,6 +545,93 @@
     <!-- http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Has_agent_almacenamiento"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#Almacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NodeDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Has_diamante"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#Diamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NodeOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Has_oro"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NodePozo -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodePozo">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeViento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#NodeViento -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#NodeViento">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Has_viento"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#Viento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     </owl:Class>
     
@@ -344,6 +674,44 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
                         <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#OneAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#OneAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeOro"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -410,6 +778,44 @@
     
 
 
+    <!-- http://www.semanticweb.org/sid-prac3#SevenAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SevenAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#SevenAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SevenAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#SixAwayOro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SixAwayAlmacenamiento">
@@ -420,6 +826,44 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
                         <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FiveAwayAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#SixAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SixAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FiveAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#SixAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#SixAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#FiveAwayOro"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -448,6 +892,44 @@
     
 
 
+    <!-- http://www.semanticweb.org/sid-prac3#TenAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TenAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NineAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#TenAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TenAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NineAwayOro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayAlmacenamiento">
@@ -458,6 +940,44 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
                         <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#ThreeAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#ThreeAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayOro"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -486,6 +1006,44 @@
     
 
 
+    <!-- http://www.semanticweb.org/sid-prac3#TwoAwayDiamante -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayDiamante">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayDiamante"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#TwoAwayOro -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#TwoAwayOro">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayOro"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/sid-prac3#Viento -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Viento">
@@ -499,6 +1057,70 @@
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Visitado">
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Node1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Node1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Node2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Node2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node3"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Node3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Node3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node4"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Node4 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Node4">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Oro -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Oro">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
+        <sid-prac3:Oro_esta_en rdf:resource="http://www.semanticweb.org/sid-prac3#Node2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/sid-prac3#Viento -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sid-prac3#Viento">
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Viento"/>
+        <sid-prac3:Viento_esta_en rdf:resource="http://www.semanticweb.org/sid-prac3#Node3"/>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
