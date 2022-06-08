@@ -76,11 +76,18 @@ public class RecolectorBrains extends SingleCapabilityAgent {
     }
 	
 	public OntModel setNewNodesOntology (String current, OntModel model, List <Couple<String, List <Couple<Observation, Integer>>>> ob) {
+		// ONTOLOGY CLASSES
 		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
 		OntClass diamanteClass = model.getOntClass(BASE_URI + "#Diamante");
 		OntClass oroClass = model.getOntClass(BASE_URI + "#Oro");
+		OntClass vientoClass = model.getOntClass(BASE_URI + "#Viento");
+		OntClass agentClass = model.getOntClass(BASE_URI + "#Agent");
+		
+		//PROPERTIES
 		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
 		Property recrusoProperty = model.createDatatypeProperty(BASE_URI + "#Recurso_esta_en");
+		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Obstaculo_esta_en");
+		Property agenteProperty = model.createDatatypeProperty(BASE_URI + "#Agente_esta_en");
 		
 		Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + current);
 		
@@ -91,13 +98,26 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			currentNode.addProperty(nameProperty, adjacentNode);
 			
 			for (Couple<Observation, Integer> obs : o.getRight()) {
-				if (obs.getLeft() == Observation.GOLD) {
-					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + obs.getRight());
-					adjacentNode.addProperty(recrusoProperty, rec);
-				}
-				else if (obs.getLeft() == Observation.DIAMOND) {
-					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + obs.getRight());
-					adjacentNode.addProperty(recrusoProperty, rec);
+				Individual rec;
+				switch(obs.getLeft()) {
+					case GOLD: 
+						rec = oroClass.createIndividual(BASE_URI + "#Oro" + obs.getRight());
+						adjacentNode.addProperty(recrusoProperty, rec);
+						break;
+					case DIAMOND:
+						rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + obs.getRight());
+						adjacentNode.addProperty(recrusoProperty, rec);
+						break;
+					case WIND:
+						rec = diamanteClass.createIndividual(BASE_URI + "#Viento" + o.getLeft());
+						adjacentNode.addProperty(obstaculoProperty, rec);
+						break;
+					case AGENTNAME:
+						//find out que tipo de agente es
+						rec = agentClass.createIndividual(BASE_URI + "#Agente" + obs.getRight());
+						adjacentNode.addProperty(agenteProperty, rec);
+					default:
+						break;
 				}
 			}
 		}
@@ -202,12 +222,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) bb.getBelief("observations").getValue();
 			OntModel model = (OntModel) bb.getBelief("ontology").getValue();
 			String currentNode = (String) bb.getBelief("currentPosition").getValue();
- 			
-			ExtendedIterator<Individual> its = model.listIndividuals();
-			System.out.println("Individuals: " + its.toList().size());
-			for (Individual ind : its.toList()) {
-				System.out.println(ind.getLocalName());
-			}
 			
 			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
 			
