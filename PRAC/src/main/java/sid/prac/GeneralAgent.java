@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import dataStructures.tuple.Couple;
@@ -29,11 +30,13 @@ import jade.domain.DFService;
 import sid.prac.ExplorerBrains;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import java.util.HashSet;
 
 public class GeneralAgent extends AbstractDedaleAgent {
 	private MapRepresentation map;
 	private String type;
 	private AID brains;
+	Observation collectType;
 	
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
@@ -44,12 +47,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		lb.add(new OneShotBehaviour() {
 			public void action () {
 				System.out.println("one shot behaviour");
-				List<Couple<Observation, Integer>> free = getBackPackFreeSpace();
-				Iterator<Couple<Observation, Integer>> iter=free.iterator();
-				int sum = 0;
-				while (iter.hasNext()) {
-					sum += iter.next().getRight();
-				}
+				int sum = sumFreeSpace(getBackPackFreeSpace());
 				
 				if (sum == 0) {
 					type = "agentExplo";
@@ -60,7 +58,8 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				}
 				else {
 					type = "agentCollect";
-					addRecolectorBrains(getMyTreasureType());
+					collectType = getMyTreasureType();
+					addRecolectorBrains();
 					System.out.println("I am a collector!");
 				}
 				
@@ -99,12 +98,13 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 	}
 	
-	public void addRecolectorBrains(Observation collectType) {
+	public void addRecolectorBrains() {
 		System.out.println("RECOLECTOR PUEDE RECOGER: " + collectType.toString());
 		
 		final Object[] args = {getAID(), collectType, getCurrentPosition(), observe()};
 		
 		System.out.println("Llego a setup de Recolector");
+		
 		AgentContainer ac = getContainerController();
 		try {
 			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.RecolectorBrains", args);
@@ -154,6 +154,49 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			tpl = MessageTemplate.and(tpl1, tpl2);
         }
 		
+		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
+			boolean myItem = false, lockOpen = false;
+        	int strength = 0, lockPicking = 0;
+			for (Couple<Observation, Integer> obs : o.getRight()) {
+				if (obs.getLeft() == collectType) {
+					myItem = true;
+				}
+				else {
+					switch(obs.getLeft()) {
+						case LOCKSTATUS:
+							lockOpen = obs.getRight() == 1;
+							break;
+						case LOCKPICKING:
+							lockPicking = obs.getRight();
+							break;
+						case STRENGH:
+							strength = obs.getRight();
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			if (!myItem) return;
+			
+			System.out.println("BEFORE: " + getBackPackFreeSpace());
+			Set<Couple<Observation, Integer>> exp = getMyExpertise();
+			
+			if (lockOpen) pick();
+			else {
+				boolean can_open = true;
+				for (Couple<Observation, Integer> e : exp) {
+					if (e.equals(Observation.LOCKPICKING)) can_open = can_open && (e.getRight() >= lockPicking);
+					else if (e.equals(Observation.STRENGH)) can_open = can_open && (e.getRight() >= strength);
+				}
+				
+				if (!can_open) return;
+				openLock(Observation.ANY_TREASURE);
+				pick();
+			}
+			System.out.println("AFTER: " + getBackPackFreeSpace());
+		}
+		
         public void action() {
             msg = myAgent.receive(tpl);
             if (msg != null) {
@@ -161,14 +204,15 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 if (content != null) {
                 	moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
-                	System.out.println("Observations: " + ob.toString());
                 	
-                	// REMOVE
-                	try {
-						TimeUnit.SECONDS.sleep(1);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
+                	if (type.equals("agentCollect") && sumFreeSpace(getBackPackFreeSpace()) > 0) 
+	                	for (Couple<String, List <Couple<Observation, Integer>>> o : ob)
+	                		if (content.equals(o.getLeft())) {
+	                			handle_current_node(o);
+	                			break;
+	                		}
+                	
+                	System.out.println("Observations: " + ob.toString());
                 	
                 	ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.INFORM);
@@ -180,5 +224,13 @@ public class GeneralAgent extends AbstractDedaleAgent {
             }
             else { block(); }
         }
+	}
+	
+	public Integer sumFreeSpace(List<Couple<Observation, Integer>> bp) {
+		Integer sum = 0;
+		for (Couple<Observation, Integer> b : bp) {
+			sum += b.getRight();
+		}
+		return sum;
 	}
 }
