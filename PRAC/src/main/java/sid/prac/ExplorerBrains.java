@@ -6,6 +6,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import sid.prac.RecolectorBrains.GetTreasureGoal;
+import sid.prac.RecolectorBrains.GetTreasurePlan;
+import sid.prac.RecolectorBrains.RecieveObservations;
 import bdi4jade.core.*;
 
 import java.io.File;
@@ -153,13 +155,24 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		Belief currentNode = new TransientBelief("currentPosition", currentPosition);
 		HashMap tmp = new HashMap<String, Integer>();
 		Belief visitedNodes = new TransientBelief("visitedNodes", tmp);
-		Belief sum = new TransientBelief("suma", 0);
-		Belief std = new TransientBelief("std", 0);
+		Belief sum = new TransientBelief("suma", (Double) 0.0);
+		Belief K = new TransientBelief("K", (Double) 0.0);
+		Belief Ex = new TransientBelief("Ex", (Double) 0.0);
+		Belief Ex2 = new TransientBelief("Ex2", (Double) 0.0);
 		bb.addBelief(observations);
 		bb.addBelief(ontology);
 		bb.addBelief(currentNode);
+		bb.addBelief(visitedNodes);
 		bb.addBelief(sum);
-		bb.addBelief(std);
+		bb.addBelief(K);
+		bb.addBelief(Ex);
+		bb.addBelief(Ex2);
+		
+		Plan getObjective = new DefaultPlan(GetObjectiveGoal.class, GetObjectivePlan.class);
+		
+		c.getPlanLibrary().addPlan(getObjective);
+		this.addGoal(new GetObjectiveGoal());
+		addBehaviour(new RecieveObservations());
 		
 		
 	}
@@ -173,7 +186,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		super.takeDown();
 	}
 	
-	// GET GOLD
+	// GET NEW OBJECTIVE IN MAP GOAL
 	public class GetObjectiveGoal implements Goal {
 		List <Couple<String, List <Couple<Observation, Integer>>>> ob;
 		OntModel model;
@@ -184,40 +197,171 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 
 		public void setModel(OntModel model) { this.model = model; }
 
-		public String getNextPosition(HashMap<String,Integer> locmap) {
+	}
+	// GET NEW OBJECTIVE IN MAP PLAN
+	public class GetObjectivePlan extends AbstractPlanBody {
+		
+		//Calcula la nueva posición a la que se moverá el agente
+		public String getNextPosition() {
+			BeliefBase bb = getBeliefBase();
 			String next = "";
-			Integer best = Integer.MAX_VALUE;
+			String randNext="";
 			List <String> possibleMoves = new ArrayList<>();
-			int min;
+			double maxScore, nextK, nextEx, nextEx2, nextVal;
+			double randScore, randK, randEx, randEx2, randVal;
+
+			maxScore=nextK=nextEx=nextEx2=nextVal=0;
+			randScore=randK=randEx=randEx2=randVal=0;
+			
+			HashMap<String,Integer> locmap = (HashMap<String,Integer>) bb.getBelief("visitedNodes").getValue();
+			double n = locmap.size();
+			Double oldSuma = (Double) bb.getBelief("suma").getValue();
+			
+			Random rand = new Random();
+			int pos = rand.nextInt(ob.size());
+					
+			int index=0;		
 			for(Couple<String, List<Couple<Observation, Integer>>> o : ob) {
 				
+				boolean possible = true;
+				for (Couple<Observation, Integer> elem : o.getRight()) {
+					if (elem.getLeft().equals(Observation.WIND)) possible = false;
+				}
+				
+					
+				double new_val;
+				double val;
+
 				String id = o.getLeft();
-				if(locmap.containsKey(id)){
+				if(!locmap.containsKey(id)) val = 0.0;
+				else val = Double.valueOf(locmap.get(id));
+
+				new_val = val+1.0;
+
+				ArrayList<Double> finalStdParam = new ArrayList<Double>();
+				Double newScore = this.getNewScore(n, val, new_val, finalStdParam);
+				if(newScore >= maxScore && possible) {
+					System.out.println("Paso nuevo maxscore");
+					System.out.println(finalStdParam);
+					maxScore = newScore;
+					nextVal = new_val;
+					nextK = finalStdParam.get(0);
+					nextEx = finalStdParam.get(1);
+					nextEx2 = finalStdParam.get(2);
+					next = id;
 					
-					int cnt = locmap.get(id);
-					locmap.put(id, cnt+1);
-					
-					
-				}else locmap.put(id, 1);
+				}else if(index == pos) {
+
+					maxScore = newScore;
+					randVal = new_val;
+					System.out.println("Paso por index==pos!");
+					System.out.println(finalStdParam);
+					randK = finalStdParam.get(0);
+					randEx = finalStdParam.get(1);
+					randEx2 = finalStdParam.get(2);
+					randNext = id;
+
+				}
+				index++;
+			}
+			
+			this.saveValueBB(oldSuma+1.0, "suma", bb);
+			if(!next.equals("")) {
+				locmap.put(next, (int)(nextVal));
+				this.saveValueBB(locmap, "visitedNodes", bb);
+				this.saveValueBB(nextK, "K", bb);
+				this.saveValueBB(nextEx, "Ex", bb);
+				this.saveValueBB(nextEx2, "Ex2", bb);
+				return next;
+			}else {
+				locmap.put(randNext, (int)(randVal));
+				this.saveValueBB(locmap, "visitedNodes", bb);
+				this.saveValueBB(randK, "K", bb);
+				this.saveValueBB(randEx, "Ex", bb);
+				this.saveValueBB(randEx2, "Ex2", bb);	
+			}
+			return randNext;
+		}
+		
+		private Double getNewScore(Double size, Double val, Double new_val, ArrayList<Double> finalStdParam) {
+			BeliefBase bb = getBeliefBase();
+			Double oldSuma = (Double) bb.getBelief("suma").getValue();
+			Double K = (Double) bb.getBelief("K").getValue();
+			Double Ex = (Double) bb.getBelief("Ex").getValue();
+			Double Ex2 = (Double) bb.getBelief("Ex2").getValue();
+			ArrayList<Double> newStdParam = this.delElemStd(K, Ex, Ex2, size, val);
+			ArrayList<Double> newStdParam2 = this.addElemStd(newStdParam, size-1.0, new_val);
+			Double newStd = Math.sqrt(this.getVariance(size,newStdParam2));
+			Double newMean = (oldSuma+1.0)/(size+1.0);
+			Double newScore = (newMean*newMean)/(1.0+newStd);
+			finalStdParam = newStdParam2;
+			return newScore;
+			
+		}
+		
+		private ArrayList<Double> delElemStd(Double K, Double Ex, Double Ex2, Double size,  Double elem) {
+			
+			ArrayList<Double> newStdParam = new ArrayList<Double>();
+			if(size > 0) {
+				size-=1;
+				BeliefBase bb = getBeliefBase();
+				if(size == 0) K = elem;
+				Ex-=elem-K;
+				Ex2 -= (elem - K)*(elem - K);
+				newStdParam.add(K);
+				newStdParam.add(Ex);
+				newStdParam.add(Ex2);
+			}else {
+				newStdParam.add(0.0);
+				newStdParam.add(0.0);
+				newStdParam.add(0.0);
 				
 			}
-			if (best == 0) {
-				if (possibleMoves.size() > 0) {
-					Random rand = new Random();
-					int pos = rand.nextInt(possibleMoves.size());
-					next = possibleMoves.get(pos);
-				}
-				else {
-					Random rand = new Random();
-					int pos = rand.nextInt(ob.size());
-					next = ob.get(pos).getLeft();
-				}
-			}
-			return next;
+			
+			return newStdParam;
 		}
-	}
-	
-	public class GetObjectivePlan extends AbstractPlanBody {
+		
+		private ArrayList<Double> addElemStd(ArrayList<Double> oldStdParam, Double size, Double elem) {
+			
+			size +=1.0;
+			Double K = oldStdParam.get(0);
+			Double Ex = oldStdParam.get(1);
+			Double Ex2 = oldStdParam.get(2);
+			BeliefBase bb = getBeliefBase();
+			if(size == 0) K = elem;
+			Ex+=elem-K;
+			Ex2 += (elem - K)*(elem - K);
+			ArrayList<Double> newStdParam = new ArrayList<Double>();
+			newStdParam.add(0,K);
+			newStdParam.add(1,Ex);
+			newStdParam.add(2,Ex2);
+			return newStdParam;
+			
+			
+		}
+		
+		
+		
+		private Double getVariance(Double size, ArrayList<Double> newStdParam) {
+			BeliefBase bb = getBeliefBase();
+			Double K = newStdParam.get(0);
+			Double Ex = newStdParam.get(1);
+			Double Ex2 = newStdParam.get(2);
+			return (Ex2-(Ex*Ex)/size)/(size-1);
+			
+			
+		}
+		
+		
+		private void saveValueBB(Object val, String name, BeliefBase bb) {
+			
+			TransientBelief newVal = new TransientBelief(name, val);
+			bb.addOrUpdateBelief(newVal);
+			
+			
+		}
+
+		
 		
 		@Override
 		public void action() {
@@ -225,12 +369,8 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) bb.getBelief("observations").getValue();
 			OntModel model = (OntModel) bb.getBelief("ontology").getValue();
 			String currentNode = (String) bb.getBelief("currentPosition").getValue();
-			
-			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
-			
-			tg.setObservations(ob);
-			tg.setModel(model);
-			String nextMove = tg.getNextPosition();
+
+			String nextMove = this.getNextPosition();
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(body);
@@ -274,7 +414,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 					Belief observations = new TransientBelief("observations", ob);
 					bb.addOrUpdateBelief(observations);
 					
-					//addGoal(new GetTreasureGoal());
+					addGoal(new GetObjectiveGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
             }
             else { block(); }

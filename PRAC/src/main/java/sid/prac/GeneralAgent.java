@@ -87,8 +87,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	public void addExplorerBrains() {
 		System.out.println("Llego a setup de Explorer");
 		AgentContainer ac = getContainerController();
+		final Object[] args = {getAID(), collectType, getCurrentPosition(), observe()};
 		try {
-			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.ExplorerBrains", new Object[]{getAID()});
+			AgentController ag = ac.createNewAgent("brainy_" + getName(), "sid.prac.ExplorerBrains", args);
 			ag.start();
 			brains = new AID(ag.getName(), AID.ISGUID);
 			
