@@ -7,6 +7,7 @@ import jade.domain.FIPAException;
 import bdi4jade.core.*;
 
 import java.util.List;
+import java.util.Map;
 
 import bdi4jade.belief.*;
 import bdi4jade.goal.Goal;
@@ -129,7 +130,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 	protected void init() {
 		System.out.println("Brains se despierta!");
 		Object[] args = getArguments();
-		if (args.length != 4) {
+		if (args.length != 5) {
 		      System.out.println("incorrect args");
 		      doDelete();
 		}
@@ -137,7 +138,8 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		body = (AID) args[0];
 		collectionType = (Observation) args[1];
 		String currentPosition = (String) args[2];
-		ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) args[3];		
+		ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) args[3];	
+		Integer free = (Integer) args[4];
 		loadOntology();
 		
 		OntClass nodeClass = model.getOntClass(BASE_URI + "#Visitado");
@@ -150,10 +152,12 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		Belief observations = new TransientBelief("observations", ob);
 		Belief ontology = new TransientBelief("ontology", model);
 		Belief currentNode = new TransientBelief("currentPosition", currentPosition);
+		Belief freeSpace = new TransientBelief("freeSpace", free);
 
 		bb.addBelief(observations);
 		bb.addBelief(ontology);
 		bb.addBelief(currentNode);
+		bb.addBelief(freeSpace);
 		
 		Plan getGold = new DefaultPlan(GetTreasureGoal.class, GetTreasurePlan.class);
 		
@@ -194,6 +198,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 					for (Couple<Observation, Integer> elem : o.getRight()) {
 						if (elem.getLeft().equals(collectionType)) q += elem.getRight();
 						else if (elem.getLeft().equals(Observation.WIND)) possible = false;
+						else if (elem.getLeft().equals(Observation.AGENTNAME)) possible = false;
 					}
 					if (q > best) next = o.getLeft();
 					else if (possible) possibleMoves.add(o.getLeft());
@@ -264,13 +269,21 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 
             if (msg != null) {
                 try {
-					List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) msg.getContentObject();
-					
-					Capability c = getCapability();
+                	Map <String, Object> rep = (Map <String, Object>) msg.getContentObject();
+                	boolean can_move = (boolean) rep.get("CAN_MOVE");
+                	Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
-					
-					Belief observations = new TransientBelief("observations", ob);
-					bb.addOrUpdateBelief(observations);
+                	if (!can_move) {
+                		String current = (String) rep.get("CURRENT_POSITION");
+                		Belief currPos = new TransientBelief("currentPosition", current);
+						bb.addOrUpdateBelief(currPos);
+                	}
+                	else {
+						List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) rep.get("OBSERVATIONS");
+						
+						Belief observations = new TransientBelief("observations", ob);
+						bb.addOrUpdateBelief(observations);
+                	}
 					
 					addGoal(new GetTreasureGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }

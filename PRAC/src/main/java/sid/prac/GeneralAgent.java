@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +32,7 @@ import sid.prac.ExplorerBrains;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.HashSet;
+import java.util.HashMap;
 
 public class GeneralAgent extends AbstractDedaleAgent {
 	private MapRepresentation map;
@@ -102,7 +104,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	public void addRecolectorBrains() {
 		System.out.println("RECOLECTOR PUEDE RECOGER: " + collectType.toString());
 		
-		final Object[] args = {getAID(), collectType, getCurrentPosition(), observe()};
+		final Object[] args = {getAID(), collectType, getCurrentPosition(), observe(), sumFreeSpace(getBackPackFreeSpace())};
 		
 		System.out.println("Llego a setup de Recolector");
 		
@@ -203,7 +205,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
             if (msg != null) {
                 String content = msg.getContent();
                 if (content != null) {
-                	moveTo(content);
+                	boolean m = moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
                 	
                 	if (type.equals("agentCollect") && sumFreeSpace(getBackPackFreeSpace()) > 0) 
@@ -215,10 +217,15 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 	
                 	System.out.println("Observations: " + ob.toString());
                 	
+                	Map <String, Object> pass_info = new HashMap <String, Object>();
+                	pass_info.put("OBSERVATIONS", ob);
+                	pass_info.put("CAN_MOVE", m);
+                	pass_info.put("CURRENT_POSITION", getCurrentPosition());
+                	
                 	ACLMessage reply = msg.createReply();
                     reply.setPerformative(ACLMessage.INFORM);
                     try {
-                    	reply.setContentObject((Serializable) ob);
+                    	reply.setContentObject((Serializable) pass_info);
                     } catch (Exception e) {}
                     send(reply);
                 }
