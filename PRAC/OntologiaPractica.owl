@@ -748,6 +748,17 @@
     <!-- http://www.semanticweb.org/sid-prac3#Recolector_puede_descargar -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_puede_descargar">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sid-prac3#Recolector"/>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector_esta_en"/>
+                        <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
         <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
     </owl:Class>
     
