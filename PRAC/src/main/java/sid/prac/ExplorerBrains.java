@@ -282,6 +282,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				this.saveValueBB(nextK, "K", bb);
 				this.saveValueBB(nextEx, "Ex", bb);
 				this.saveValueBB(nextEx2, "Ex2", bb);
+				System.out.println("locmap es: " + locmap);
 				return next;
 			}else {
 				locmap.put(randNext, (int)(randVal));
@@ -291,6 +292,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				this.saveValueBB(randEx, "Ex", bb);
 				this.saveValueBB(randEx2, "Ex2", bb);	
 			}
+			System.out.println("locmap es: " + locmap);
 			return randNext;
 		}
 		
@@ -307,7 +309,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			Double newMean = (oldSuma+1.0)/(size+1.0);
 			Double newScore = (newMean*newMean)/(1.0+newStd);
 			for(Double d:newStdParam2)finalStdParam.add(d);
-			return newScore;
+			return newScore/val;
 			
 		}
 		
