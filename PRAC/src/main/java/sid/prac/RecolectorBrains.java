@@ -323,6 +323,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			msg.addReceiver(body);
 			msg.setSender(getAID());
             msg.setContent(nextMove);
+            msg.setConversationId("movimientos");
             send(msg);
             
             //System.out.println("NEXT MOVE: " + nextMove);

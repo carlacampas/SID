@@ -1,2 +1,2 @@
 mapname:map2018MultiTypes
-agentExplo:GeneralAgentExplore:3:free:-1:-1:0:1:1
+agentCollect:CollectGold:3:free:50:-1:0:1:1

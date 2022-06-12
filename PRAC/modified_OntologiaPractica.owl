@@ -538,6 +538,24 @@
       </owl:Class>
     </owl:equivalentClass>
   </owl:Class>
+  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento">
+    <rdfs:label>OneAwayAlmacenamiento</rdfs:label>
+    <sid-prac3:definition>Nodo adyacente a un nodo que contiene un agente almacenador</sid-prac3:definition>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FiveAwayDiamante">
     <rdfs:label>FiveAwayDiamante</rdfs:label>
     <sid-prac3:definition>Nodo a distancia 5 de un nodo que contiene el recurso diamante</sid-prac3:definition>
@@ -550,24 +568,6 @@
             <owl:someValuesFrom>
               <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#FourAwayDiamante"/>
             </owl:someValuesFrom>
-            <owl:onProperty>
-              <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
-            </owl:onProperty>
-          </owl:Restriction>
-        </owl:intersectionOf>
-      </owl:Class>
-    </owl:equivalentClass>
-  </owl:Class>
-  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento">
-    <rdfs:label>OneAwayAlmacenamiento</rdfs:label>
-    <sid-prac3:definition>Nodo adyacente a un nodo que contiene un agente almacenador</sid-prac3:definition>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-    <owl:equivalentClass>
-      <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Node"/>
-          <owl:Restriction>
-            <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#NodeAlmacenamiento"/>
             <owl:onProperty>
               <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
             </owl:onProperty>
@@ -688,24 +688,6 @@
       </owl:Class>
     </owl:equivalentClass>
   </owl:Class>
-  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_puede_descargar">
-    <rdfs:label>Recolector_puede_descargar</rdfs:label>
-    <sid-prac3:definition>Agente con rol recolector que esta adyacente a otro agente con rol almacenador</sid-prac3:definition>
-    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
-    <owl:equivalentClass>
-      <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector"/>
-          <owl:Restriction>
-            <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
-            <owl:onProperty>
-              <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_esta_en"/>
-            </owl:onProperty>
-          </owl:Restriction>
-        </owl:intersectionOf>
-      </owl:Class>
-    </owl:equivalentClass>
-  </owl:Class>
   <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#ThreeAwayOro">
     <rdfs:label>ThreeAwayOro</rdfs:label>
     <sid-prac3:definition>Nodo a distancia 3 de un nodo que contiene el recurso oro</sid-prac3:definition>
@@ -718,6 +700,24 @@
             <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#TwoAwayOro"/>
             <owl:onProperty>
               <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Adjacent"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_puede_descargar">
+    <rdfs:label>Recolector_puede_descargar</rdfs:label>
+    <sid-prac3:definition>Agente con rol recolector que esta adyacente a otro agente con rol almacenador</sid-prac3:definition>
+    <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recolector"/>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="http://www.semanticweb.org/sid-prac3#Recolector"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.semanticweb.org/sid-prac3#OneAwayAlmacenamiento"/>
+            <owl:onProperty>
+              <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recolector_esta_en"/>
             </owl:onProperty>
           </owl:Restriction>
         </owl:intersectionOf>
@@ -842,6 +842,19 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Diamante_esta_en">
+    <sid-prac3:definition>Un recurso de tipo diamante esta en un nodo</sid-prac3:definition>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Diamante"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <owl:inverseOf>
+      <owl:InverseFunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_diamante"/>
+    </owl:inverseOf>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Agente_esta_en">
     <sid-prac3:definition>Un agente esta en un nodo</sid-prac3:definition>
     <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
@@ -855,20 +868,20 @@
     </rdfs:subPropertyOf>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Oro_esta_en">
+    <sid-prac3:definition>Un recurso de tipo oro esta en un nodo</sid-prac3:definition>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:subPropertyOf>
+      <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
+    </rdfs:subPropertyOf>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en">
     <sid-prac3:definition>Un obstaculo esta en un nodo</sid-prac3:definition>
     <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Obstáculo"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-    <rdfs:subPropertyOf>
-      <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Esta_en"/>
-    </rdfs:subPropertyOf>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recurso_esta_en">
-    <sid-prac3:definition>Un recurso esta en un nodo</sid-prac3:definition>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
     <rdfs:subPropertyOf>
       <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Esta_en"/>
@@ -880,16 +893,6 @@
     <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Explorador"/>
     <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agente_esta_en"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Diamante_esta_en">
-    <sid-prac3:definition>Un recurso de tipo diamante esta en un nodo</sid-prac3:definition>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Diamante"/>
-    <owl:inverseOf>
-      <owl:InverseFunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_diamante"/>
-    </owl:inverseOf>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:FunctionalProperty>
   <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Pozo_esta_en">
@@ -904,13 +907,6 @@
     <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
     <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Viento"/>
     <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Obstaculo_esta_en"/>
-    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
-  </owl:FunctionalProperty>
-  <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Oro_esta_en">
-    <sid-prac3:definition>Un recurso de tipo oro esta en un nodo</sid-prac3:definition>
-    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Oro"/>
-    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso_esta_en"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:FunctionalProperty>
   <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Esta_en">
@@ -945,6 +941,13 @@
       <owl:InverseFunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_agent_almacenamiento"/>
     </owl:inverseOf>
     <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Agente_esta_en"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:FunctionalProperty>
+  <owl:FunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Recurso_esta_en">
+    <sid-prac3:definition>Un recurso esta en un nodo</sid-prac3:definition>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/sid-prac3#Recurso"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sid-prac3#Esta_en"/>
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:FunctionalProperty>
   <owl:InverseFunctionalProperty rdf:about="http://www.semanticweb.org/sid-prac3#Has_oro">
@@ -1003,845 +1006,81 @@
     <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
   </owl:InverseFunctionalProperty>
   <owl:AnnotationProperty rdf:about="http://www.semanticweb.org/sid-prac3#definition"/>
-  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node50">
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node95">
+  <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro66">
+    <sid-prac3:Oro_esta_en>
+      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node66">
         <sid-prac3:Adjacent>
-          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node96">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node95"/>
-            <sid-prac3:Recurso_esta_en>
-              <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro24"/>
-            </sid-prac3:Recurso_esta_en>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node96"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-          </sid-prac3:Node>
+          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node67"/>
         </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node50"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node95"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node42">
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node50"/>
         <sid-prac3:Adjacent>
-          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node41">
+          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node54">
+            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
             <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node128">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node41"/>
+              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node55">
                 <sid-prac3:Adjacent>
-                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node117">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node128"/>
+                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node53">
                     <sid-prac3:Adjacent>
-                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node118">
-                        <sid-prac3:Adjacent>
-                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node119">
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node120">
-                                <sid-prac3:Obstaculo_esta_en>
-                                  <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Viento120"/>
-                                </sid-prac3:Obstaculo_esta_en>
-                              </sid-prac3:Node>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node118"/>
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node116">
-                                <sid-prac3:Obstaculo_esta_en>
-                                  <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Viento116"/>
-                                </sid-prac3:Obstaculo_esta_en>
-                              </sid-prac3:Node>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node119"/>
-                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                          </sid-prac3:Node>
-                        </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node117"/>
-                        <sid-prac3:Adjacent>
-                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node113">
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node118"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node116"/>
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node112">
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node117"/>
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node114">
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node126">
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node127">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node128"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node126"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node127"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                          </sid-prac3:Visitado>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node125">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node126"/>
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node124">
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node125"/>
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node106">
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node124"/>
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node107">
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node115">
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node125"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node114"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node107"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node115"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                          </sid-prac3:Visitado>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node108">
-                                                            <sid-prac3:Adjacent>
-                                                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node109">
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node112"/>
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node110">
-        <sid-prac3:Obstaculo_esta_en>
-          <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Viento110"/>
-        </sid-prac3:Obstaculo_esta_en>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node108"/>
-    <sid-prac3:Adjacent>
-      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node102">
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node109"/>
-        <sid-prac3:Adjacent>
-          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node101">
-            <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node122">
-                <sid-prac3:Adjacent>
-                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node121">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node122"/>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node120"/>
-                    <sid-prac3:Adjacent>
-                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node104">
-                        <sid-prac3:Obstaculo_esta_en>
-                          <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Viento104"/>
-                        </sid-prac3:Obstaculo_esta_en>
-                      </sid-prac3:Node>
+                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node52"/>
                     </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node121"/>
-                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                  </sid-prac3:Node>
-                </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node101"/>
-                <sid-prac3:Adjacent>
-                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node0">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node122"/>
-                    <sid-prac3:Adjacent>
-                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node6">
-                        <sid-prac3:Adjacent>
-                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node7">
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node8">
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node12">
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node13">
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node14">
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node15">
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node19">
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node27">
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node31">
-                                                            <sid-prac3:Adjacent>
-                                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node32">
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node31"/>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node32"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                              </sid-prac3:Node>
-                                                            </sid-prac3:Adjacent>
-                                                            <sid-prac3:Adjacent>
-                                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node80">
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node81">
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node80"/>
-        <sid-prac3:Adjacent>
-          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node57">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node81"/>
-            <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node44">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node57"/>
-                <sid-prac3:Adjacent>
-                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node45">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node44"/>
-                    <sid-prac3:Adjacent>
-                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node37">
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node45"/>
-                        <sid-prac3:Adjacent>
-                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node38">
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node46">
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node47">
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node46"/>
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node39">
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node48">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node41"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node39"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node48"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                          </sid-prac3:Visitado>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node47"/>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node39"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                      </sid-prac3:Node>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node47"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                  </sid-prac3:Node>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node38"/>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node46"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                              </sid-prac3:Node>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node37"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node38"/>
-                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                          </sid-prac3:Node>
-                        </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node37"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                      </sid-prac3:Node>
-                    </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node45"/>
-                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                  </sid-prac3:Node>
-                </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent>
-                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node43">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node44"/>
-                    <sid-prac3:Adjacent>
-                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node35">
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node44"/>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node43"/>
-                        <sid-prac3:Adjacent>
-                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node29">
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node35"/>
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node28">
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node29"/>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node81"/>
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node17">
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node27"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node28"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node15"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node17"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                  </sid-prac3:Node>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node28"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                              </sid-prac3:Visitado>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node29"/>
-                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                          </sid-prac3:Node>
-                        </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node35"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                      </sid-prac3:Visitado>
-                    </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node43"/>
+                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
+                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node53"/>
                     <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
                   </sid-prac3:Visitado>
                 </sid-prac3:Adjacent>
                 <sid-prac3:Adjacent>
-                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node36">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node44"/>
+                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node65">
                     <sid-prac3:Adjacent>
-                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node30">
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node36"/>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node31"/>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node30"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                      </sid-prac3:Visitado>
-                    </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node36"/>
-                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                  </sid-prac3:Visitado>
-                </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node35"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node44"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node57"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-          </sid-prac3:Node>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node28"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node81"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node31"/>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node80"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                              </sid-prac3:Node>
-                                                            </sid-prac3:Adjacent>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node30"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node27"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node31"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                          </sid-prac3:Node>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node19"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node17"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node27"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                      </sid-prac3:Visitado>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node15"/>
-                                                    <sid-prac3:Recurso_esta_en>
-                                                      <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Diamante41"/>
-                                                    </sid-prac3:Recurso_esta_en>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node19"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                  </sid-prac3:Node>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node17"/>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node14"/>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node15"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                              </sid-prac3:Visitado>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node13"/>
-                                            <sid-prac3:Recurso_esta_en>
-                                              <sid-prac3:Diamante rdf:about="http://www.semanticweb.org/sid-prac3#Diamante24"/>
-                                            </sid-prac3:Recurso_esta_en>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node14"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                          </sid-prac3:Node>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node12"/>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node13"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                      </sid-prac3:Node>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node8"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node12"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                  </sid-prac3:Node>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node9">
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node10">
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node11">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node10"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node11"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                          </sid-prac3:Node>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node4">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node10"/>
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node5">
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node58">
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node60">
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node63">
-                                                            <sid-prac3:Adjacent>
-                                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node65">
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node78">
-        <sid-prac3:Adjacent>
-          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node79">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node79"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-          </sid-prac3:Node>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent>
-          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node77">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
-            <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node76">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node77"/>
-                <sid-prac3:Adjacent>
-                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node71">
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node76"/>
-                    <sid-prac3:Adjacent>
-                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node70">
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node71"/>
+                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node78">
                         <sid-prac3:Adjacent>
-                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node69">
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node75">
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node74">
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node75"/>
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node73">
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node74"/>
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node72">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node73"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node72"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                          </sid-prac3:Visitado>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node73"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                      </sid-prac3:Visitado>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node74"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                  </sid-prac3:Visitado>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node75"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                              </sid-prac3:Node>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node74"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node73"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node72"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node70"/>
-                            <sid-prac3:Adjacent>
-                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node68">
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                                <sid-prac3:Adjacent>
-                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node67">
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node71"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node68"/>
-                                    <sid-prac3:Adjacent>
-                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node66">
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node67"/>
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node54">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node55">
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node53">
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node52">
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node67"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node53"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node52"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                      </sid-prac3:Visitado>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node53"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                  </sid-prac3:Node>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node65"/>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node54"/>
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node56">
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node54"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node63"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node56"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                  </sid-prac3:Visitado>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                              </sid-prac3:Visitado>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node56"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node54"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                          </sid-prac3:Node>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node52"/>
-                                        <sid-prac3:Adjacent>
-                                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node49">
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node40">
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node59">
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node62">
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node63"/>
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node61">
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node62"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node59"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node61"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                          </sid-prac3:Node>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node59"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node62"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                      </sid-prac3:Visitado>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node61"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node40"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node59"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                  </sid-prac3:Visitado>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node49"/>
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node33">
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node40"/>
-                                                    <sid-prac3:Adjacent>
-                                                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node24">
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node33"/>
-                                                        <sid-prac3:Adjacent>
-                                                          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node21">
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node24"/>
-                                                            <sid-prac3:Adjacent>
-                                                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node16">
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node22">
-        <sid-prac3:Adjacent>
-          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node51">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node67"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node22"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node51"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-          </sid-prac3:Visitado>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent>
-          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node97">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node22"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node97"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-          </sid-prac3:Node>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent>
-          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node23">
-            <sid-prac3:Adjacent>
-              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node34">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node41"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node23"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node34"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-              </sid-prac3:Visitado>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node22"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node23"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-          </sid-prac3:Visitado>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node16"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node22"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node21"/>
-    <sid-prac3:Adjacent>
-      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node20">
-        <sid-prac3:Adjacent>
-          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node25">
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node33"/>
-            <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node26">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node25"/>
-                <sid-prac3:Recurso_esta_en>
-                  <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro95"/>
-                </sid-prac3:Recurso_esta_en>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node26"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node20"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node25"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-          </sid-prac3:Visitado>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node16"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node20"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent>
-      <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node18">
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node16"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node18"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-      </sid-prac3:Visitado>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node16"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                              </sid-prac3:Visitado>
-                                                            </sid-prac3:Adjacent>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node21"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                          </sid-prac3:Node>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node24"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                      </sid-prac3:Node>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node25"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node33"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                  </sid-prac3:Visitado>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node40"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                              </sid-prac3:Node>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node49"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                          </sid-prac3:Visitado>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Recurso_esta_en>
-                                          <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro46"/>
-                                        </sid-prac3:Recurso_esta_en>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                      </sid-prac3:Node>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node51"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node52"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node67"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                  </sid-prac3:Visitado>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node68"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                              </sid-prac3:Visitado>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node69"/>
-                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                          </sid-prac3:Node>
-                        </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node70"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                      </sid-prac3:Node>
-                    </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node67"/>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node71"/>
-                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                  </sid-prac3:Node>
-                </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node76"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node77"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-          </sid-prac3:Visitado>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node65"/>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node63"/>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node65"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                              </sid-prac3:Node>
-                                                            </sid-prac3:Adjacent>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node62"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node60"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node56"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node63"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                          </sid-prac3:Node>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node58"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node60"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                      </sid-prac3:Node>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node5"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node58"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                  </sid-prac3:Node>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node4"/>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node5"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                              </sid-prac3:Node>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent>
-                                              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node3">
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node4"/>
-                                                <sid-prac3:Adjacent>
-                                                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node2">
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node7"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node3"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node2"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                  </sid-prac3:Node>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node3"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                              </sid-prac3:Visitado>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node4"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                          </sid-prac3:Visitado>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node9"/>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node10"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                      </sid-prac3:Node>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node8"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node9"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                  </sid-prac3:Node>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node7"/>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node8"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                              </sid-prac3:Node>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node6"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node2"/>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node7"/>
+                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node79">
+                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
+                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node79"/>
                             <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
                           </sid-prac3:Visitado>
                         </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node0"/>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node6"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                      </sid-prac3:Node>
+                        <sid-prac3:Adjacent>
+                          <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node77">
+                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
+                            <sid-prac3:Adjacent>
+                              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node76"/>
+                            </sid-prac3:Adjacent>
+                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node77"/>
+                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+                          </sid-prac3:Visitado>
+                        </sid-prac3:Adjacent>
+                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node65"/>
+                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node78"/>
+                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+                      </sid-prac3:Visitado>
                     </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node0"/>
+                    <sid-prac3:Adjacent>
+                      <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node63"/>
+                    </sid-prac3:Adjacent>
+                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
+                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node65"/>
                     <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
                   </sid-prac3:Visitado>
                 </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node122"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node106"/>
-            <sid-prac3:Adjacent>
-              <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node105">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node108"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node101"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node105"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node104"/>
-            <sid-prac3:Adjacent>
-              <sid-prac3:Visitado rdf:about="http://www.semanticweb.org/sid-prac3#Node103">
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node110"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node101"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node103"/>
+                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node54"/>
+                <sid-prac3:Adjacent>
+                  <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node56"/>
+                </sid-prac3:Adjacent>
+                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node55"/>
                 <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
               </sid-prac3:Visitado>
             </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node102"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node101"/>
-            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-          </sid-prac3:Visitado>
-        </sid-prac3:Adjacent>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node102"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-      </sid-prac3:Visitado>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node109"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                              </sid-prac3:Visitado>
-                                                            </sid-prac3:Adjacent>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node107"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node105"/>
-                                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node108"/>
-                                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                                          </sid-prac3:Visitado>
-                                                        </sid-prac3:Adjacent>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node106"/>
-                                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node107"/>
-                                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                      </sid-prac3:Node>
-                                                    </sid-prac3:Adjacent>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node101"/>
-                                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node106"/>
-                                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                                  </sid-prac3:Node>
-                                                </sid-prac3:Adjacent>
-                                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node124"/>
-                                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                              </sid-prac3:Node>
-                                            </sid-prac3:Adjacent>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node115"/>
-                                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node125"/>
-                                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                          </sid-prac3:Node>
-                                        </sid-prac3:Adjacent>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node114"/>
-                                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node126"/>
-                                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                                      </sid-prac3:Node>
-                                    </sid-prac3:Adjacent>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node115"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node112"/>
-                                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node114"/>
-                                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                                  </sid-prac3:Visitado>
-                                </sid-prac3:Adjacent>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node113"/>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node109"/>
-                                <sid-prac3:Recurso_esta_en>
-                                  <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro10"/>
-                                </sid-prac3:Recurso_esta_en>
-                                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node112"/>
-                                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                              </sid-prac3:Visitado>
-                            </sid-prac3:Adjacent>
-                            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node113"/>
-                            <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                          </sid-prac3:Node>
-                        </sid-prac3:Adjacent>
-                        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node118"/>
-                        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-                      </sid-prac3:Node>
-                    </sid-prac3:Adjacent>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node112"/>
-                    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node117"/>
-                    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
-                  </sid-prac3:Visitado>
-                </sid-prac3:Adjacent>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node127"/>
-                <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node128"/>
-                <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-              </sid-prac3:Node>
-            </sid-prac3:Adjacent>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node42"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node48"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node34"/>
-            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node41"/>
+            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node56"/>
+            <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node54"/>
             <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
           </sid-prac3:Node>
         </sid-prac3:Adjacent>
-        <sid-prac3:Recurso_esta_en>
-          <sid-prac3:Oro rdf:about="http://www.semanticweb.org/sid-prac3#Oro60"/>
-        </sid-prac3:Recurso_esta_en>
-        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node42"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-      </sid-prac3:Node>
-    </sid-prac3:Adjacent>
-    <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node50"/>
-    <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Visitado"/>
-  </sid-prac3:Node>
+        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node52"/>
+        <sid-prac3:Adjacent>
+          <sid-prac3:Node rdf:about="http://www.semanticweb.org/sid-prac3#Node49"/>
+        </sid-prac3:Adjacent>
+        <sid-prac3:Adjacent rdf:resource="http://www.semanticweb.org/sid-prac3#Node66"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/sid-prac3#Node"/>
+      </sid-prac3:Visitado>
+    </sid-prac3:Oro_esta_en>
+  </sid-prac3:Oro>
 </rdf:RDF>

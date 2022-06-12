@@ -153,7 +153,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		public void onStart() {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
+			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
 			tpl = MessageTemplate.and(tpl1, tpl2);
+			tpl = MessageTemplate.and(tpl, tpl3);
         }
 
 		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
@@ -246,4 +248,6 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 		return sum;
 	}
+	
+	//public class Receive
 }
