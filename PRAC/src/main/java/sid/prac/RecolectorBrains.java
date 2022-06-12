@@ -8,6 +8,7 @@ import bdi4jade.core.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import bdi4jade.belief.*;
 import bdi4jade.goal.Goal;
@@ -51,7 +52,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
     OntDocumentManager dm;
     
 	AID body;
-	Observation collectionType;
+	Observation collectionType = Observation.ANY_TREASURE;
 	List <Couple<String, List <Couple<Observation, Integer>>>> ob;
     
 	public RecolectorBrains () {
@@ -86,41 +87,34 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		//PROPERTIES
 		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
-		Property recrusoProperty = model.createDatatypeProperty(BASE_URI + "#Recurso_esta_en");
+		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Oro_esta_en");
+		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Diamante_esta_en");
 		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Obstaculo_esta_en");
 		Property agenteProperty = model.createDatatypeProperty(BASE_URI + "#Agente_esta_en");
 		
 		Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + current);
-		
 		// add all new nodes
 		for (Couple <String, List<Couple<Observation, Integer>>> o : ob) {
-			if (!current.equals(o.getLeft())) {
+		
+			Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + o.getLeft());
+			currentNode.addProperty(nameProperty, adjacentNode);
 			
-				Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + o.getLeft());
-				currentNode.addProperty(nameProperty, adjacentNode);
-				
-				for (Couple<Observation, Integer> obs : o.getRight()) {
-					Individual rec;
-					switch(obs.getLeft()) {
-						case GOLD: 
-							rec = oroClass.createIndividual(BASE_URI + "#Oro" + obs.getRight());
-							rec.addProperty(recrusoProperty, adjacentNode);
-							break;
-						case DIAMOND:
-							rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + obs.getRight());
-							rec.addProperty(recrusoProperty, adjacentNode);
-							break;
-						case WIND:
-							rec = vientoClass.createIndividual(BASE_URI + "#Viento" + o.getLeft());
-							rec.addProperty(obstaculoProperty, adjacentNode);
-							break;
-						case AGENTNAME:
-							//find out que tipo de agente es
-							rec = agentClass.createIndividual(BASE_URI + "#Agente" + obs.getRight());
-							rec.addProperty(agenteProperty, adjacentNode);
-						default:
-							break;
-					}
+			for (Couple<Observation, Integer> obs : o.getRight()) {
+				if (obs.getLeft() == Observation.GOLD) {
+					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + o.getLeft());
+					rec.addProperty(oroProperty, adjacentNode);
+				}
+				else if (obs.getLeft() == Observation.DIAMOND) {
+					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + o.getRight());
+					rec.addProperty(diamanteProperty, adjacentNode);
+				}
+				else if (obs.getLeft() == Observation.WIND) {
+					Individual rec = vientoClass.createIndividual(BASE_URI + "#Viento" + o.getLeft());
+					rec.addProperty(obstaculoProperty, adjacentNode);
+				}
+				else if (obs.getLeft() == Observation.AGENTNAME) {
+					Individual rec = agentClass.createIndividual(BASE_URI + "#Agente" + o.getLeft());
+					rec.addProperty(agenteProperty, adjacentNode);
 				}
 			}
 		}
@@ -150,14 +144,18 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		Capability c = getCapability();
 		BeliefBase bb = c.getBeliefBase();
 		Belief observations = new TransientBelief("observations", ob);
+		Belief cType = new TransientBelief("collectionType", collectionType);
 		Belief ontology = new TransientBelief("ontology", model);
 		Belief currentNode = new TransientBelief("currentPosition", currentPosition);
 		Belief freeSpace = new TransientBelief("freeSpace", free);
+		Belief maxSpace = new TransientBelief("maxSpace", free);
 
 		bb.addBelief(observations);
+		bb.addBelief(cType);
 		bb.addBelief(ontology);
 		bb.addBelief(currentNode);
 		bb.addBelief(freeSpace);
+		bb.addBelief(maxSpace);
 		
 		Plan getGold = new DefaultPlan(GetTreasureGoal.class, GetTreasurePlan.class);
 		
@@ -179,6 +177,10 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 	public class GetTreasureGoal implements Goal {
 		List <Couple<String, List <Couple<Observation, Integer>>>> ob;
 		OntModel model;
+		Integer maxCapacity;
+		Integer free;
+		String currentPosition;
+		String type;
 		
 		public void setObservations(List <Couple<String, List <Couple<Observation, Integer>>>> ob) {
 			this.ob = ob;
@@ -186,7 +188,49 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		public void setModel(OntModel model) { this.model = model; }
 		
-		public String getNextPosition() {
+		public void setMaxCapacity(Integer maxCapacity) { this.maxCapacity = maxCapacity; }
+		
+		public void setFree(Integer free) { this.free = free; }
+		
+		public void setCurrentPosition(String currentPosition) { this.currentPosition = currentPosition; }
+		
+		public void setCollectionType(Observation collectionType) {
+			if (collectionType == Observation.GOLD) type = "Oro";
+			else type = "Diamante";
+		}
+		
+		public Integer check_num_away (String node, String find) {
+			String[] possibilities = {"Node", "OneAway", "TwoAway", "ThreeAway", "FourAway", "FiveAway"};
+			Individual curr = model.getIndividual(node);
+			for (int i = 0; i < possibilities.length; i++) {
+				String pos = possibilities[i];
+				OntClass n_away = model.getOntClass(BASE_URI + "#" + pos + find);
+				if (curr.hasOntClass(n_away)) return i;
+			}
+			return -1;
+		}
+		
+		public Couple<String, Integer> traverseOnt(String currentNode, String find) {//, Set <String> visited) {
+			Individual curr = model.getIndividual(BASE_URI + "#Node" + currentNode);
+		
+			Property adj = model.createDatatypeProperty(BASE_URI + "#Adjacent");
+            NodeIterator ni = curr.listPropertyValues(adj);
+            Couple<String, Integer> best = new Couple("", -1);
+            
+            while (ni.hasNext()) {
+            	RDFNode nextNode = ni.nextNode();
+            	Integer check_away = check_num_away(nextNode.toString(), find);
+            	if (check_away != -1 && (best.getRight() == -1 || best.getRight() > check_away)) {
+            		System.out.println("HERE CLOSE TO GOLD!!");
+            		String name = nextNode.toString().split("#Node")[1];
+            		best = new Couple(name, check_away);
+            	}
+            }
+            
+            return best;
+		}
+		
+		public String getClosestEmpty() {
 			String next = "";
 			Integer best = 0;
 			List <String> possibleMoves = new ArrayList<>();
@@ -218,6 +262,37 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			}
 			return next;
 		}
+		
+		
+		
+		public String getNextPosition() {
+			boolean treasure = free != 0;
+			boolean almacenador = free != maxCapacity;
+			
+			if (treasure && almacenador) {
+				Couple<String, Integer> t = traverseOnt(currentPosition, type);
+				Couple<String, Integer> a = traverseOnt(currentPosition, "Almacenamiento");
+				
+				if (a.getLeft() == "" && t.getLeft() == "") return getClosestEmpty();
+				else if (a.getLeft() == "") return t.getLeft();
+				else if (t.getLeft() == "") return a.getLeft();
+				
+				if (t.getRight() <= a.getRight()) return t.getLeft();
+				return a.getLeft();
+			}
+			else if (treasure) {
+				Couple<String, Integer> t = traverseOnt(currentPosition, type);
+				if (t.getLeft() == "") return getClosestEmpty();
+				return t.getLeft();
+			}
+			else if (almacenador) {
+				Couple<String, Integer> a = traverseOnt(currentPosition, "Almacenamiento");
+				if (a.getLeft() == "") return getClosestEmpty();
+				return a.getLeft();
+			}
+			
+			return getClosestEmpty();
+		}
 	}
 	
 	public class GetTreasurePlan extends AbstractPlanBody {
@@ -228,12 +303,20 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) bb.getBelief("observations").getValue();
 			OntModel model = (OntModel) bb.getBelief("ontology").getValue();
 			String currentNode = (String) bb.getBelief("currentPosition").getValue();
+			Integer free = (Integer) bb.getBelief("freeSpace").getValue();
+			Integer maxCapacity = (Integer) bb.getBelief("maxSpace").getValue();
+			Observation collectionType = (Observation) bb.getBelief("collectionType").getValue();
 			
 			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
 			setNewNodesOntology(currentNode, model, ob);
 			
 			tg.setObservations(ob);
+			tg.setCollectionType(collectionType);
 			tg.setModel(model);
+			tg.setMaxCapacity(maxCapacity);
+			tg.setFree(free);
+			tg.setCurrentPosition(currentNode);
+			
 			String nextMove = tg.getNextPosition();
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
@@ -242,7 +325,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             msg.setContent(nextMove);
             send(msg);
             
-            System.out.println("NEXT MOVE: " + nextMove);
+            //System.out.println("NEXT MOVE: " + nextMove);
             
             OntClass nodeClass = model.getOntClass(BASE_URI + "#Visitado");
     		Individual nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nextMove);
@@ -271,8 +354,14 @@ public class RecolectorBrains extends SingleCapabilityAgent {
                 try {
                 	Map <String, Object> rep = (Map <String, Object>) msg.getContentObject();
                 	boolean can_move = (boolean) rep.get("CAN_MOVE");
+                	
                 	Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
+					
+					Integer free = (Integer) rep.get("BACKPACK_SPACE");
+                	Belief freeSpace = new TransientBelief("freeSpace", free);
+            		bb.addOrUpdateBelief(freeSpace);
+            		
                 	if (!can_move) {
                 		String current = (String) rep.get("CURRENT_POSITION");
                 		Belief currPos = new TransientBelief("currentPosition", current);
