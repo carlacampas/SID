@@ -54,7 +54,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				if (sum == 0) {
 					type = "agentExplo";
 					
-					myAgent.addBehaviour(new ExploSoloBehaviour((AbstractDedaleAgent) this.myAgent, map));
+					//myAgent.addBehaviour(new ExploSoloBehaviour((AbstractDedaleAgent) this.myAgent, map));
 					addExplorerBrains();
 					System.out.println("I am an explorer!");
 				}
@@ -203,7 +203,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
         public void action() {
             msg = myAgent.receive(tpl);
             if (msg != null) {
+            	System.out.println("El cont. del mensaje es: " + msg.getContent());
                 String content = msg.getContent();
+               
                 if (content != null) {
                 	boolean m = moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();

@@ -14,8 +14,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.jena.ontology.Individual;
@@ -55,7 +57,6 @@ public class ExplorerBrains extends SingleCapabilityAgent {
     
 	AID body;
 	Observation collectionType;
-	List <Couple<String, List <Couple<Observation, Integer>>>> ob;
     
 	public ExplorerBrains () {
         this.JENAPath = "./";
@@ -140,7 +141,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		body = (AID) args[0];
 		collectionType = (Observation) args[1];
 		String currentPosition = (String) args[2];
-		ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) args[3];		
+		List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) args[3];		
 		loadOntology();
 		
 		OntClass nodeClass = model.getOntClass(BASE_URI + "#Visitado");
@@ -210,10 +211,14 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			double maxScore, nextK, nextEx, nextEx2, nextVal;
 			double randScore, randK, randEx, randEx2, randVal;
 
-			maxScore=nextK=nextEx=nextEx2=nextVal=0;
-			randScore=randK=randEx=randEx2=randVal=0;
+			maxScore=nextK=nextEx=nextEx2=nextVal=0.0;
+			randScore=randK=randEx=randEx2=randVal=0.0;
 			
 			HashMap<String,Integer> locmap = (HashMap<String,Integer>) bb.getBelief("visitedNodes").getValue();
+			String currentPos = (String) bb.getBelief("currentPosition").getValue();
+			List <Couple<String, List <Couple<Observation, Integer>>>> ob = 
+					(List <Couple<String, List <Couple<Observation, Integer>>>>)bb.getBelief("observations").getValue();
+			
 			double n = locmap.size();
 			Double oldSuma = (Double) bb.getBelief("suma").getValue();
 			
@@ -239,10 +244,15 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				new_val = val+1.0;
 
 				ArrayList<Double> finalStdParam = new ArrayList<Double>();
+				if(index==pos) System.out.println("Ejecuto getNewScore con indice == pos");
 				Double newScore = this.getNewScore(n, val, new_val, finalStdParam);
-				if(newScore >= maxScore && possible) {
-					System.out.println("Paso nuevo maxscore");
-					System.out.println(finalStdParam);
+				System.out.println("newScore es: " + newScore);
+				
+				System.out.println("id es: " + id);
+				if((newScore >= maxScore) && possible && !id.equals(currentPos)) {
+					
+					
+				
 					maxScore = newScore;
 					nextVal = new_val;
 					nextK = finalStdParam.get(0);
@@ -251,11 +261,9 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 					next = id;
 					
 				}else if(index == pos) {
-
-					maxScore = newScore;
+				
+					randScore = newScore;
 					randVal = new_val;
-					System.out.println("Paso por index==pos!");
-					System.out.println(finalStdParam);
 					randK = finalStdParam.get(0);
 					randEx = finalStdParam.get(1);
 					randEx2 = finalStdParam.get(2);
@@ -266,7 +274,9 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			}
 			
 			this.saveValueBB(oldSuma+1.0, "suma", bb);
+			System.out.println("next es antes de next.equals: " + next);
 			if(!next.equals("")) {
+				System.out.println("El explorador no se arriesga al viento!");
 				locmap.put(next, (int)(nextVal));
 				this.saveValueBB(locmap, "visitedNodes", bb);
 				this.saveValueBB(nextK, "K", bb);
@@ -275,6 +285,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				return next;
 			}else {
 				locmap.put(randNext, (int)(randVal));
+				System.out.println("El explorador se arriesga al viento!");
 				this.saveValueBB(locmap, "visitedNodes", bb);
 				this.saveValueBB(randK, "K", bb);
 				this.saveValueBB(randEx, "Ex", bb);
@@ -292,9 +303,10 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			ArrayList<Double> newStdParam = this.delElemStd(K, Ex, Ex2, size, val);
 			ArrayList<Double> newStdParam2 = this.addElemStd(newStdParam, size-1.0, new_val);
 			Double newStd = Math.sqrt(this.getVariance(size,newStdParam2));
+			System.out.println("Nuevo std: " + newStd);
 			Double newMean = (oldSuma+1.0)/(size+1.0);
 			Double newScore = (newMean*newMean)/(1.0+newStd);
-			finalStdParam = newStdParam2;
+			for(Double d:newStdParam2)finalStdParam.add(d);
 			return newScore;
 			
 		}
@@ -305,7 +317,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			if(size > 0) {
 				size-=1;
 				BeliefBase bb = getBeliefBase();
-				if(size == 0) K = elem;
+				
 				Ex-=elem-K;
 				Ex2 -= (elem - K)*(elem - K);
 				newStdParam.add(K);
@@ -332,9 +344,9 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			Ex+=elem-K;
 			Ex2 += (elem - K)*(elem - K);
 			ArrayList<Double> newStdParam = new ArrayList<Double>();
-			newStdParam.add(0,K);
-			newStdParam.add(1,Ex);
-			newStdParam.add(2,Ex2);
+			newStdParam.add(K);
+			newStdParam.add(Ex);
+			newStdParam.add(Ex2);
 			return newStdParam;
 			
 			
@@ -343,11 +355,18 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		
 		
 		private Double getVariance(Double size, ArrayList<Double> newStdParam) {
+			
+			if(size <= 1.0) return 0.0;
+			
 			BeliefBase bb = getBeliefBase();
 			Double K = newStdParam.get(0);
+	
 			Double Ex = newStdParam.get(1);
 			Double Ex2 = newStdParam.get(2);
-			return (Ex2-(Ex*Ex)/size)/(size-1);
+			System.out.println("newStdParam en getVariance es: " + newStdParam);
+			System.out.println("size es: " + size);
+			Double newVar = (Ex2-(Ex*Ex)/size)/(size-1);
+			return newVar < 0.0 ? 0.0 : newVar;
 			
 			
 		}
@@ -406,13 +425,23 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 
             if (msg != null) {
                 try {
-					List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) msg.getContentObject();
-					
+                	
+                	Map <String, Object> rep = (Map <String, Object>) msg.getContentObject();
 					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
+					boolean can_move = (boolean) rep.get("CAN_MOVE");
 					
-					Belief observations = new TransientBelief("observations", ob);
-					bb.addOrUpdateBelief(observations);
+					if (!can_move) {
+                		String current = (String) rep.get("CURRENT_POSITION");
+                		Belief currPos = new TransientBelief("currentPosition", current);
+						bb.addOrUpdateBelief(currPos);
+                	}
+                	else {
+						List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) (rep.get("OBSERVATIONS"));
+						
+						Belief observations = new TransientBelief("observations", ob);
+						bb.addOrUpdateBelief(observations);
+                	}
 					
 					addGoal(new GetObjectiveGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
