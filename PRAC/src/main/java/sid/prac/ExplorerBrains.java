@@ -13,6 +13,7 @@ import bdi4jade.core.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -160,6 +161,8 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		Belief K = new TransientBelief("K", (Double) 0.0);
 		Belief Ex = new TransientBelief("Ex", (Double) 0.0);
 		Belief Ex2 = new TransientBelief("Ex2", (Double) 0.0);
+		tmp = new HashMap<String, Boolean>();
+		Belief Agents = new TransientBelief("Agents",tmp);
 		bb.addBelief(observations);
 		bb.addBelief(ontology);
 		bb.addBelief(currentNode);
@@ -168,12 +171,15 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		bb.addBelief(K);
 		bb.addBelief(Ex);
 		bb.addBelief(Ex2);
+		bb.addBelief(Agents);
 		
 		Plan getObjective = new DefaultPlan(GetObjectiveGoal.class, GetObjectivePlan.class);
-		
+		Plan informAgent = new DefaultPlan(InformAgentGoal.class, InformAgentPlan.class);
 		c.getPlanLibrary().addPlan(getObjective);
+		c.getPlanLibrary().addPlan(informAgent);
 		this.addGoal(new GetObjectiveGoal());
 		addBehaviour(new RecieveObservations());
+		
 		
 		
 	}
@@ -414,22 +420,34 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 	}
 	
 	public class RecieveObservations extends CyclicBehaviour {
-		private MessageTemplate tpl;
-		private ACLMessage msg;
+		private MessageTemplate tplObs, tplAg, tplExt;
+		private ACLMessage msgObs, msgAg, msgExt;
 		
         public void onStart() {
         	MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(body);
-			tpl = MessageTemplate.and(tpl1, tpl2);
+			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
+			tplObs = MessageTemplate.and(tpl1, tpl2);
+			tplObs = MessageTemplate.and(tplObs, tpl3);
+			
+			tpl3 = MessageTemplate.MatchConversationId("comunicacion");
+			tplAg = MessageTemplate.and(tpl1, tpl2);
+			tplAg = MessageTemplate.and(tplAg, tpl3);
+			
+			tplExt = tpl1;
+			
         }
         
         public void action() {
-            msg = myAgent.receive(tpl);
+            msgObs = myAgent.receive(tplObs);
+            msgAg = myAgent.receive(tplAg);
+            msgExt = myAgent.receive(tplExt);
+            
 
-            if (msg != null) {
+            if (msgObs != null) {
                 try {
                 	
-                	Map <String, Object> rep = (Map <String, Object>) msg.getContentObject();
+                	Map <String, Object> rep = (Map <String, Object>) msgObs.getContentObject();
 					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
 					boolean can_move = (boolean) rep.get("CAN_MOVE");
@@ -449,9 +467,61 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 					addGoal(new GetObjectiveGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
             }
-            else { block(); }
+            if(msgAg !=null) {
+            	try {
+            		AID rep = (AID) msgAg.getContentObject();
+					addGoal(new InformAgentGoal(rep));
+				} catch (UnreadableException e) { e.printStackTrace(); }
+            }if(msgAg == null && msgObs==null) block(); 
+        
+            
         }
+        
 	}
 	
+	public class InformAgentGoal implements Goal{
+		
+		private AID otherAgent;
+		
+		public InformAgentGoal(AID ag) {
+			
+			super();
+			otherAgent = ag;
+		}
+		public AID getOtherAgent() {return otherAgent;}
+		public void setOtherAgent(AID newAgent) {otherAgent = newAgent;}
+		
+	}
+	
+	public class InformAgentPlan extends AbstractPlanBody{
+
+		@Override
+		public void action() {
+			InformAgentGoal ia = (InformAgentGoal) getGoal();
+			AID receiver = ia.getOtherAgent();
+			
+			BeliefBase bb = getBeliefBase();
+			Map<String, Boolean> agmap = (Map<String, Boolean>) bb.getBelief("Agents").getValue();
+			agmap.put(receiver.getName(), true);
+			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.addReceiver(body);
+			msg.addReplyTo(this.getAgent().getAID());
+			msg.setConversationId("comunicacion");
+			msg.setSender(myAgent.getAID());
+			Couple<AID, String> cpl = new Couple<AID,String>(receiver, "Te mando mi mapa. Aceptalo!");
+			try {
+				msg.setContentObject(cpl);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			send(msg);
+			TransientBelief newb = new TransientBelief("Agentes", agmap);
+			bb.addOrUpdateBelief(newb);
+			setEndState(Plan.EndState.SUCCESSFUL);
+			
+		}
+		
+	}
 	
 }
