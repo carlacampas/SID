@@ -5,6 +5,7 @@ import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.behaviours.*;
 import eu.su.mas.dedaleEtu.mas.knowledge.*;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +32,8 @@ import jade.domain.DFService;
 import sid.prac.ExplorerBrains;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+
 import java.util.HashSet;
 import java.util.HashMap;
 
@@ -150,15 +153,73 @@ public class GeneralAgent extends AbstractDedaleAgent {
 
 	// Recivimos mensaje del Brains esperando la accion
 	public class RecieveNextMove extends CyclicBehaviour {
-		MessageTemplate tpl;
-        ACLMessage msg;
+		MessageTemplate tpl, tplExt, tplCom;
+        ACLMessage msg, msgExt, msgCom;
 
 		public void onStart() {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
+			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
 			tpl = MessageTemplate.and(tpl1, tpl2);
+			tpl = MessageTemplate.and(tpl, tpl3);
+			tplExt = tpl1;
+			tplExt = MessageTemplate.and(tpl1, MessageTemplate.not(tpl2));
+			tpl3 = MessageTemplate.MatchConversationId("comunicacion");
+			tplCom = MessageTemplate.and(tpl1, tpl2);
+			tplCom = MessageTemplate.and(tplCom, tpl3);
+			notifyAgents();
         }
-
+		
+		
+		public void notifyAgents() {
+			System.out.println("Empiezo a buscar agentes. Iniciando protocolo de Hola!");
+			DFAgentDescription templateExplo = new DFAgentDescription();
+			ServiceDescription templateSdExplo = new ServiceDescription();
+			templateSdExplo.setType("agentExplo");
+			templateExplo.addServices(templateSdExplo);
+			
+			DFAgentDescription templateCol = new DFAgentDescription();
+			ServiceDescription templateSdCol = new ServiceDescription();
+			templateSdCol.setType("agentCollect");
+			templateCol.addServices(templateSdCol);
+			
+			try {
+				DFAgentDescription[] results = DFService.search(myAgent, templateExplo);
+				if(results.length>0) {
+					for(DFAgentDescription d : results) {
+						if(!d.getName().equals(myAgent.getAID())) {
+							AID rcv = d.getName();
+							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
+							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
+							nmsg.addReceiver(rcv);
+							nmsg.setContent("Hola!");
+							nmsg.setSender(myAgent.getAID());
+							ag.sendMessage(nmsg);
+						}
+					}
+				}
+				
+				results = DFService.search(myAgent, templateCol);
+				if(results.length>0) {
+					for(DFAgentDescription d : results) {
+						if(!d.getName().equals(myAgent.getAID())) {
+							AID rcv = d.getName();
+							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
+							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
+							nmsg.addReceiver(rcv);
+							nmsg.setContent("Hola!");
+							nmsg.setSender(myAgent.getAID());
+							ag.sendMessage(nmsg);
+						}
+					}
+				}
+			} catch (FIPAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
 			boolean myItem = false, lockOpen = false;
         	int strength = 0, lockPicking = 0;
@@ -176,6 +237,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 							break;
 						case STRENGH:
 							strength = obs.getRight();
+							
 							break;
 						default:
 							break;
@@ -203,13 +265,17 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 
         public void action() {
+        	
             msg = myAgent.receive(tpl);
+            msgCom = myAgent.receive(tplCom);
+            msgExt = myAgent.receive(tplExt);
+            
             if (msg != null) {
             	System.out.println("El cont. del mensaje es: " + msg.getContent());
                 String content = msg.getContent();
                
                 if (content != null) {
-                	boolean m = moveTo(content);
+                	boolean m = false;//moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
@@ -219,7 +285,13 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	                			handle_current_node(o);
 	                			break;
 	                		}
-
+	                else if(type.equals("agentExplo"))
+	                	for(Couple<String, List <Couple<Observation, Integer>>> o2 : ob)
+	                		for(Couple<Observation,Integer> o3: o2.getRight())
+	                			if(o3.getLeft() == Observation.STRENGH) {
+	                				this.notifyAgents();
+                					break;
+	                			}
                 	fp = sumFreeSpace(getBackPackFreeSpace());
 
                 	System.out.println("Observations: " + ob.toString());
@@ -237,8 +309,65 @@ public class GeneralAgent extends AbstractDedaleAgent {
                     } catch (Exception e) {}
                     send(reply);
                 }
+            }if(msgExt != null) {
+            	if(msgExt.getContent().equals("Hola!")) {
+            		
+            		ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
+            		nmsg.setConversationId("comunicacion");
+            		nmsg.addReceiver(brains);
+            		nmsg.addReplyTo(myAgent.getAID());
+            		nmsg.setSender(myAgent.getAID());
+            		System.out.println("Recibo hola respuesta!!");
+            		try {
+						nmsg.setContentObject(msgExt.getSender());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            		
+            		myAgent.send(nmsg);
+            		
+            	}else if(!msgExt.getSender().equals(brains)) {
+            		
+            		try {
+            			System.out.println("Soy " + myAgent.getName()+ "\nInfo exterior de: " + msgExt.getSender().getName());
+						String extcont = (String) msgExt.getContentObject();
+						System.out.println("Recibo información de agente externo: \n" + extcont);
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            		
+            	}
+            	
             }
-            else { block(); }
+            if(msgCom != null) {
+            	try {
+            		System.out.println("Notifico a otro agente!");
+					Couple<AID, String> cpl = (Couple<AID, String>) msgCom.getContentObject();
+					AID recv = cpl.getLeft();
+					ACLMessage resp = new ACLMessage(ACLMessage.INFORM);
+					resp.addReceiver(recv);
+					resp.setContentObject(cpl.getRight());
+					resp.setSender(myAgent.getAID());
+					AbstractDedaleAgent ab = (AbstractDedaleAgent) myAgent;
+					ab.sendMessage(resp);
+					
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					
+				}
+            	
+            }
+            if(msgExt == null && msg == null && msgCom == null) block();
+           
         }
 	}
 
@@ -250,4 +379,5 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 		return sum;
 	}
+	
 }
