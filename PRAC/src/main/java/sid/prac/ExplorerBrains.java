@@ -63,7 +63,8 @@ public class ExplorerBrains extends SingleCapabilityAgent {
         this.OntologyFile = "OntologiaPractica.owl";
         this.NamingContext = "prac3";
     }
-	
+
+	// Cargar ontologia
 	public void loadOntology() {
         System.out.println("· Loading Ontology");
         model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF);
@@ -72,6 +73,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
         model.read(NamingContext);
     }
 	
+	// Liberar ontologia
 	public void releaseOntology() throws FileNotFoundException {
         System.out.println("· Releasing Ontology");
         if (!model.isClosed()) {
@@ -80,6 +82,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
         }
     }
 	
+	// Crear nuevos nodos
 	public OntModel setNewNodesOntology (String current, OntModel model, List <Couple<String, List <Couple<Observation, Integer>>>> ob) {
 		// ONTOLOGY CLASSES
 		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
