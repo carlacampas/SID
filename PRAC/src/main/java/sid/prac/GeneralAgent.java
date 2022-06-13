@@ -47,17 +47,17 @@ public class GeneralAgent extends AbstractDedaleAgent {
 
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 
-		lb.add(new OneShotBehaviour() {
+		lb.add(new OneShotBehaviour() {   // Mirar el rol del agente
 			public void action () {
 				System.out.println("one shot behaviour");
 				int sum = sumFreeSpace(getBackPackFreeSpace());
 
-				if (sum == 0) {
+				if (sum == 0) {    // Agente Explorador
 					type = "agentExplo";
 					addExplorerBrains();
 					System.out.println("I am an explorer!");
 				}
-				else {
+				else {            // Agente Recolector
 					type = "agentCollect";
 					collectType = getMyTreasureType();
 					addRecolectorBrains();
@@ -85,6 +85,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		System.out.println("here, done with behaviour");
 	}
 
+	// Añadimos agente BDI Explorer
 	public void addExplorerBrains() {
 		System.out.println("Llego a setup de Explorer");
 		AgentContainer ac = getContainerController();
@@ -100,6 +101,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 	}
 
+	// Añadimos agente BDI Recolector
 	public void addRecolectorBrains() {
 		System.out.println("RECOLECTOR PUEDE RECOGER: " + collectType.toString());
 
@@ -146,6 +148,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		super.afterMove();
 	}
 
+	// Recivimos mensaje del Brains esperando la accion
 	public class RecieveNextMove extends CyclicBehaviour {
 		MessageTemplate tpl;
         ACLMessage msg;
@@ -239,6 +242,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
         }
 	}
 
+	// Suma capacidades
 	public Integer sumFreeSpace(List<Couple<Observation, Integer>> bp) {
 		Integer sum = 0;
 		for (Couple<Observation, Integer> b : bp) {
