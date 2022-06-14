@@ -275,7 +275,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 String content = msg.getContent();
                
                 if (content != null) {
-                	boolean m = false;//moveTo(content);
+                	boolean m = moveTo(content);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
