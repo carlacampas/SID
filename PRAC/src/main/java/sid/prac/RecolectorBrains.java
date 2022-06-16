@@ -74,6 +74,11 @@ public class RecolectorBrains extends SingleCapabilityAgent {
         dm = model.getDocumentManager();
         dm.addAltEntry(NamingContext, "file:" + JENAPath + OntologyFile);
         model.read(NamingContext);
+        
+        Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+        Belief modelB = new TransientBelief("model", model);
+        bb.addBelief(modelB);
     }
 	
 	public void releaseOntology() throws FileNotFoundException {
@@ -87,6 +92,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 	public void setNewNodesOntology () {
 		Capability c = getCapability();
 		BeliefBase bb = c.getBeliefBase();
+		System.out.println(bb.toString());
 		String current = (String) (bb.getBelief("currentPosition").getValue());
 		OntModel model = (OntModel) bb.getBelief("model").getValue();
 		MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
@@ -111,10 +117,12 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		map.addNewNode(current);
 		
 		Statement s_oro = currentNode.getProperty(oroProperty);
-		currentNode.removeProperty(oroProperty, s_oro.getResource());
+		if (s_oro != null)
+			currentNode.removeProperty(oroProperty, s_oro.getResource());
 		
 		Statement s_diamante = currentNode.getProperty(diamanteProperty);
-		currentNode.removeProperty(oroProperty, s_diamante.getResource());
+		if (s_diamante != null)
+			currentNode.removeProperty(oroProperty, s_diamante.getResource());
 		
 		// add all new nodes
 		for (Couple <String, List<Couple<Observation, Integer>>> o : ob) {
@@ -203,6 +211,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		Plan getGold = new DefaultPlan(GetTreasureGoal.class, GetTreasurePlan.class);
 		
+		setNewNodesOntology();
 		c.getPlanLibrary().addPlan(getGold);
 		this.addGoal(new GetTreasureGoal());
 		addBehaviour(new RecieveObservations());
@@ -371,7 +380,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			msg.setSender(getAID());
 			Map <String, Object> message = new HashMap <>();
 			message.put("nextMove", nextMove);
-			message.put("map", map);
+			message.put("map", map.getSerializableGraph());
 			message.put("mapping", mapping);
             try {
 				msg.setContentObject((Serializable) message);
