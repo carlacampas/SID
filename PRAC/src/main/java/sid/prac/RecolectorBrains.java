@@ -8,6 +8,7 @@ import bdi4jade.core.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 
 import bdi4jade.belief.*;
@@ -18,10 +19,14 @@ import bdi4jade.plan.planbody.AbstractPlanBody;
 import dataStructures.tuple.Couple;
 import bdi4jade.plan.Plan;
 import eu.su.mas.dedale.mas.AbstractDedaleAgent;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 import eu.su.mas.dedale.env.Observation;
 import java.util.Random;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -35,8 +40,10 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.ontology.OntModelSpec;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.util.iterator.ExtendedIterator;
 import java.io.File;
+import java.sql.Timestamp;
 
 import org.apache.jena.rdf.model.NodeIterator;
 
@@ -53,24 +60,27 @@ public class RecolectorBrains extends SingleCapabilityAgent {
     
 	AID body;
 	Observation collectionType = Observation.ANY_TREASURE;
-	List <Couple<String, List <Couple<Observation, Integer>>>> ob;
+	List <Couple<String, List <Couple<Observation, Integer>>>> ob;	
     
 	public RecolectorBrains () {
         this.JENAPath = "./";
         this.OntologyFile = "OntologiaPractica.owl";
         this.NamingContext = "prac3";
     }
-
-	// Cargar ontologia
+	
 	public void loadOntology() {
         System.out.println("· Loading Ontology");
         model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM_MICRO_RULE_INF);
         dm = model.getDocumentManager();
         dm.addAltEntry(NamingContext, "file:" + JENAPath + OntologyFile);
         model.read(NamingContext);
+        
+        Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+        Belief modelB = new TransientBelief("model", model);
+        bb.addBelief(modelB);
     }
 	
-	// Liberar ontologia
 	public void releaseOntology() throws FileNotFoundException {
         System.out.println("· Releasing Ontology");
         if (!model.isClosed()) {
@@ -79,8 +89,16 @@ public class RecolectorBrains extends SingleCapabilityAgent {
         }
     }
 	
-	// Crear nuevos nodos
-	public OntModel setNewNodesOntology (String current, OntModel model, List <Couple<String, List <Couple<Observation, Integer>>>> ob) {
+	public void setNewNodesOntology () {
+		Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+		System.out.println(bb.toString());
+		String current = (String) (bb.getBelief("currentPosition").getValue());
+		OntModel model = (OntModel) bb.getBelief("model").getValue();
+		MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
+		HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) (bb.getBelief("mapping").getValue());
+		List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) bb.getBelief("observations").getValue();
+		
 		// ONTOLOGY CLASSES
 		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
 		OntClass diamanteClass = model.getOntClass(BASE_URI + "#Diamante");
@@ -96,19 +114,30 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		Property agenteProperty = model.createDatatypeProperty(BASE_URI + "#Agente_esta_en");
 		
 		Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + current);
+		map.addNewNode(current);
+		
+		Statement s_oro = currentNode.getProperty(oroProperty);
+		if (s_oro != null)
+			currentNode.removeProperty(oroProperty, s_oro.getResource());
+		
+		Statement s_diamante = currentNode.getProperty(diamanteProperty);
+		if (s_diamante != null)
+			currentNode.removeProperty(oroProperty, s_diamante.getResource());
+		
 		// add all new nodes
 		for (Couple <String, List<Couple<Observation, Integer>>> o : ob) {
-		
+			boolean open = true;
+			boolean agent = false;
 			Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + o.getLeft());
 			currentNode.addProperty(nameProperty, adjacentNode);
 			
 			for (Couple<Observation, Integer> obs : o.getRight()) {
-				if (obs.getLeft() == Observation.GOLD) {
-					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + o.getLeft());
+				if (obs.getLeft() == Observation.GOLD && obs.getRight() != 0) {
+					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + obs.getRight());
 					rec.addProperty(oroProperty, adjacentNode);
 				}
-				else if (obs.getLeft() == Observation.DIAMOND) {
-					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + o.getRight());
+				else if (obs.getLeft() == Observation.DIAMOND && obs.getRight() != 0) {
+					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + obs.getRight());
 					rec.addProperty(diamanteProperty, adjacentNode);
 				}
 				else if (obs.getLeft() == Observation.WIND) {
@@ -118,10 +147,25 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 				else if (obs.getLeft() == Observation.AGENTNAME) {
 					Individual rec = agentClass.createIndividual(BASE_URI + "#Agente" + o.getLeft());
 					rec.addProperty(agenteProperty, adjacentNode);
+					agent = true;
 				}
+				else if (obs.getLeft() == Observation.LOCKPICKING && obs.getRight() == 0) open = false;
+			}
+			
+			if (!o.getLeft().equals(current)) {
+				if (agent) map.addNode(o.getLeft(), MapAttribute.agent);
+				else if (!open) map.addNode(o.getLeft(), MapAttribute.closed);
+				else map.addNode(o.getLeft(), MapAttribute.open);
+				map.addEdge(current, o.getLeft());
 			}
 		}
-		return model;
+		
+		Belief map_updated = new TransientBelief("map", map);
+		Belief mapping_updated = new TransientBelief("mapping", mapping);
+		Belief model_updated = new TransientBelief("model", model);
+		bb.addOrUpdateBelief(map_updated);
+		bb.addOrUpdateBelief(mapping_updated);
+		bb.addOrUpdateBelief(model_updated);
 	}
 	
 	protected void init() {
@@ -152,6 +196,9 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		Belief currentNode = new TransientBelief("currentPosition", currentPosition);
 		Belief freeSpace = new TransientBelief("freeSpace", free);
 		Belief maxSpace = new TransientBelief("maxSpace", free);
+		Belief mapping = new TransientBelief("mapping", new HashMap<String, Couple <Long, HashMap<Observation, Integer>>>());
+		Belief map = new TransientBelief("map", new MapRepresentation());
+		
 
 		bb.addBelief(observations);
 		bb.addBelief(cType);
@@ -159,9 +206,12 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		bb.addBelief(currentNode);
 		bb.addBelief(freeSpace);
 		bb.addBelief(maxSpace);
+		bb.addBelief(mapping);
+		bb.addBelief(map);
 		
 		Plan getGold = new DefaultPlan(GetTreasureGoal.class, GetTreasurePlan.class);
 		
+		setNewNodesOntology();
 		c.getPlanLibrary().addPlan(getGold);
 		this.addGoal(new GetTreasureGoal());
 		addBehaviour(new RecieveObservations());
@@ -238,8 +288,8 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			Integer best = 0;
 			List <String> possibleMoves = new ArrayList<>();
 			for(Couple<String, List<Couple<Observation, Integer>>> o : ob) {
-				Individual i = model.getIndividual(BASE_URI + "#" + o.getLeft());
-				if (i == null || !i.hasOntClass(BASE_URI + "#Visitado")) {
+				Individual i = model.getIndividual(BASE_URI + "#Node" + o.getLeft());
+				if (!i.hasOntClass(BASE_URI + "#Visitado")) {
 					Integer q = 0;
 					boolean possible = true;
 					for (Couple<Observation, Integer> elem : o.getRight()) {
@@ -309,9 +359,11 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			Integer free = (Integer) bb.getBelief("freeSpace").getValue();
 			Integer maxCapacity = (Integer) bb.getBelief("maxSpace").getValue();
 			Observation collectionType = (Observation) bb.getBelief("collectionType").getValue();
+			MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
+			HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) (bb.getBelief("mapping").getValue());
+			
 			
 			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
-			setNewNodesOntology(currentNode, model, ob);
 			
 			tg.setObservations(ob);
 			tg.setCollectionType(collectionType);
@@ -323,13 +375,20 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			String nextMove = tg.getNextPosition();
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+			msg.setConversationId("movimientos");
 			msg.addReceiver(body);
 			msg.setSender(getAID());
-            msg.setContent(nextMove);
-            msg.setConversationId("movimientos");
+			Map <String, Object> message = new HashMap <>();
+			message.put("nextMove", nextMove);
+			message.put("map", map.getSerializableGraph());
+			message.put("mapping", mapping);
+            try {
+				msg.setContentObject((Serializable) message);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             send(msg);
-            
-            //System.out.println("NEXT MOVE: " + nextMove);
             
             OntClass nodeClass = model.getOntClass(BASE_URI + "#Visitado");
     		Individual nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nextMove);
@@ -378,6 +437,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 						bb.addOrUpdateBelief(observations);
                 	}
 					
+                	setNewNodesOntology();
 					addGoal(new GetTreasureGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
             }

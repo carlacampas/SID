@@ -4,6 +4,7 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.behaviours.*;
 import eu.su.mas.dedaleEtu.mas.knowledge.*;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import jade.core.AID;
@@ -33,6 +35,7 @@ import sid.prac.ExplorerBrains;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import jade.proto.SubscriptionInitiator;
 
 import java.util.HashSet;
 import java.util.HashMap;
@@ -41,8 +44,11 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	private MapRepresentation map;
 	private String type;
 	private AID brains;
-	Observation collectType;
-	
+	private Observation collectType;
+	private Set<AID> collectors = new HashSet<AID> ();
+	private Set<AID> explorers = new HashSet<AID> ();
+	private Set<AID> tanks = new HashSet<AID> ();
+	private HashMap<AID, Couple<Long, String>> agent_pos;
 
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
@@ -82,6 +88,65 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		        }
 			}
 		});
+		
+		// crear subscripcion a agentes exploradores
+		DFAgentDescription template =  new DFAgentDescription();
+		ServiceDescription sd_template = new ServiceDescription();
+		sd_template.setType("agentExplo");
+        template.addServices(sd_template);
+		Behaviour b_explo = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						explorers.add(d.getName());
+					}
+					// do something
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b_explo);
+		
+		sd_template.setType("agentCollect");
+        template.addServices(sd_template);
+		Behaviour b_collect = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						collectors.add(d.getName());
+					}
+					// do something
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b_collect);
+		
+		sd_template.setType("agentTanker");
+        template.addServices(sd_template);
+		Behaviour b_tanker = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						tanks.add(d.getName());
+					}
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b_collect);
 
 		lb.add(new RecieveNextMove());
 		addBehaviour(new startMyBehaviours(this,lb));
@@ -153,72 +218,16 @@ public class GeneralAgent extends AbstractDedaleAgent {
 
 	// Recivimos mensaje del Brains esperando la accion
 	public class RecieveNextMove extends CyclicBehaviour {
-		MessageTemplate tpl, tplExt, tplCom;
-        ACLMessage msg, msgExt, msgCom;
+		MessageTemplate tpl, tpl_ext;
+        ACLMessage msg, msg_ext;
+        SerializableSimpleGraph<String,MapAttribute> map;
+        HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping;
 
 		public void onStart() {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
-			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
 			tpl = MessageTemplate.and(tpl1, tpl2);
-			tpl = MessageTemplate.and(tpl, tpl3);
-			tplExt = tpl1;
-			tplExt = MessageTemplate.and(tpl1, MessageTemplate.not(tpl2));
-			tpl3 = MessageTemplate.MatchConversationId("comunicacion");
-			tplCom = MessageTemplate.and(tpl1, tpl2);
-			tplCom = MessageTemplate.and(tplCom, tpl3);
-			notifyAgents();
         }
-		
-		
-		public void notifyAgents() {
-			System.out.println("Empiezo a buscar agentes. Iniciando protocolo de Hola!");
-			DFAgentDescription templateExplo = new DFAgentDescription();
-			ServiceDescription templateSdExplo = new ServiceDescription();
-			templateSdExplo.setType("agentExplo");
-			templateExplo.addServices(templateSdExplo);
-			
-			DFAgentDescription templateCol = new DFAgentDescription();
-			ServiceDescription templateSdCol = new ServiceDescription();
-			templateSdCol.setType("agentCollect");
-			templateCol.addServices(templateSdCol);
-			
-			try {
-				DFAgentDescription[] results = DFService.search(myAgent, templateExplo);
-				if(results.length>0) {
-					for(DFAgentDescription d : results) {
-						if(!d.getName().equals(myAgent.getAID())) {
-							AID rcv = d.getName();
-							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
-							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-							nmsg.addReceiver(rcv);
-							nmsg.setContent("Hola!");
-							nmsg.setSender(myAgent.getAID());
-							ag.sendMessage(nmsg);
-						}
-					}
-				}
-				
-				results = DFService.search(myAgent, templateCol);
-				if(results.length>0) {
-					for(DFAgentDescription d : results) {
-						if(!d.getName().equals(myAgent.getAID())) {
-							AID rcv = d.getName();
-							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
-							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-							nmsg.addReceiver(rcv);
-							nmsg.setContent("Hola!");
-							nmsg.setSender(myAgent.getAID());
-							ag.sendMessage(nmsg);
-						}
-					}
-				}
-			} catch (FIPAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
 		
 		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
 			boolean myItem = false, lockOpen = false;
@@ -263,19 +272,64 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			}
 			System.out.println("AFTER: " + getBackPackFreeSpace());
 		}
+		
+		public void sendExternalMessages() {
+			ACLMessage msg_topology = new ACLMessage(ACLMessage.INFORM);
+			ACLMessage msg_resourceInfo = new ACLMessage(ACLMessage.INFORM);
+			ACLMessage msg_agentPositions = new ACLMessage(ACLMessage.INFORM);
+			msg_topology.setOntology("mapTopology");
+			msg_resourceInfo.setOntology("resourceInformation");
+			msg_agentPositions.setOntology("agentPositions");
+			
+			for (AID a : collectors) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			
+			for (AID a : explorers) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			
+			for (AID a : tanks) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			msg_topology.setSender(getAID());
+			msg_resourceInfo.setSender(getAID());
+			msg_agentPositions.setSender(getAID());
+			
+			try {
+				msg_topology.setContentObject((Serializable) map);
+				msg_resourceInfo.setContentObject((Serializable) mapping);
+				msg_agentPositions.setContentObject((Serializable) agent_pos);
+			} catch (IOException e) { e.printStackTrace(); }
+            
+            sendMessage(msg_topology);
+            sendMessage(msg_resourceInfo);
+            sendMessage(msg_agentPositions);
+		}
 
         public void action() {
         	
             msg = myAgent.receive(tpl);
-            msgCom = myAgent.receive(tplCom);
-            msgExt = myAgent.receive(tplExt);
             
             if (msg != null) {
-            	System.out.println("El cont. del mensaje es: " + msg.getContent());
-                String content = msg.getContent();
+                Map<String, Object> content = new HashMap<String, Object>();
+				try {
+					content = (Map<String, Object>) msg.getContentObject();
+				} catch (UnreadableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+                System.out.println("El cont. del mensaje es: " + content.get("nextMove"));
                
                 if (content != null) {
-                	boolean m = moveTo(content);
+                	boolean m = moveTo((String) content.get("nextMove"));
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
@@ -289,12 +343,15 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	                	for(Couple<String, List <Couple<Observation, Integer>>> o2 : ob)
 	                		for(Couple<Observation,Integer> o3: o2.getRight())
 	                			if(o3.getLeft() == Observation.STRENGH) {
-	                				this.notifyAgents();
+	                				//this.notifyAgents();
                 					break;
 	                			}
                 	fp = sumFreeSpace(getBackPackFreeSpace());
 
                 	System.out.println("Observations: " + ob.toString());
+                	map = (SerializableSimpleGraph<String,MapAttribute>) content.get("map");
+                	mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) content.get("mapping");
+                	sendExternalMessages();
 
                 	Map <String, Object> pass_info = new HashMap <String, Object>();
                 	pass_info.put("OBSERVATIONS", ob);
@@ -309,65 +366,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
                     } catch (Exception e) {}
                     send(reply);
                 }
-            }if(msgExt != null) {
-            	if(msgExt.getContent().equals("Hola!")) {
-            		
-            		ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-            		nmsg.setConversationId("comunicacion");
-            		nmsg.addReceiver(brains);
-            		nmsg.addReplyTo(myAgent.getAID());
-            		nmsg.setSender(myAgent.getAID());
-            		System.out.println("Recibo hola respuesta!!");
-            		try {
-						nmsg.setContentObject(msgExt.getSender());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		
-            		myAgent.send(nmsg);
-            		
-            	}else if(!msgExt.getSender().equals(brains)) {
-            		
-            		try {
-            			System.out.println("Soy " + myAgent.getName()+ "\nInfo exterior de: " + msgExt.getSender().getName());
-						String extcont = (String) msgExt.getContentObject();
-						System.out.println("Recibo información de agente externo: \n" + extcont);
-					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		
-            	}
-            	
             }
-            if(msgCom != null) {
-            	try {
-            		System.out.println("Notifico a otro agente!");
-					Couple<AID, String> cpl = (Couple<AID, String>) msgCom.getContentObject();
-					AID recv = cpl.getLeft();
-					ACLMessage resp = new ACLMessage(ACLMessage.INFORM);
-					resp.addReceiver(recv);
-					resp.setContentObject(cpl.getRight());
-					resp.setSender(myAgent.getAID());
-					AbstractDedaleAgent ab = (AbstractDedaleAgent) myAgent;
-					ab.sendMessage(resp);
-					
-				} catch (UnreadableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-				}
-            	
-            }
-            if(msgExt == null && msg == null && msgCom == null) block();
-           
         }
 	}
 
