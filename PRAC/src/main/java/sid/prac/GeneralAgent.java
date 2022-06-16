@@ -49,10 +49,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	private Set<AID> explorers = new HashSet<AID> ();
 	private Set<AID> tanks = new HashSet<AID> ();
 	private HashMap<AID, Couple<Long, String>> agent_pos;
+	private MessageTemplate all_senders;
 
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
 		super.setup();
+		//all_senders = MessageTemplate.MatchSender(getAID());
 
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 
@@ -101,6 +103,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
 					for (DFAgentDescription d : dfds) {
 						explorers.add(d.getName());
+						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
 					}
 					// do something
 				} catch (FIPAException fe) {
@@ -120,6 +123,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
 					for (DFAgentDescription d : dfds) {
 						collectors.add(d.getName());
+						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
 					}
 					// do something
 				} catch (FIPAException fe) {
@@ -139,6 +143,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
 					for (DFAgentDescription d : dfds) {
 						tanks.add(d.getName());
+						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
 					}
 				} catch (FIPAException fe) {
 					fe.printStackTrace();
@@ -218,8 +223,8 @@ public class GeneralAgent extends AbstractDedaleAgent {
 
 	// Recivimos mensaje del Brains esperando la accion
 	public class RecieveNextMove extends CyclicBehaviour {
-		MessageTemplate tpl, tpl_ext;
-        ACLMessage msg, msg_ext;
+		MessageTemplate tpl, tpl_map, tpl_resource, tpl_positions;
+        ACLMessage msg, msg_map, msg_resource, msg_positions;
         SerializableSimpleGraph<String,MapAttribute> map;
         HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping;
 
@@ -227,6 +232,10 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
 			tpl = MessageTemplate.and(tpl1, tpl2);
+			
+			tpl_map = MessageTemplate.and(all_senders, MessageTemplate.MatchOntology("mapTopology"));
+			tpl_resource = MessageTemplate.and(all_senders, MessageTemplate.MatchOntology("resourceInformation"));
+			tpl_positions = MessageTemplate.and(all_senders, MessageTemplate.MatchOntology("agentPositions"));
         }
 		
 		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
@@ -246,7 +255,6 @@ public class GeneralAgent extends AbstractDedaleAgent {
 							break;
 						case STRENGH:
 							strength = obs.getRight();
-							
 							break;
 						default:
 							break;
@@ -366,6 +374,59 @@ public class GeneralAgent extends AbstractDedaleAgent {
                     } catch (Exception e) {}
                     send(reply);
                 }
+            }
+            
+            msg_map = myAgent.receive(tpl_map);
+            if (msg_map != null) {
+            	ACLMessage msg_brain = new ACLMessage(ACLMessage.INFORM);
+            	msg_brain.addReceiver(brains);
+            	msg_brain.setConversationId("mapa");
+            	msg_brain.setSender(getAID());
+            	try {
+					msg.setContentObject(msg_map.getContentObject());
+            	} catch (IOException | UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	send(msg);
+            }
+            
+            msg_resource = myAgent.receive(tpl_resource);
+            if (msg_resource != null) {
+            	ACLMessage msg_brain = new ACLMessage(ACLMessage.INFORM);
+            	msg_brain.addReceiver(brains);
+            	msg_brain.setConversationId("recursos");
+            	msg_brain.setSender(getAID());
+            	try {
+					msg.setContentObject(msg_resource.getContentObject());
+				} catch (IOException | UnreadableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	send(msg);
+            }
+            
+            msg_positions = myAgent.receive(tpl_positions);
+            if (msg_positions != null) {
+            	try {
+					Map<AID, Couple<Long, String>> content = (HashMap<AID, Couple<Long, String>>) msg_positions.getContentObject();
+					for (Map.Entry<AID, Couple<Long, String>> e : content.entrySet()) {
+						if (agent_pos.containsKey(e.getKey())) {
+							if (agent_pos.get(e.getKey()).getLeft() < e.getValue().getLeft()) {
+								agent_pos.put(e.getKey(), e.getValue());
+							}
+						}
+						else agent_pos.put(e.getKey(), e.getValue());
+					}
+					
+					ACLMessage msg_brain = new ACLMessage(ACLMessage.INFORM);
+	            	msg_brain.addReceiver(brains);
+	            	msg_brain.setConversationId("agentes");
+	            	msg_brain.setSender(getAID());
+	            	msg_brain.setContentObject((Serializable) agent_pos);
+	            	send(msg_brain);
+	            	
+				} catch (IOException | UnreadableException e) { e.printStackTrace(); }
             }
         }
 	}
