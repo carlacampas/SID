@@ -33,6 +33,7 @@ import sid.prac.ExplorerBrains;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
+import jade.proto.SubscriptionInitiator;
 
 import java.util.HashSet;
 import java.util.HashMap;
@@ -82,6 +83,24 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		        }
 			}
 		});
+		
+		DFAgentDescription template =  new DFAgentDescription();
+		ServiceDescription sd_template = new ServiceDescription();
+		sd_template.setType(type);
+        template.addServices(sd_template);
+		Behaviour b = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					// do something
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b);
 
 		lb.add(new RecieveNextMove());
 		addBehaviour(new startMyBehaviours(this,lb));
@@ -271,11 +290,19 @@ public class GeneralAgent extends AbstractDedaleAgent {
             msgExt = myAgent.receive(tplExt);
             
             if (msg != null) {
-            	System.out.println("El cont. del mensaje es: " + msg.getContent());
-                String content = msg.getContent();
+            	
+                Map<String, Object> content = new HashMap<String, Object>();
+				try {
+					content = (Map<String, Object>) msg.getContentObject();
+				} catch (UnreadableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+                System.out.println("El cont. del mensaje es: " + content.get("nextMove"));
                
                 if (content != null) {
-                	boolean m = moveTo(content);
+                	boolean m = moveTo((String) content.get("nextMove"));
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
@@ -309,65 +336,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
                     } catch (Exception e) {}
                     send(reply);
                 }
-            }if(msgExt != null) {
-            	if(msgExt.getContent().equals("Hola!")) {
-            		
-            		ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-            		nmsg.setConversationId("comunicacion");
-            		nmsg.addReceiver(brains);
-            		nmsg.addReplyTo(myAgent.getAID());
-            		nmsg.setSender(myAgent.getAID());
-            		System.out.println("Recibo hola respuesta!!");
-            		try {
-						nmsg.setContentObject(msgExt.getSender());
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		
-            		myAgent.send(nmsg);
-            		
-            	}else if(!msgExt.getSender().equals(brains)) {
-            		
-            		try {
-            			System.out.println("Soy " + myAgent.getName()+ "\nInfo exterior de: " + msgExt.getSender().getName());
-						String extcont = (String) msgExt.getContentObject();
-						System.out.println("Recibo información de agente externo: \n" + extcont);
-					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		
-            	}
-            	
             }
-            if(msgCom != null) {
-            	try {
-            		System.out.println("Notifico a otro agente!");
-					Couple<AID, String> cpl = (Couple<AID, String>) msgCom.getContentObject();
-					AID recv = cpl.getLeft();
-					ACLMessage resp = new ACLMessage(ACLMessage.INFORM);
-					resp.addReceiver(recv);
-					resp.setContentObject(cpl.getRight());
-					resp.setSender(myAgent.getAID());
-					AbstractDedaleAgent ab = (AbstractDedaleAgent) myAgent;
-					ab.sendMessage(resp);
-					
-				} catch (UnreadableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					
-				}
-            	
-            }
-            if(msgExt == null && msg == null && msgCom == null) block();
-           
         }
 	}
 
