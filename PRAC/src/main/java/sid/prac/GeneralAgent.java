@@ -42,7 +42,11 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	private MapRepresentation map;
 	private String type;
 	private AID brains;
-	Observation collectType;
+	private Observation collectType;
+	private Set<AID> collectors;
+	private Set<AID> explorers;
+	private Set<AID> tanks;
+	
 	
 
 	public MapRepresentation getMap() { return map; }
@@ -84,15 +88,19 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			}
 		});
 		
+		// crear subscripcion a agentes exploradores
 		DFAgentDescription template =  new DFAgentDescription();
 		ServiceDescription sd_template = new ServiceDescription();
-		sd_template.setType(type);
+		sd_template.setType("agentExplo");
         template.addServices(sd_template);
-		Behaviour b = new SubscriptionInitiator(this, 
+		Behaviour b_explo = new SubscriptionInitiator(this, 
 			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
 			protected void handleInform(ACLMessage inform) {
 				try {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						explorers.add(d.getName());
+					}
 					// do something
 				} catch (FIPAException fe) {
 					fe.printStackTrace();
@@ -100,7 +108,44 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			}
 		  };
 		 
-		lb.add(b);
+		lb.add(b_explo);
+		
+		sd_template.setType("agentCollect");
+        template.addServices(sd_template);
+		Behaviour b_collect = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						collectors.add(d.getName());
+					}
+					// do something
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b_collect);
+		
+		sd_template.setType("agentTanker");
+        template.addServices(sd_template);
+		Behaviour b_tanker = new SubscriptionInitiator(this, 
+			DFService.createSubscriptionMessage(this, getDefaultDF(), template, null)) {
+			protected void handleInform(ACLMessage inform) {
+				try {
+					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
+					for (DFAgentDescription d : dfds) {
+						tanks.add(d.getName());
+					}
+				} catch (FIPAException fe) {
+					fe.printStackTrace();
+				}
+			}
+		  };
+		 
+		lb.add(b_collect);
 
 		lb.add(new RecieveNextMove());
 		addBehaviour(new startMyBehaviours(this,lb));
