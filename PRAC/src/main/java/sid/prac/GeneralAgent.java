@@ -54,7 +54,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
 		super.setup();
-		//all_senders = MessageTemplate.MatchSender(getAID());
+		all_senders = MessageTemplate.and(MessageTemplate.not(MessageTemplate.MatchSender(brains)), MessageTemplate.not(MessageTemplate.MatchSender(getAID())));
 
 		List<Behaviour> lb=new ArrayList<Behaviour>();
 
@@ -322,7 +322,6 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		}
 
         public void action() {
-        	
             msg = myAgent.receive(tpl);
             
             if (msg != null) {
@@ -410,21 +409,23 @@ public class GeneralAgent extends AbstractDedaleAgent {
             if (msg_positions != null) {
             	try {
 					Map<AID, Couple<Long, String>> content = (HashMap<AID, Couple<Long, String>>) msg_positions.getContentObject();
-					for (Map.Entry<AID, Couple<Long, String>> e : content.entrySet()) {
-						if (agent_pos.containsKey(e.getKey())) {
-							if (agent_pos.get(e.getKey()).getLeft() < e.getValue().getLeft()) {
-								agent_pos.put(e.getKey(), e.getValue());
+					if (content != null) {
+						for (Map.Entry<AID, Couple<Long, String>> e : content.entrySet()) {
+							if (agent_pos.containsKey(e.getKey())) {
+								if (agent_pos.get(e.getKey()).getLeft() < e.getValue().getLeft()) {
+									agent_pos.put(e.getKey(), e.getValue());
+								}
 							}
+							else agent_pos.put(e.getKey(), e.getValue());
 						}
-						else agent_pos.put(e.getKey(), e.getValue());
+						
+						ACLMessage msg_brain = new ACLMessage(ACLMessage.INFORM);
+		            	msg_brain.addReceiver(brains);
+		            	msg_brain.setConversationId("agentes");
+		            	msg_brain.setSender(getAID());
+		            	msg_brain.setContentObject((Serializable) agent_pos);
+		            	send(msg_brain);
 					}
-					
-					ACLMessage msg_brain = new ACLMessage(ACLMessage.INFORM);
-	            	msg_brain.addReceiver(brains);
-	            	msg_brain.setConversationId("agentes");
-	            	msg_brain.setSender(getAID());
-	            	msg_brain.setContentObject((Serializable) agent_pos);
-	            	send(msg_brain);
 	            	
 				} catch (IOException | UnreadableException e) { e.printStackTrace(); }
             }
