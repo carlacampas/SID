@@ -4,6 +4,7 @@ import eu.su.mas.dedale.mas.AbstractDedaleAgent;
 import eu.su.mas.dedale.mas.agent.behaviours.startMyBehaviours;
 import eu.su.mas.dedaleEtu.mas.behaviours.*;
 import eu.su.mas.dedaleEtu.mas.knowledge.*;
+import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation.MapAttribute;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
 import eu.su.mas.dedale.env.Observation;
 import jade.core.AID;
@@ -43,11 +45,10 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	private String type;
 	private AID brains;
 	private Observation collectType;
-	private Set<AID> collectors;
-	private Set<AID> explorers;
-	private Set<AID> tanks;
-	
-	
+	private Set<AID> collectors = new HashSet<AID> ();
+	private Set<AID> explorers = new HashSet<AID> ();
+	private Set<AID> tanks = new HashSet<AID> ();
+	private HashMap<AID, Couple<Long, String>> agent_pos;
 
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
@@ -217,72 +218,16 @@ public class GeneralAgent extends AbstractDedaleAgent {
 
 	// Recivimos mensaje del Brains esperando la accion
 	public class RecieveNextMove extends CyclicBehaviour {
-		MessageTemplate tpl, tplExt, tplCom;
-        ACLMessage msg, msgExt, msgCom;
+		MessageTemplate tpl, tpl_ext;
+        ACLMessage msg, msg_ext;
+        SerializableSimpleGraph<String,MapAttribute> map;
+        HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping;
 
 		public void onStart() {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
-			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
 			tpl = MessageTemplate.and(tpl1, tpl2);
-			tpl = MessageTemplate.and(tpl, tpl3);
-			tplExt = tpl1;
-			tplExt = MessageTemplate.and(tpl1, MessageTemplate.not(tpl2));
-			tpl3 = MessageTemplate.MatchConversationId("comunicacion");
-			tplCom = MessageTemplate.and(tpl1, tpl2);
-			tplCom = MessageTemplate.and(tplCom, tpl3);
-			notifyAgents();
         }
-		
-		
-		public void notifyAgents() {
-			System.out.println("Empiezo a buscar agentes. Iniciando protocolo de Hola!");
-			DFAgentDescription templateExplo = new DFAgentDescription();
-			ServiceDescription templateSdExplo = new ServiceDescription();
-			templateSdExplo.setType("agentExplo");
-			templateExplo.addServices(templateSdExplo);
-			
-			DFAgentDescription templateCol = new DFAgentDescription();
-			ServiceDescription templateSdCol = new ServiceDescription();
-			templateSdCol.setType("agentCollect");
-			templateCol.addServices(templateSdCol);
-			
-			try {
-				DFAgentDescription[] results = DFService.search(myAgent, templateExplo);
-				if(results.length>0) {
-					for(DFAgentDescription d : results) {
-						if(!d.getName().equals(myAgent.getAID())) {
-							AID rcv = d.getName();
-							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
-							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-							nmsg.addReceiver(rcv);
-							nmsg.setContent("Hola!");
-							nmsg.setSender(myAgent.getAID());
-							ag.sendMessage(nmsg);
-						}
-					}
-				}
-				
-				results = DFService.search(myAgent, templateCol);
-				if(results.length>0) {
-					for(DFAgentDescription d : results) {
-						if(!d.getName().equals(myAgent.getAID())) {
-							AID rcv = d.getName();
-							AbstractDedaleAgent ag = (AbstractDedaleAgent) myAgent;
-							ACLMessage nmsg = new ACLMessage(ACLMessage.INFORM);
-							nmsg.addReceiver(rcv);
-							nmsg.setContent("Hola!");
-							nmsg.setSender(myAgent.getAID());
-							ag.sendMessage(nmsg);
-						}
-					}
-				}
-			} catch (FIPAException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
 		
 		public void handle_current_node (Couple<String, List<Couple<Observation, Integer>>> o) {
 			boolean myItem = false, lockOpen = false;
@@ -327,15 +272,52 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			}
 			System.out.println("AFTER: " + getBackPackFreeSpace());
 		}
+		
+		public void sendExternalMessages() {
+			ACLMessage msg_topology = new ACLMessage(ACLMessage.INFORM);
+			ACLMessage msg_resourceInfo = new ACLMessage(ACLMessage.INFORM);
+			ACLMessage msg_agentPositions = new ACLMessage(ACLMessage.INFORM);
+			msg_topology.setOntology("mapTopology");
+			msg_resourceInfo.setOntology("resourceInformation");
+			msg_agentPositions.setOntology("agentPositions");
+			
+			for (AID a : collectors) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			
+			for (AID a : explorers) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			
+			for (AID a : tanks) {
+				msg_topology.addReceiver(a);
+				msg_resourceInfo.addReceiver(a);
+				msg_agentPositions.addReceiver(a);
+			}
+			msg_topology.setSender(getAID());
+			msg_resourceInfo.setSender(getAID());
+			msg_agentPositions.setSender(getAID());
+			
+			try {
+				msg_topology.setContentObject((Serializable) map);
+				msg_resourceInfo.setContentObject((Serializable) mapping);
+				msg_agentPositions.setContentObject((Serializable) agent_pos);
+			} catch (IOException e) { e.printStackTrace(); }
+            
+            sendMessage(msg_topology);
+            sendMessage(msg_resourceInfo);
+            sendMessage(msg_agentPositions);
+		}
 
         public void action() {
         	
             msg = myAgent.receive(tpl);
-            msgCom = myAgent.receive(tplCom);
-            msgExt = myAgent.receive(tplExt);
             
             if (msg != null) {
-            	
                 Map<String, Object> content = new HashMap<String, Object>();
 				try {
 					content = (Map<String, Object>) msg.getContentObject();
@@ -361,12 +343,15 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	                	for(Couple<String, List <Couple<Observation, Integer>>> o2 : ob)
 	                		for(Couple<Observation,Integer> o3: o2.getRight())
 	                			if(o3.getLeft() == Observation.STRENGH) {
-	                				this.notifyAgents();
+	                				//this.notifyAgents();
                 					break;
 	                			}
                 	fp = sumFreeSpace(getBackPackFreeSpace());
 
                 	System.out.println("Observations: " + ob.toString());
+                	map = (SerializableSimpleGraph<String,MapAttribute>) content.get("map");
+                	mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) content.get("mapping");
+                	sendExternalMessages();
 
                 	Map <String, Object> pass_info = new HashMap <String, Object>();
                 	pass_info.put("OBSERVATIONS", ob);
