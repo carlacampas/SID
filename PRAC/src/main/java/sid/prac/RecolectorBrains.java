@@ -197,7 +197,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		for (SerializableNode<String, MapAttribute> n : nodes) {
 			Individual node_added = nodeClass.createIndividual(BASE_URI + "#Node" + n.getNodeId());
-			Set<String> edges = sg.getEdges(BASE_URI);
+			Set<String> edges = sg.getEdges(n.getNodeId());
 			for (String edge : edges) {
 				Individual node_adjacent = nodeClass.createIndividual(BASE_URI + "#Node" + n.getNodeId());
 				node_added.addProperty(nameProperty, node_adjacent);
@@ -545,8 +545,10 @@ public class RecolectorBrains extends SingleCapabilityAgent {
         	HashMap<String, Couple <Long, HashMap<Observation, Integer>>> res = new HashMap<>();
         	for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> e : m1.entrySet()) {
         		if (m2.containsKey(e.getKey())) {
+        			System.out.println(e.getValue());
+        			System.out.println(m2.get(e.getKey()));
         			if (!e.getValue().getRight().containsKey(Observation.GOLD) || m2.get(e.getKey()).getRight().containsKey(Observation.GOLD)) {
-        				if (e.getValue().getLeft() >= m2.get(e.getKey()).getRight().get(Observation.GOLD)) res.put(e.getKey(), e.getValue());
+        				if (e.getValue().getLeft() >= m2.get(e.getKey()).getLeft()) res.put(e.getKey(), e.getValue());
         				else res.put(e.getKey(), m2.get(e.getKey()));
         			}
         		}
@@ -599,6 +601,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             msg_map = myAgent.receive(tpl_map);     
             if (msg_map != null) {
             	try {
+            		System.out.println("RECIEVED MAP BRAIN");
 					SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
 					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
@@ -620,6 +623,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             if (msg_resource != null) {
 				
             	try {
+            		System.out.println("RECIEVED RESOURCES BRAIN");
 					HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
 					if (m2 != null) {
 						Capability c = getCapability();
@@ -639,6 +643,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             msg_agent = myAgent.receive(tpl_agent);
             if (msg_agent != null) {
             	try {
+            		System.out.println("RECIEVED AGENTS BRAIN");
             		Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
 					
@@ -667,7 +672,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             	in_one = true;
             }
             
-            if(!in_one) { block(); }
+            //if(!in_one) { block(); }
         }
 	}
 }
