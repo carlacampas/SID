@@ -667,7 +667,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             	in_one = true;
             }
             
-            //if(!in_one) { block(); }
+            if(!in_one) { block(); }
         }
 	}
 }

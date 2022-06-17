@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.OntClass;
@@ -37,6 +38,8 @@ import bdi4jade.goal.Goal;
 import bdi4jade.plan.DefaultPlan;
 import bdi4jade.plan.Plan.EndState;
 import bdi4jade.plan.planbody.AbstractPlanBody;
+import dataStructures.serializableGraph.SerializableNode;
+import dataStructures.serializableGraph.SerializableSimpleGraph;
 import dataStructures.tuple.Couple;
 //import eu.su.mas.dedaleEtu.mas.knowledge.MapRepresentation;
 import bdi4jade.plan.Plan;
@@ -100,7 +103,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 	public void setNewNodesOntology () {
 		Capability c = getCapability();
 		BeliefBase bb = c.getBeliefBase();
-		System.out.println(bb.toString());
+		//System.out.println(bb.toString());
 		String current = (String) (bb.getBelief("currentPosition").getValue());
 		OntModel model = (OntModel) bb.getBelief("model").getValue();
 		MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
@@ -174,6 +177,106 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 		bb.addOrUpdateBelief(map_updated);
 		bb.addOrUpdateBelief(mapping_updated);
 		bb.addOrUpdateBelief(model_updated);
+	}
+	
+	public void addExternalMap() {
+		Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+		MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
+		OntModel model = (OntModel) (bb.getBelief("model").getValue());
+		
+		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
+		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
+		
+		SerializableSimpleGraph<String,MapAttribute> sg = map.getSerializableGraph();
+		Set <SerializableNode<String, MapAttribute>> nodes = sg.getAllNodes();
+		
+		for (SerializableNode<String, MapAttribute> n : nodes) {
+			Individual node_added = nodeClass.createIndividual(BASE_URI + "#Node" + n.getNodeId());
+			Set<String> edges = sg.getEdges(BASE_URI);
+			for (String edge : edges) {
+				Individual node_adjacent = nodeClass.createIndividual(BASE_URI + "#Node" + n.getNodeId());
+				node_added.addProperty(nameProperty, node_adjacent);
+			}
+		}
+		
+		Belief model_updated = new TransientBelief("model", model);
+		bb.addOrUpdateBelief(model_updated);
+	}
+	
+	// create merge external resources with internal resources and then add to ontology
+	public void addExternalResources() {
+		// ONTOLOGY CLASSES
+		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
+		OntClass diamanteClass = model.getOntClass(BASE_URI + "#Diamante");
+		OntClass oroClass = model.getOntClass(BASE_URI + "#Oro");
+		OntClass vientoClass = model.getOntClass(BASE_URI + "#Viento");
+		
+		//PROPERTIES
+		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
+		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Oro_esta_en");
+		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Diamante_esta_en");
+		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Obstaculo_esta_en");
+				
+		Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+		OntModel model = (OntModel) (bb.getBelief("model").getValue());
+		HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) (bb.getBelief("mapping").getValue());
+		
+		for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> m : mapping.entrySet()) {
+			Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + m.getKey());
+			
+			for (Map.Entry<Observation, Integer> e : m.getValue().getRight().entrySet()) {
+				if (e.getKey() == Observation.GOLD && e.getValue() != 0) {
+					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + e.getValue());
+					rec.addProperty(oroProperty, adjacentNode);
+				}
+				else if (e.getKey() == Observation.DIAMOND && e.getValue() != 0) {
+					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + e.getValue());
+					rec.addProperty(diamanteProperty, adjacentNode);
+				}
+				else if (e.getKey() == Observation.WIND) {
+					Individual rec = vientoClass.createIndividual(BASE_URI + "#Viento" + m.getKey());
+					rec.addProperty(obstaculoProperty, adjacentNode);
+				}
+			}
+		}
+	}
+	
+	public void addAgents() {
+		Capability c = getCapability();
+		BeliefBase bb = c.getBeliefBase();
+		OntModel model = (OntModel) (bb.getBelief("model").getValue());
+		Set<AID> collectors = (Set<AID>) bb.getBelief("collectors").getValue();
+		Set<AID> explorers = (Set<AID>) bb.getBelief("explorers").getValue();
+		Set<AID> tanks = (Set<AID>) bb.getBelief("tanks").getValue();
+		HashMap<AID, Couple<Long, String>> agent_pos = (HashMap<AID, Couple<Long, String>>) bb.getBelief("agent_positions").getValue();
+		
+		OntClass nodeClass = model.getOntClass(BASE_URI + "#Node");
+		OntClass agentClass = model.getOntClass(BASE_URI + "#Agent");
+		OntClass almacenamientoClass = model.getOntClass(BASE_URI + "#Almacenamiento");
+		OntClass recolectorClass = model.getOntClass(BASE_URI + "#Recolector");
+		OntClass exploradorClass = model.getOntClass(BASE_URI + "#Explorador");
+		
+		Property agenteProperty = model.createDatatypeProperty(BASE_URI + "#Agente_esta_en");
+		
+		for (Map.Entry<AID, Couple<Long, String>> ap : agent_pos.entrySet()) {
+			String name = ap.getKey().getName();
+			Individual agent;
+			
+			if (collectors.contains(name)) agent = recolectorClass.createIndividual(BASE_URI + "#Agent" + name);
+			else if (explorers.contains(name)) agent = exploradorClass.createIndividual(BASE_URI + "#Agent" + name);
+			else if (tanks.contains(name)) agent = almacenamientoClass.createIndividual(BASE_URI + "#Agent" + name);
+			else agent = agentClass.createIndividual(BASE_URI + "#Agent" + name);
+			
+			agent.removeAll(agenteProperty);
+			Individual node_added = nodeClass.createIndividual(BASE_URI + "#Node" + ap.getValue().getRight());
+			agent.addProperty(agenteProperty, node_added);
+		}
+		
+		Belief model_updated = new TransientBelief("model", model);
+		bb.addOrUpdateBelief(model_updated);
+		//Individual node_added = nodeClass.createIndividual(BASE_URI + "#Node" + n.getNodeId());
 	}
 	
 	protected void init() {
@@ -302,15 +405,10 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				new_val = val+1.0;
 
 				ArrayList<Double> finalStdParam = new ArrayList<Double>();
-				if(index==pos) System.out.println("Ejecuto getNewScore con indice == pos");
 				Double newScore = this.getNewScore(n, val, new_val, finalStdParam);
-				System.out.println("newScore es: " + newScore);
 				
-				System.out.println("id es: " + id);
 				if((newScore >= maxScore) && possible && !id.equals(currentPos)) {
-					
-					
-				
+									
 					maxScore = newScore;
 					nextVal = new_val;
 					nextK = finalStdParam.get(0);
@@ -330,17 +428,14 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				}
 				index++;
 			}
-			
+			System.out.println(next);
 			this.saveValueBB(oldSuma+1.0, "suma", bb);
-			System.out.println("next es antes de next.equals: " + next);
 			if(!next.equals("")) {
-				System.out.println("El explorador no se arriesga al viento!");
 				locmap.put(next, (int)(nextVal));
 				this.saveValueBB(locmap, "visitedNodes", bb);
 				this.saveValueBB(nextK, "K", bb);
 				this.saveValueBB(nextEx, "Ex", bb);
 				this.saveValueBB(nextEx2, "Ex2", bb);
-				System.out.println("locmap es: " + locmap);
 				return next;
 			}else {
 				locmap.put(randNext, (int)(randVal));
@@ -350,7 +445,6 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				this.saveValueBB(randEx, "Ex", bb);
 				this.saveValueBB(randEx2, "Ex2", bb);	
 			}
-			System.out.println("locmap es: " + locmap);
 			return randNext;
 		}
 		
@@ -363,7 +457,6 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			ArrayList<Double> newStdParam = this.delElemStd(K, Ex, Ex2, size, val);
 			ArrayList<Double> newStdParam2 = this.addElemStd(newStdParam, size-1.0, new_val);
 			Double newStd = Math.sqrt(this.getVariance(size,newStdParam2));
-			System.out.println("Nuevo std: " + newStd);
 			Double newMean = (oldSuma+1.0)/(size+1.0);
 			Double newScore = (newMean*newMean)/(1.0+newStd);
 			for(Double d:newStdParam2)finalStdParam.add(d);
@@ -423,8 +516,6 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 	
 			Double Ex = newStdParam.get(1);
 			Double Ex2 = newStdParam.get(2);
-			System.out.println("newStdParam en getVariance es: " + newStdParam);
-			System.out.println("size es: " + size);
 			Double newVar = (Ex2-(Ex*Ex)/size)/(size-1);
 			return newVar < 0.0 ? 0.0 : newVar;
 			
@@ -466,6 +557,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.addReceiver(body);
 			msg.setSender(getAID());
+			msg.addReplyTo(getAID());
             //msg.setContent(nextMove);
             //msg.setConversationId("movimientos");
 			Map <String, Object> message = new HashMap <>();
@@ -479,49 +571,63 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				e.printStackTrace();
 			}
             
-            
-            System.out.println("NEXT MOVE: " + nextMove);
-            
             OntClass nodeClass = model.getOntClass(BASE_URI + "#Visitado");
     		Individual nodeInstance = nodeClass.createIndividual(BASE_URI + "#Node" + nextMove);
             
             Belief currentPosition = new TransientBelief("currentPosition", nextMove);
             bb.addOrUpdateBelief(currentPosition);
-            //setNewNodesOntology(currentNode, model, ob);
+            myAgent.send(msg);
             
             setEndState(Plan.EndState.SUCCESSFUL);
 		}
 	}
 	
 	public class RecieveObservations extends CyclicBehaviour {
-		private MessageTemplate tplObs, tplAg, tplExt;
-		private ACLMessage msgObs, msgAg, msgExt;
+		private MessageTemplate tpl_reply, tpl_map, tpl_resource, tpl_agent;
+		private ACLMessage msg_reply, msg_map, msg_resource, msg_agent;
 		
         public void onStart() {
         	MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(body);
-			MessageTemplate tpl3 = MessageTemplate.MatchConversationId("movimientos");
-			tplObs = MessageTemplate.and(tpl1, tpl2);
-			tplObs = MessageTemplate.and(tplObs, tpl3);
+			MessageTemplate tpl = MessageTemplate.and(tpl1, tpl2);
 			
-			tpl3 = MessageTemplate.MatchConversationId("comunicacion");
-			tplAg = MessageTemplate.and(tpl1, tpl2);
-			tplAg = MessageTemplate.and(tplAg, tpl3);
+			tpl_reply = MessageTemplate.and(tpl, MessageTemplate.MatchConversationId("movimientos"));
+			tpl_map = MessageTemplate.and(tpl, MessageTemplate.MatchConversationId("mapa"));
+			tpl_resource = MessageTemplate.and(tpl, MessageTemplate.MatchConversationId("recursos"));
+			tpl_agent = MessageTemplate.and(tpl, MessageTemplate.MatchConversationId("agentes"));
+
 			
-			tplExt = tpl1;
-			
+        }
+        public void mergeResources (HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m1, HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2) {
+        	HashMap<String, Couple <Long, HashMap<Observation, Integer>>> res = new HashMap<>();
+        	for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> e : m1.entrySet()) {
+        		if (m2.containsKey(e.getKey())) {
+        			if (!e.getValue().getRight().containsKey(Observation.GOLD) || m2.get(e.getKey()).getRight().containsKey(Observation.GOLD)) {
+        				if (e.getValue().getLeft() >= m2.get(e.getKey()).getRight().get(Observation.GOLD)) res.put(e.getKey(), e.getValue());
+        				else res.put(e.getKey(), m2.get(e.getKey()));
+        			}
+        		}
+        		else res.put(e.getKey(), e.getValue());
+        	}
+        	
+        	for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> e : m2.entrySet()) 
+        		if (!res.containsKey(e.getKey())) res.put(e.getKey(), e.getValue());
+        	
+        	Capability c = getCapability();
+    		BeliefBase bb = c.getBeliefBase();
+    		Belief mapping = new TransientBelief("mapping", res);
+    		bb.addOrUpdateBelief(mapping);
         }
         
         public void action() {
-            msgObs = myAgent.receive(tplObs);
-            msgAg = myAgent.receive(tplAg);
-            msgExt = myAgent.receive(tplExt);
+            msg_reply = myAgent.receive(tpl_reply);
+            boolean in_one = false;
             
-
-            if (msgObs != null) {
+            if (msg_reply != null) {
+            	in_one=true;
                 try {
-                	
-                	Map <String, Object> rep = (Map <String, Object>) msgObs.getContentObject();
+                	System.out.println("Recibo observaciones!");
+                	Map <String, Object> rep = (Map <String, Object>) msg_reply.getContentObject();
 					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
 					boolean can_move = (boolean) rep.get("CAN_MOVE");
@@ -540,14 +646,77 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 					setNewNodesOntology();
 					addGoal(new GetObjectiveGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
-            }
-            if(msgAg !=null) {
-            	try {
-            		AID rep = (AID) msgAg.getContentObject();
-					addGoal(new InformAgentGoal(rep));
-				} catch (UnreadableException e) { e.printStackTrace(); }
-            }if(msgAg == null && msgObs==null) block(); 
-        
+                msg_map = myAgent.receive(tpl_map);     
+                if (msg_map != null) {
+                	try {
+    					SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
+    					Capability c = getCapability();
+    					BeliefBase bb = c.getBeliefBase();
+    					
+    					MapRepresentation map = (MapRepresentation) bb.getBelief("map").getValue();
+    					
+    					map.mergeMap(new_map);
+    					Belief mapUpdate = new TransientBelief("map", map);
+    					addExternalMap();
+    					
+    				} catch (UnreadableException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+                	in_one = true;
+                }
+                
+                msg_resource = myAgent.receive(tpl_resource);  
+                if (msg_resource != null) {
+    				
+                	try {
+    					HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
+    					if (m2 != null) {
+    						Capability c = getCapability();
+    						BeliefBase bb = c.getBeliefBase();
+    						
+    						HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m1 =(HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) bb.getBelief("mapping").getValue();
+    						mergeResources(m1, m2);
+    						addExternalResources();
+    					}
+    				} catch (UnreadableException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+                	in_one = true;
+                }
+                
+                msg_agent = myAgent.receive(tpl_agent);
+                if (msg_agent != null) {
+                	try {
+                		Capability c = getCapability();
+    					BeliefBase bb = c.getBeliefBase();
+    					
+    					Map<String, Object> agents = (Map<String, Object>) msg_agent.getContentObject();
+    					Set<AID> collectors = (Set<AID>) agents.get("collectors");
+    					Set<AID> explorers = (Set<AID>) agents.get("explorers");
+    					Set<AID> tanks = (Set<AID>) agents.get("tanks");
+    					HashMap<AID, Couple<Long, String>> agent_pos = (HashMap<AID, Couple<Long, String>>) agents.get("agent_pos");
+    					
+    					Belief bCollectors = new TransientBelief("collectors", collectors);
+    					Belief bExplorers = new TransientBelief("explorers", explorers);
+    					Belief bTanks = new TransientBelief("tanks", tanks);
+    					Belief bAgentPos = new TransientBelief("agent_positions", agent_pos);
+    					
+    					bb.addOrUpdateBelief(bCollectors);
+    					bb.addOrUpdateBelief(bExplorers);
+    					bb.addOrUpdateBelief(bTanks);
+    					bb.addOrUpdateBelief(bAgentPos);
+    					
+    					addAgents();
+    				} catch (UnreadableException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+                	
+                	in_one = true;
+                }
+            }else block();
             
         }
         
@@ -589,7 +758,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			send(msg);
+			//send(msg);
 			TransientBelief newb = new TransientBelief("Agentes", agmap);
 			bb.addOrUpdateBelief(newb);
 			setEndState(Plan.EndState.SUCCESSFUL);
