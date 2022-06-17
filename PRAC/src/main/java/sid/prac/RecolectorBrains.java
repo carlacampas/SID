@@ -121,20 +121,23 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		//PROPERTIES
 		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
-		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Oro_esta_en");
-		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Diamante_esta_en");
-		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Obstaculo_esta_en");
+		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Has_oro");
+		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Has_diamante");
+		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Has_viento");
 		
 		Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + current);
 		map.addNewNode(current);
 		
-		Statement s_oro = currentNode.getProperty(oroProperty);
-		if (s_oro != null)
-			currentNode.removeProperty(oroProperty, s_oro.getResource());
+		RDFNode s_oro = currentNode.getPropertyValue(oroProperty);
+		if (s_oro != null) {
+			System.out.println("node contains oro");
+			currentNode.removeProperty(oroProperty, s_oro);
+		}
 		
-		Statement s_diamante = currentNode.getProperty(diamanteProperty);
-		if (s_diamante != null)
-			currentNode.removeProperty(oroProperty, s_diamante.getResource());
+		RDFNode s_diamante = currentNode.getPropertyValue(oroProperty);
+		if (s_diamante != null) {
+			currentNode.removeProperty(oroProperty, s_diamante);
+		}
 		
 		// add all new nodes
 		for (Couple <String, List<Couple<Observation, Integer>>> o : ob) {
@@ -146,15 +149,15 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			for (Couple<Observation, Integer> obs : o.getRight()) {
 				if (obs.getLeft() == Observation.GOLD && obs.getRight() != 0) {
 					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + obs.getRight());
-					rec.addProperty(oroProperty, adjacentNode);
+					adjacentNode.addProperty(oroProperty, rec);
 				}
 				else if (obs.getLeft() == Observation.DIAMOND && obs.getRight() != 0) {
 					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + obs.getRight());
-					rec.addProperty(diamanteProperty, adjacentNode);
+					adjacentNode.addProperty(diamanteProperty, rec);
 				}
 				else if (obs.getLeft() == Observation.WIND) {
 					Individual rec = vientoClass.createIndividual(BASE_URI + "#Viento" + o.getLeft());
-					rec.addProperty(obstaculoProperty, adjacentNode);
+					adjacentNode.addProperty(obstaculoProperty, rec);
 				}
 				else if (obs.getLeft() == Observation.AGENTNAME) agent = true;
 				else if (obs.getLeft() == Observation.LOCKPICKING && obs.getRight() == 0) open = false;
@@ -215,9 +218,9 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		
 		//PROPERTIES
 		Property nameProperty = model.createDatatypeProperty(BASE_URI + "#Adjacent");
-		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Oro_esta_en");
-		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Diamante_esta_en");
-		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Obstaculo_esta_en");
+		Property oroProperty = model.createDatatypeProperty(BASE_URI + "#Has_oro");
+		Property diamanteProperty = model.createDatatypeProperty(BASE_URI + "#Has_diamante");
+		Property obstaculoProperty = model.createDatatypeProperty(BASE_URI + "#Has_viento");
 				
 		Capability c = getCapability();
 		BeliefBase bb = c.getBeliefBase();
@@ -225,20 +228,31 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) (bb.getBelief("mapping").getValue());
 		
 		for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> m : mapping.entrySet()) {
-			Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + m.getKey());
+			Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + m.getKey());
+			
+			RDFNode s_oro = currentNode.getPropertyValue(oroProperty);
+			if (s_oro != null) {
+				System.out.println("node contains oro");
+				currentNode.removeProperty(oroProperty, s_oro);
+			}
+			
+			RDFNode s_diamante = currentNode.getPropertyValue(oroProperty);
+			if (s_diamante != null) {
+				currentNode.removeProperty(oroProperty, s_diamante);
+			}
 			
 			for (Map.Entry<Observation, Integer> e : m.getValue().getRight().entrySet()) {
 				if (e.getKey() == Observation.GOLD && e.getValue() != 0) {
 					Individual rec = oroClass.createIndividual(BASE_URI + "#Oro" + e.getValue());
-					rec.addProperty(oroProperty, adjacentNode);
+					currentNode.addProperty(oroProperty, rec);
 				}
 				else if (e.getKey() == Observation.DIAMOND && e.getValue() != 0) {
 					Individual rec = diamanteClass.createIndividual(BASE_URI + "#Diamante" + e.getValue());
-					rec.addProperty(diamanteProperty, adjacentNode);
+					currentNode.addProperty(diamanteProperty, rec);
 				}
 				else if (e.getKey() == Observation.WIND) {
 					Individual rec = vientoClass.createIndividual(BASE_URI + "#Viento" + m.getKey());
-					rec.addProperty(obstaculoProperty, adjacentNode);
+					currentNode.addProperty(obstaculoProperty, rec);
 				}
 			}
 		}
@@ -415,9 +429,9 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			}
 			if (best == 0) {
 				if (possibleMoves.size() > 0) {
-				Random rand = new Random();
-				int pos = rand.nextInt(possibleMoves.size());
-				next = possibleMoves.get(pos);
+					Random rand = new Random();
+					int pos = rand.nextInt(possibleMoves.size());
+					next = possibleMoves.get(pos);
 				}
 				else {
 					Random rand = new Random();

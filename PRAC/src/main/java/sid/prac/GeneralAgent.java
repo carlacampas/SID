@@ -273,9 +273,11 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					if (e.equals(Observation.LOCKPICKING)) can_open = can_open && (e.getRight() >= lockPicking);
 					else if (e.equals(Observation.STRENGH)) can_open = can_open && (e.getRight() >= strength);
 				}
+				System.out.println("here");
 
 				if (!can_open) return;
 				openLock(Observation.ANY_TREASURE);
+				System.out.println("picking");
 				pick();
 			}
 			System.out.println("AFTER: " + getBackPackFreeSpace());
@@ -336,23 +338,19 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 System.out.println("El cont. del mensaje es: " + content.get("nextMove"));
                
                 if (content != null) {
-                	boolean m = moveTo((String) content.get("nextMove"));
+                	String move = (String) content.get("nextMove");
+                	boolean m = moveTo(move);
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
-                	if (type.equals("agentCollect") && fp > 0)
-	                	for (Couple<String, List <Couple<Observation, Integer>>> o : ob)
-	                		if (content.equals(o.getLeft())) {
+                	if (type.equals("agentCollect") && fp > 0) {
+	                	for (Couple<String, List <Couple<Observation, Integer>>> o : ob) {
+	                		if (move.equals(o.getLeft())) {
 	                			handle_current_node(o);
 	                			break;
 	                		}
-	                else if(type.equals("agentExplo"))
-	                	for(Couple<String, List <Couple<Observation, Integer>>> o2 : ob)
-	                		for(Couple<Observation,Integer> o3: o2.getRight())
-	                			if(o3.getLeft() == Observation.STRENGH) {
-	                				//this.notifyAgents();
-                					break;
-	                			}
+                		}
+                	}
                 	fp = sumFreeSpace(getBackPackFreeSpace());
 
                 	System.out.println("Observations: " + ob.toString());
