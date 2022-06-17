@@ -93,7 +93,7 @@ public class RecolectorBrains extends SingleCapabilityAgent {
     }
 	
 	public boolean hasGold (Couple <Long, HashMap<Observation, Integer>> obs) {
-		return obs.getRight().containsKey(Observation.GOLD);
+		return !(obs == null) && obs.getRight().containsKey(Observation.GOLD);
 	}
 	
 	public HashMap<Observation, Integer> obsHashMap(List<Couple<Observation, Integer>> l) {
@@ -107,7 +107,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 	public void setNewNodesOntology () {
 		Capability c = getCapability();
 		BeliefBase bb = c.getBeliefBase();
-		System.out.println(bb.toString());
 		String current = (String) (bb.getBelief("currentPosition").getValue());
 		OntModel model = (OntModel) bb.getBelief("model").getValue();
 		MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
@@ -585,16 +584,72 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             
             msg_map = myAgent.receive(tpl_map);     
             if (msg_map != null) {
+            	try {
+					SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
+					Capability c = getCapability();
+					BeliefBase bb = c.getBeliefBase();
+					
+					MapRepresentation map = (MapRepresentation) bb.getBelief("map").getValue();
+					
+					map.mergeMap(new_map);
+					Belief mapUpdate = new TransientBelief("map", map);
+					addExternalMap();
+					
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	in_one = true;
             }
             
             msg_resource = myAgent.receive(tpl_resource);  
             if (msg_resource != null) {
+				
+            	try {
+					HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
+					if (m2 != null) {
+						Capability c = getCapability();
+						BeliefBase bb = c.getBeliefBase();
+						
+						HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m1 =(HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) bb.getBelief("mapping").getValue();
+						mergeResources(m1, m2);
+						addExternalResources();
+					}
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             	in_one = true;
             }
             
             msg_agent = myAgent.receive(tpl_agent);
             if (msg_agent != null) {
+            	try {
+            		Capability c = getCapability();
+					BeliefBase bb = c.getBeliefBase();
+					
+					Map<String, Object> agents = (Map<String, Object>) msg_agent.getContentObject();
+					Set<AID> collectors = (Set<AID>) agents.get("collectors");
+					Set<AID> explorers = (Set<AID>) agents.get("explorers");
+					Set<AID> tanks = (Set<AID>) agents.get("tanks");
+					HashMap<AID, Couple<Long, String>> agent_pos = (HashMap<AID, Couple<Long, String>>) agents.get("agent_pos");
+					
+					Belief bCollectors = new TransientBelief("collectors", collectors);
+					Belief bExplorers = new TransientBelief("explorers", explorers);
+					Belief bTanks = new TransientBelief("tanks", tanks);
+					Belief bAgentPos = new TransientBelief("agent_positions", agent_pos);
+					
+					bb.addOrUpdateBelief(bCollectors);
+					bb.addOrUpdateBelief(bExplorers);
+					bb.addOrUpdateBelief(bTanks);
+					bb.addOrUpdateBelief(bAgentPos);
+					
+					addAgents();
+				} catch (UnreadableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
             	in_one = true;
             }
             

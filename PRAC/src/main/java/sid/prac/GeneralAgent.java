@@ -398,10 +398,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
             	msg_brain.setSender(getAID());
             	try {
 					msg.setContentObject(msg_resource.getContentObject());
-				} catch (IOException | UnreadableException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				} catch (IOException | UnreadableException e1) { e1.printStackTrace(); }
             	send(msg);
             }
             
@@ -423,7 +420,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
 		            	msg_brain.addReceiver(brains);
 		            	msg_brain.setConversationId("agentes");
 		            	msg_brain.setSender(getAID());
-		            	msg_brain.setContentObject((Serializable) agent_pos);
+		            	Map <String, Object> agent_info = new HashMap<>();
+		            	agent_info.put("collectors", collectors);
+		            	agent_info.put("explorers", explorers);
+		            	agent_info.put("tanks", tanks);
+		            	agent_info.put("agent_pos", agent_pos);
+		            	msg_brain.setContentObject((Serializable) agent_info);
 		            	send(msg_brain);
 					}
 	            	
