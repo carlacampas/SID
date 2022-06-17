@@ -102,8 +102,10 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				try {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
 					for (DFAgentDescription d : dfds) {
-						explorers.add(d.getName());
-						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
+						if(!(d.getName().equals(getAID()))){
+							explorers.add(d.getName());
+							all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
+						}
 					}
 					// do something
 				} catch (FIPAException fe) {
@@ -122,8 +124,10 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				try {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
 					for (DFAgentDescription d : dfds) {
-						collectors.add(d.getName());
-						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
+						if(!(d.getName().equals(getAID()))){
+							collectors.add(d.getName());
+							all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
+						}
 					}
 					// do something
 				} catch (FIPAException fe) {
@@ -227,7 +231,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
         ACLMessage msg, msg_map, msg_resource, msg_positions;
         SerializableSimpleGraph<String,MapAttribute> map;
         HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping;
-
+        
 		public void onStart() {
 			MessageTemplate tpl1 = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			MessageTemplate tpl2 = MessageTemplate.MatchSender(brains);
@@ -263,7 +267,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			}
 			if (!myItem) return;
 
-			System.out.println("BEFORE: " + getBackPackFreeSpace());
+			//System.out.println("BEFORE: " + getBackPackFreeSpace());
 			Set<Couple<Observation, Integer>> exp = getMyExpertise();
 
 			if (lockOpen) pick();
@@ -278,7 +282,7 @@ public class GeneralAgent extends AbstractDedaleAgent {
 				openLock(Observation.ANY_TREASURE);
 				pick();
 			}
-			System.out.println("AFTER: " + getBackPackFreeSpace());
+			//System.out.println("AFTER: " + getBackPackFreeSpace());
 		}
 		
 		public void sendExternalMessages() {
@@ -325,7 +329,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
             msg = myAgent.receive(tpl);
             
             if (msg != null) {
-                Map<String, Object> content = new HashMap<String, Object>();
+            	
+               System.out.println("Soy "+ getAID().getName()+ " recibo movimiento de: " + msg.getSender());
+            	Map<String, Object> content = new HashMap<String, Object>();
 				try {
 					content = (Map<String, Object>) msg.getContentObject();
 				} catch (UnreadableException e1) {
@@ -333,10 +339,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
 					e1.printStackTrace();
 				}
 				
-                System.out.println("El cont. del mensaje es: " + content.get("nextMove"));
-               
+                //System.out.println("El cont. del mensaje es: " + content.get("nextMove"));
+                
                 if (content != null) {
+                	 System.out.println("recibo nuevo movimiento!");
                 	boolean m = moveTo((String) content.get("nextMove"));
+                	if(m)System.out.println("Movimiento realizado!");
                 	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
@@ -355,9 +363,10 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	                			}
                 	fp = sumFreeSpace(getBackPackFreeSpace());
 
-                	System.out.println("Observations: " + ob.toString());
+                	//System.out.println("Observations: " + ob.toString());
                 	map = (SerializableSimpleGraph<String,MapAttribute>) content.get("map");
                 	mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) content.get("mapping");
+                	if(map==null) System.out.println("Se manda un mapa vacio!");
                 	sendExternalMessages();
 
                 	Map <String, Object> pass_info = new HashMap <String, Object>();
@@ -365,9 +374,11 @@ public class GeneralAgent extends AbstractDedaleAgent {
                 	pass_info.put("CAN_MOVE", m);
                 	pass_info.put("CURRENT_POSITION", getCurrentPosition());
                 	if (type.equals("agentCollect")) pass_info.put("BACKPACK_SPACE", fp);
-
+                	System.out.println("Sender es: " + msg.getSender().getName());
                 	ACLMessage reply = msg.createReply();
+                	//reply.addReceiver(getAID());
                     reply.setPerformative(ACLMessage.INFORM);
+                    reply.setConversationId("movimientos");
                     try {
                     	reply.setContentObject((Serializable) pass_info);
                     } catch (Exception e) {}
@@ -381,13 +392,20 @@ public class GeneralAgent extends AbstractDedaleAgent {
             	msg_brain.addReceiver(brains);
             	msg_brain.setConversationId("mapa");
             	msg_brain.setSender(getAID());
+            	System.out.println("Me manda un mapa el agente " + msg_map.getSender().getName());
+            	System.out.println("La ontologia es" + msg_map.getOntology());
+            	
             	try {
-					msg.setContentObject(msg_map.getContentObject());
+					
+            		SerializableSimpleGraph<String,MapAttribute> m = (SerializableSimpleGraph<String,MapAttribute>) 
+            				msg_map.getContentObject();
+            		if(m == null) System.out.println("Soy "+ getAID() +" Recibo mapa nulo!");
+            		msg_brain.setContentObject(m);
             	} catch (IOException | UnreadableException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	send(msg);
+            	send(msg_brain);
             }
             
             msg_resource = myAgent.receive(tpl_resource);
@@ -397,9 +415,9 @@ public class GeneralAgent extends AbstractDedaleAgent {
             	msg_brain.setConversationId("recursos");
             	msg_brain.setSender(getAID());
             	try {
-					msg.setContentObject(msg_resource.getContentObject());
+					msg_brain.setContentObject(msg_resource.getContentObject());
 				} catch (IOException | UnreadableException e1) { e1.printStackTrace(); }
-            	send(msg);
+            	send(msg_brain);
             }
             
             msg_positions = myAgent.receive(tpl_positions);

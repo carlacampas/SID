@@ -373,7 +373,7 @@ public class Principal {
 			/*********
 			 * AGENT General Recolector
 			 *********/
-		 /*Descomentar para activar agente recolector (recordar añadir entidad en agentExplo).
+		/*// Descomentar para activar agente recolector (recordar añadir entidad en agentExplo).
 			//1) Get the container where the agent will appear
 			c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
 			Assert.assertNotNull("This container does not exist",c);
@@ -386,6 +386,25 @@ public class Principal {
 
 			//4) Give the class name of your agent to let the system instantiate it
 			ag=createNewDedaleAgent(c, agentName, GeneralAgent.class.getName(), entityParametersCollectGold);//ExploreSoloAgent
+			agentList.add(ag);
+		*/
+
+			/*********
+			 * AGENT General Recolector2
+			 *********/
+		/*// Descomentar para activar agente recolector (recordar añadir entidad en agentExplo).
+			//1) Get the container where the agent will appear
+			c = containerList.get(ConfigurationFile.LOCAL_CONTAINER2_NAME);
+			Assert.assertNotNull("This container does not exist",c);
+
+			//2) Give the name of your agent, MUST be the same as the one given in the entities file.
+			agentName="CollectGold2";
+
+			//3) If you want to give specific parameters to your agent, add them here
+			Object [] entityParametersCollectGold2={"My parameters"};
+
+			//4) Give the class name of your agent to let the system instantiate it
+			ag=createNewDedaleAgent(c, agentName, GeneralAgent.class.getName(), entityParametersCollectGold2);//ExploreSoloAgent
 			agentList.add(ag);
 		*/
 			/*********
