@@ -352,8 +352,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
                
                 if (content != null) {
                 	String move = (String) content.get("nextMove");
-                	boolean m = moveTo(move);
-                	List <Couple<String, List <Couple<Observation, Integer>>>> ob = observe();
+                	List <Couple<String, List <Couple<Observation, Integer>>>> ob = new ArrayList<>();
+                	boolean m = false;
+                	try {
+                		m = moveTo(move);
+                		ob = observe();
+                	} catch(Exception e) {}
 
                 	Integer fp = sumFreeSpace(getBackPackFreeSpace());
                 	if (type.equals("agentCollect") && fp > 0) {

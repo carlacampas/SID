@@ -372,18 +372,20 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			else type = "Diamante";
 		}
 		
-		public Integer check_num_away (String node, String find) {
+		public Integer check_num_away (String node, Set<String> find) {
 			String[] possibilities = {"Node", "OneAway", "TwoAway", "ThreeAway", "FourAway", "FiveAway"};
 			Individual curr = model.getIndividual(node);
 			for (int i = 0; i < possibilities.length; i++) {
 				String pos = possibilities[i];
-				OntClass n_away = model.getOntClass(BASE_URI + "#" + pos + find);
-				if (curr.hasOntClass(n_away)) return i;
+				for (String f : find) {
+					OntClass n_away = model.getOntClass(BASE_URI + "#" + pos + f);
+					if (curr.hasOntClass(n_away)) return i;
+				}
 			}
 			return -1;
 		}
 		
-		public Couple<String, Integer> traverseOnt(String currentNode, String find) {//, Set <String> visited) {
+		public Couple<String, Integer> traverseOnt(String currentNode, Set<String> find) {//, Set <String> visited) {
 			Individual curr = model.getIndividual(BASE_URI + "#Node" + currentNode);
 		
 			Property adj = model.createDatatypeProperty(BASE_URI + "#Adjacent");
@@ -440,30 +442,15 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		public String getNextPosition() {
 			boolean treasure = free != 0;
 			boolean almacenador = free != maxCapacity;
+			Set <String> find = new HashSet<>();
 			
-			if (treasure && almacenador) {
-				Couple<String, Integer> t = traverseOnt(currentPosition, type);
-				Couple<String, Integer> a = traverseOnt(currentPosition, "Almacenamiento");
-				
-				if (a.getLeft() == "" && t.getLeft() == "") return getClosestEmpty();
-				else if (a.getLeft() == "") return t.getLeft();
-				else if (t.getLeft() == "") return a.getLeft();
-				
-				if (t.getRight() <= a.getRight()) return t.getLeft();
-				return a.getLeft();
-			}
-			else if (treasure) {
-				Couple<String, Integer> t = traverseOnt(currentPosition, type);
-				if (t.getLeft() == "") return getClosestEmpty();
-				return t.getLeft();
-			}
-			else if (almacenador) {
-				Couple<String, Integer> a = traverseOnt(currentPosition, "Almacenamiento");
-				if (a.getLeft() == "") return getClosestEmpty();
-				return a.getLeft();
-			}
+			if (treasure) find.add(type);
+			if (almacenador) find.add("Almacenamiento");
 			
-			return getClosestEmpty();
+			Couple<String, Integer> res = traverseOnt(currentPosition, find);
+			if (res.getLeft() == "") return getClosestEmpty();
+			
+			return res.getLeft();
 		}
 	}
 	
@@ -480,7 +467,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			Observation collectionType = (Observation) bb.getBelief("collectionType").getValue();
 			MapRepresentation map = (MapRepresentation) (bb.getBelief("map").getValue());
 			HashMap<String, Couple <Long, HashMap<Observation, Integer>>> mapping = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) (bb.getBelief("mapping").getValue());
-			
 			
 			GetTreasureGoal tg = (GetTreasureGoal) getGoal();
 			
