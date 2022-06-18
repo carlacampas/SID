@@ -354,7 +354,7 @@ public class ExplorerBrains extends SingleCapabilityAgent {
 			msg.setSender(getAID());
 			msg.addReplyTo(getAID());
             //msg.setContent(nextMove);
-            //msg.setConversationId("movimientos");
+            msg.setConversationId("movimientos");
 			Map <String, Object> message = new HashMap <>();
 			message.put("nextMove", nextMove);
 			message.put("map", map.getSerializableGraph());
