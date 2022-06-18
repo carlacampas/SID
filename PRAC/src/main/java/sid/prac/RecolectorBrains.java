@@ -141,7 +141,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			boolean open = true;
 			boolean agent = false;
 			Individual adjacentNode = nodeClass.createIndividual(BASE_URI + "#Node" + o.getLeft());
-			currentNode.addProperty(nameProperty, adjacentNode);
 			
 			for (Couple<Observation, Integer> obs : o.getRight()) {
 				if (obs.getLeft() == Observation.GOLD && obs.getRight() != 0) {
@@ -161,6 +160,8 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			}
 			
 			if (!o.getLeft().equals(current)) {
+				currentNode.addProperty(nameProperty, adjacentNode);
+				
 				if (agent) map.addNode(o.getLeft(), MapAttribute.agent);
 				else if (!open) map.addNode(o.getLeft(), MapAttribute.closed);
 				else map.addNode(o.getLeft(), MapAttribute.open);
