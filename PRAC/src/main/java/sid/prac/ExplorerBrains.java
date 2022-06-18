@@ -414,95 +414,90 @@ public class ExplorerBrains extends SingleCapabilityAgent {
         	boolean in_one = false;
         	msg_reply = myAgent.receive(tpl_reply);     
 
-            if (msg_reply != null) {
-            	in_one = true;
+        	if (msg_reply != null) {
+            	in_one=true;
                 try {
+                	System.out.println("Recibo observaciones!");
                 	Map <String, Object> rep = (Map <String, Object>) msg_reply.getContentObject();
-                	boolean can_move = (boolean) rep.get("CAN_MOVE");
-                	
-                	Capability c = getCapability();
+					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
+					boolean can_move = (boolean) rep.get("CAN_MOVE");
 					
-					Integer free = (Integer) rep.get("BACKPACK_SPACE");
-                	Belief freeSpace = new TransientBelief("freeSpace", free);
-            		bb.addOrUpdateBelief(freeSpace);
-            		
-                	if (!can_move) {
+					if (!can_move) {
                 		String current = (String) rep.get("CURRENT_POSITION");
                 		Belief currPos = new TransientBelief("currentPosition", current);
 						bb.addOrUpdateBelief(currPos);
                 	}
                 	else {
-						List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) rep.get("OBSERVATIONS");
+						List <Couple<String, List <Couple<Observation, Integer>>>> ob = (List <Couple<String, List <Couple<Observation, Integer>>>>) (rep.get("OBSERVATIONS"));
 						
 						Belief observations = new TransientBelief("observations", ob);
 						bb.addOrUpdateBelief(observations);
                 	}
-					
-                	setNewNodesOntology();
-                	addGoal(new GetObjectiveGoal());
+					setNewNodesOntology();
+					addGoal(new GetObjectiveGoal());
 				} catch (UnreadableException e) { e.printStackTrace(); }
-            }
             
-            msg_map = myAgent.receive(tpl_map);     
-            if (msg_map != null) {
-            	try {
-					SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
-					Capability c = getCapability();
-					BeliefBase bb = c.getBeliefBase();
-					
-					MapRepresentation map = (MapRepresentation) bb.getBelief("map").getValue();
-					
-					map.mergeMap(new_map);
-					Belief mapUpdate = new TransientBelief("map", map);
-					
-				} catch (UnreadableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	in_one = true;
-            }
-            
-            msg_resource = myAgent.receive(tpl_resource);  
-            if (msg_resource != null) {
-				
-            	try {
-					HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
-					if (m2 != null) {
+	            msg_map = myAgent.receive(tpl_map);     
+	            if (msg_map != null) {
+	            	try {
+						SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
 						Capability c = getCapability();
 						BeliefBase bb = c.getBeliefBase();
 						
-						HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m1 =(HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) bb.getBelief("mapping").getValue();
-						mergeResources(m1, m2);
+						MapRepresentation map = (MapRepresentation) bb.getBelief("map").getValue();
+						
+						map.mergeMap(new_map);
+						Belief mapUpdate = new TransientBelief("map", map);
+						
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (UnreadableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	in_one = true;
-            }
-            
-            msg_agent = myAgent.receive(tpl_agent);
-            if (msg_agent != null) {
-            	try {
-            		Capability c = getCapability();
-					BeliefBase bb = c.getBeliefBase();
+	            	in_one = true;
+	            }
+	            
+	            msg_resource = myAgent.receive(tpl_resource);  
+	            if (msg_resource != null) {
 					
-					Map<String, Object> agents = (Map<String, Object>) msg_agent.getContentObject();
-					HashMap<AID, Couple<Long, String>> agent_pos = (HashMap<AID, Couple<Long, String>>) agents.get("agent_pos");
-					
-					Belief bAgentPos = new TransientBelief("agent_positions", agent_pos);
-					
-					bb.addOrUpdateBelief(bAgentPos);
-				} catch (UnreadableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	
-            	in_one = true;
-            }
-            
-            //if(!in_one) { block(); }
+	            	try {
+						HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
+						if (m2 != null) {
+							Capability c = getCapability();
+							BeliefBase bb = c.getBeliefBase();
+							
+							HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m1 =(HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) bb.getBelief("mapping").getValue();
+							mergeResources(m1, m2);
+						}
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            	in_one = true;
+	            }
+	            
+	            msg_agent = myAgent.receive(tpl_agent);
+	            if (msg_agent != null) {
+	            	try {
+	            		Capability c = getCapability();
+						BeliefBase bb = c.getBeliefBase();
+						
+						Map<String, Object> agents = (Map<String, Object>) msg_agent.getContentObject();
+						HashMap<AID, Couple<Long, String>> agent_pos = (HashMap<AID, Couple<Long, String>>) agents.get("agent_pos");
+						
+						Belief bAgentPos = new TransientBelief("agent_positions", agent_pos);
+						
+						bb.addOrUpdateBelief(bAgentPos);
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	            	
+	            	in_one = true;
+	            }
+	            
+	            //if(!in_one) { block(); }
+	        }
         }
 	}
 	
