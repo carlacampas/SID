@@ -48,12 +48,15 @@ public class GeneralAgent extends AbstractDedaleAgent {
 	private Set<AID> collectors = new HashSet<AID> ();
 	private Set<AID> explorers = new HashSet<AID> ();
 	private Set<AID> tanks = new HashSet<AID> ();
+	private Set<String> tankNames = new HashSet<String> ();
 	private HashMap<AID, Couple<Long, String>> agent_pos = new HashMap<>();
 	private MessageTemplate all_senders;
 
 	public MapRepresentation getMap() { return map; }
 	public void setup() {
 		super.setup();
+		
+		System.out.println(getLocalName());
 		all_senders = MessageTemplate.and(MessageTemplate.not(MessageTemplate.MatchSender(brains)), MessageTemplate.not(MessageTemplate.MatchSender(getAID())));
 
 		List<Behaviour> lb=new ArrayList<Behaviour>();
@@ -141,8 +144,11 @@ public class GeneralAgent extends AbstractDedaleAgent {
 			protected void handleInform(ACLMessage inform) {
 				try {
 					DFAgentDescription[] dfds = DFService.decodeNotification(inform.getContent());
-					for (DFAgentDescription d : dfds) {
+					for (DFAgentDescription d : dfds) {						
 						tanks.add(d.getName());
+						ServiceDescription serviceDescription = (ServiceDescription) d.getAllServices().next();
+						String name = serviceDescription.getName();
+						if (name != null) tankNames.add(name);
 						all_senders = MessageTemplate.and(all_senders, MessageTemplate.MatchSender(d.getName()));
 					}
 				} catch (FIPAException fe) {
@@ -256,6 +262,12 @@ public class GeneralAgent extends AbstractDedaleAgent {
 						case STRENGH:
 							strength = obs.getRight();
 							break;
+						case AGENTNAME:
+							for (String t : tankNames) 
+								if (emptyMyBackPack(t)) {
+									System.out.println("UNLOADING ...");
+									return;
+								}
 						default:
 							break;
 					}
@@ -384,7 +396,6 @@ public class GeneralAgent extends AbstractDedaleAgent {
             	try {
             		msg_brain.setContentObject(msg_map.getContentObject());
             	} catch (IOException | UnreadableException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             	send(msg_brain);

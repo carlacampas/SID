@@ -129,14 +129,11 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 		map.addNewNode(current);
 		
 		RDFNode s_oro = currentNode.getPropertyValue(oroProperty);
-		if (s_oro != null) {
-			System.out.println("node contains oro");
-			currentNode.removeProperty(oroProperty, s_oro);
-		}
+		if (s_oro != null) currentNode.removeProperty(oroProperty, s_oro);
 		
 		RDFNode s_diamante = currentNode.getPropertyValue(oroProperty);
 		if (s_diamante != null) {
-			currentNode.removeProperty(oroProperty, s_diamante);
+			currentNode.removeProperty(diamanteProperty, s_diamante);
 		}
 		
 		// add all new nodes
@@ -231,14 +228,11 @@ public class RecolectorBrains extends SingleCapabilityAgent {
 			Individual currentNode = nodeClass.createIndividual(BASE_URI + "#Node" + m.getKey());
 			
 			RDFNode s_oro = currentNode.getPropertyValue(oroProperty);
-			if (s_oro != null) {
-				System.out.println("node contains oro");
-				currentNode.removeProperty(oroProperty, s_oro);
-			}
+			if (s_oro != null) currentNode.removeProperty(oroProperty, s_oro);
 			
 			RDFNode s_diamante = currentNode.getPropertyValue(oroProperty);
 			if (s_diamante != null) {
-				currentNode.removeProperty(oroProperty, s_diamante);
+				currentNode.removeProperty(diamanteProperty, s_diamante);
 			}
 			
 			for (Map.Entry<Observation, Integer> e : m.getValue().getRight().entrySet()) {
@@ -400,7 +394,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             	RDFNode nextNode = ni.nextNode();
             	Integer check_away = check_num_away(nextNode.toString(), find);
             	if (check_away != -1 && (best.getRight() == -1 || best.getRight() > check_away)) {
-            		System.out.println("HERE CLOSE TO GOLD!!");
             		String name = nextNode.toString().split("#Node")[1];
             		best = new Couple(name, check_away);
             	}
@@ -545,8 +538,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
         	HashMap<String, Couple <Long, HashMap<Observation, Integer>>> res = new HashMap<>();
         	for (Map.Entry<String, Couple<Long, HashMap<Observation, Integer>>> e : m1.entrySet()) {
         		if (m2.containsKey(e.getKey())) {
-        			System.out.println(e.getValue());
-        			System.out.println(m2.get(e.getKey()));
         			if (!e.getValue().getRight().containsKey(Observation.GOLD) || m2.get(e.getKey()).getRight().containsKey(Observation.GOLD)) {
         				if (e.getValue().getLeft() >= m2.get(e.getKey()).getLeft()) res.put(e.getKey(), e.getValue());
         				else res.put(e.getKey(), m2.get(e.getKey()));
@@ -601,7 +592,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             msg_map = myAgent.receive(tpl_map);     
             if (msg_map != null) {
             	try {
-            		System.out.println("RECIEVED MAP BRAIN");
 					SerializableSimpleGraph<String,MapAttribute> new_map = (SerializableSimpleGraph<String,MapAttribute>) msg_map.getContentObject();
 					Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
@@ -623,7 +613,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             if (msg_resource != null) {
 				
             	try {
-            		System.out.println("RECIEVED RESOURCES BRAIN");
 					HashMap<String, Couple <Long, HashMap<Observation, Integer>>> m2 = (HashMap<String, Couple <Long, HashMap<Observation, Integer>>>) msg_resource.getContentObject();
 					if (m2 != null) {
 						Capability c = getCapability();
@@ -643,7 +632,6 @@ public class RecolectorBrains extends SingleCapabilityAgent {
             msg_agent = myAgent.receive(tpl_agent);
             if (msg_agent != null) {
             	try {
-            		System.out.println("RECIEVED AGENTS BRAIN");
             		Capability c = getCapability();
 					BeliefBase bb = c.getBeliefBase();
 					
